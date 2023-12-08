@@ -11,7 +11,7 @@ custom:
     build:
       version_file: version.txt
       docker_file: rshiny-app/Dockerfile
-      docker_context: docker
+      docker_context: rshiny-app
 
 credentials:
   - name: azure_tenant_id
