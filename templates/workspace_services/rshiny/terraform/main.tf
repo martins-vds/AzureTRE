@@ -35,7 +35,8 @@ resource "azurerm_linux_web_app" "rshiny" {
     vnet_route_all_enabled                        = true
 
     application_stack {
-      docker_image_name = "${data.azurerm_container_registry.mgmt_acr.login_server}/microsoft/azuretre/rshiny-workspace-service:${local.version}"
+      docker_image     = "${data.azurerm_container_registry.mgmt_acr.login_server}/microsoft/azuretre/rshiny"
+      docker_image_tag = local.version
     }
   }
 
