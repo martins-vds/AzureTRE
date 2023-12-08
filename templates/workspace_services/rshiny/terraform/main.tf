@@ -26,6 +26,10 @@ resource "azurerm_linux_web_app" "rshiny" {
     identity_ids = [azurerm_user_assigned_identity.rshiny_id.id]
   }
 
+  app_settings = {
+    WEBSITES_PORT = "3838"
+  }
+
   site_config {
     container_registry_use_managed_identity       = true
     container_registry_managed_identity_client_id = azurerm_user_assigned_identity.rshiny_id.client_id
