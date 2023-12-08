@@ -68,10 +68,10 @@ data "azurerm_key_vault_secret" "client_secret" {
   key_vault_id = data.azurerm_key_vault.ws.id
 }
 
-data "azurerm_monitor_diagnostic_categories" "gitea" {
-  resource_id = azurerm_linux_web_app.gitea.id
+data "azurerm_monitor_diagnostic_categories" "rshiny" {
+  resource_id = azurerm_linux_web_app.rshiny.id
   depends_on = [
-    azurerm_linux_web_app.gitea,
+    azurerm_linux_web_app.rshiny,
   ]
 }
 
