@@ -389,6 +389,8 @@ jobs:
           - {BUNDLE_TYPE: "workspace_service",
              BUNDLE_DIR: "./templates/workspace_services/rshiny"}
           - {BUNDLE_TYPE: "workspace_service",
+             BUNDLE_DIR: "./templates/workspace_services/bastion"}
+          - {BUNDLE_TYPE: "workspace_service",
              BUNDLE_DIR: "./templates/workspace_services/mlflow"}
           - {BUNDLE_TYPE: "workspace_service",
              BUNDLE_DIR: "./templates/workspace_services/mysql"}
@@ -551,6 +553,8 @@ jobs:
              BUNDLE_DIR: "./templates/workspace_services/gitea"}
           - {BUNDLE_TYPE: "workspace_service",
              BUNDLE_DIR: "./templates/workspace_services/rshiny"}
+          - {BUNDLE_TYPE: "workspace_service",
+             BUNDLE_DIR: "./templates/workspace_services/bastion"}
           - {BUNDLE_TYPE: "workspace_service",
              BUNDLE_DIR: "./templates/workspace_services/mlflow"}
           - {BUNDLE_TYPE: "workspace_service",

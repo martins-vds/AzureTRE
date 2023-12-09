@@ -7,8 +7,8 @@ resource "azurerm_subnet" "bastion" {
 
 resource "azurerm_network_security_group" "bastion" {
   name                = "AzureBastionSubnet-nsg"
-  location            = azurerm_resource_group.bastion.location
-  resource_group_name = azurerm_resource_group.bastion.name
+  location            = data.azurerm_resource_group.ws.location
+  resource_group_name = data.azurerm_resource_group.ws.name
 
   security_rule {
     name                       = "AllowHttpsInbound"
