@@ -11,8 +11,6 @@ locals {
   webapp_suffix                  = module.terraform_azurerm_environment_configuration.web_app_suffix
   api_url                        = "https://api-${var.tre_id}.${local.webapp_suffix}"
   keyvault_name                  = lower("kv-${substr(local.workspace_resource_name_suffix, -20, -1)}")
-  image_tag_from_file            = replace(replace(replace(data.local_file.version.content, "__version__ = \"", ""), "\"", ""), "\n", "")
-  image_tag                      = var.image_tag == "" ? local.image_tag_from_file : var.image_tag
   identity_name                  = "id-${local.bastion_name}"
   workspace_service_tags = {
     tre_id                   = var.tre_id
