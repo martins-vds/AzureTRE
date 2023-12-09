@@ -18,45 +18,37 @@ variable "mgmt_acr_name" {
   type        = string
   description = "The management ACR name"
 }
-variable "image_name" {
-  type        = string
-  description = "The Guacamole image name"
-}
-variable "image_tag" {
-  type        = string
-  description = "The Guacamole image tag"
-}
 
 variable "bastion_scale_units" {
   type        = number
   description = "The number of bastion scale units"
 }
 
-variable "guac_disable_copy" {
+variable "bastion_disable_copy" {
   type        = bool
   description = "Disable copy from the Guacamole workspace"
 }
-variable "guac_disable_paste" {
+variable "bastion_disable_paste" {
   type        = bool
   description = "Disable paste to the Guacamole workspace"
 }
-variable "guac_enable_drive" {
+variable "bastion_enable_drive" {
   type        = bool
   description = "Enable drive redirection"
 }
-variable "guac_drive_name" {
+variable "bastion_drive_name" {
   type        = string
   description = "The drive name"
 }
-variable "guac_drive_path" {
+variable "bastion_drive_path" {
   type        = string
   description = "The drive path"
 }
-variable "guac_disable_download" {
+variable "bastion_disable_download" {
   type        = bool
   description = "Disable download from the Guacamole workspace"
 }
-variable "guac_disable_upload" {
+variable "bastion_disable_upload" {
   type        = bool
   description = "Disable upload to the Guacamole workspace"
 }

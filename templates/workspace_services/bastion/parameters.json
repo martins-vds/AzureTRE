@@ -55,49 +55,43 @@
     {
       "name": "bastion_disable_copy",
       "source": {
-        "env": "GUAC_DISABLE_COPY"
+        "env": "BASTION_DISABLE_COPY"
       }
     },
     {
       "name": "bastion_disable_download",
       "source": {
-        "env": "GUAC_DISABLE_DOWNLOAD"
+        "env": "BASTION_DISABLE_DOWNLOAD"
       }
     },
     {
       "name": "bastion_disable_upload",
       "source": {
-        "env": "GUAC_DISABLE_UPLOAD"
+        "env": "BASTION_DISABLE_UPLOAD"
       }
     },
     {
       "name": "bastion_disable_paste",
       "source": {
-        "env": "GUAC_DISABLE_PASTE"
+        "env": "BASTION_DISABLE_PASTE"
       }
     },
     {
       "name": "bastion_drive_name",
       "source": {
-        "env": "GUAC_DRIVE_NAME"
+        "env": "BASTION_DRIVE_NAME"
       }
     },
     {
       "name": "bastion_drive_path",
       "source": {
-        "env": "GUAC_DRIVE_PATH"
+        "env": "BASTION_DRIVE_PATH"
       }
     },
     {
       "name": "bastion_enable_drive",
       "source": {
-        "env": "GUAC_ENABLE_DRIVE"
-      }
-    },
-    {
-      "name": "image_tag",
-      "source": {
-        "env": "IMAGE_TAG"
+        "env": "BASTION_ENABLE_DRIVE"
       }
     },
     {
