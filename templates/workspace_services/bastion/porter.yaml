@@ -63,6 +63,11 @@ parameters:
     type: boolean
     default: true
     env: BASTION_DISABLE_UPLOAD
+  - name: bastion_scale_units
+    type: integer
+    default: 1
+    env: BASTION_SCALE_UNITS
+    description: "Bastion scale units configuration"
   - name: is_exposed_externally
     type: boolean
     default: true
@@ -130,6 +135,7 @@ install:
         bastion_drive_path: ${ bundle.parameters.bastion_drive_path }
         bastion_disable_download: ${ bundle.parameters.bastion_disable_download }
         bastion_disable_upload: ${ bundle.parameters.bastion_disable_upload }
+        bastion_scale_units: ${ bundle.parameters.bastion_scale_units }
         is_exposed_externally: ${ bundle.parameters.is_exposed_externally }
         tre_resource_id: ${ bundle.parameters.id }
         aad_authority_url: ${ bundle.parameters.aad_authority_url }
@@ -159,6 +165,7 @@ upgrade:
         bastion_drive_path: ${ bundle.parameters.bastion_drive_path }
         bastion_disable_download: ${ bundle.parameters.bastion_disable_download }
         bastion_disable_upload: ${ bundle.parameters.bastion_disable_upload }
+        bastion_scale_units: ${ bundle.parameters.bastion_scale_units }
         is_exposed_externally: ${ bundle.parameters.is_exposed_externally }
         tre_resource_id: ${ bundle.parameters.id }
         aad_authority_url: ${ bundle.parameters.aad_authority_url }
@@ -188,6 +195,7 @@ uninstall:
         bastion_drive_path: ${ bundle.parameters.bastion_drive_path }
         bastion_disable_download: ${ bundle.parameters.bastion_disable_download }
         bastion_disable_upload: ${ bundle.parameters.bastion_disable_upload }
+        bastion_scale_units: ${ bundle.parameters.bastion_scale_units }
         is_exposed_externally: ${ bundle.parameters.is_exposed_externally }
         tre_resource_id: ${ bundle.parameters.id }
         aad_authority_url: ${ bundle.parameters.aad_authority_url }
