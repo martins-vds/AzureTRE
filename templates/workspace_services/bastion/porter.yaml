@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-bastion
-version: 0.0.4
+version: 0.0.5
 description: "An Azure TRE service for Azure Bastion"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -65,7 +65,7 @@ parameters:
     env: BASTION_DISABLE_UPLOAD
   - name: bastion_scale_units
     type: integer
-    default: 1
+    default: 2
     env: BASTION_SCALE_UNITS
     description: "Bastion scale units configuration"
   - name: is_exposed_externally
