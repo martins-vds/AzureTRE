@@ -107,6 +107,14 @@ parameters:
     displayName: Pull request head SHA
     type: string
     default: ''
+  - name: TEST_USER_NAME
+    displayName: Test user name
+    type: string
+    default: ''
+  - name: TEST_USER_PASSWORD
+    displayName: Test user password
+    type: string
+    default: ''
 jobs:
 - job: deploy_management
   displayName: Deploy management
