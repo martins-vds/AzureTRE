@@ -25,7 +25,7 @@ variables:
     - group: ${{ parameters.environment }}
 
 jobs:
-  - template: az_pipelines_templates/deploy_tre_reusable.yml
+  - template: az_pipeline_templates/deploy_tre_reusable.yml
     parameters:
       ciGitRef: $(Build.SourceBranch)
       # e2eTestsCustomSelector: >-
