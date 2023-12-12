@@ -11,7 +11,7 @@ parameters:
       - "azuretre-dev"
 
 variables:
-    - group: '$[ parameters.environment ]'
+    - group: '${{ parameters.environment }}'
 
 jobs:
   - template: az_pipeline_templates/deploy_tre_reusable.yml
