@@ -112,8 +112,7 @@ jobs:
       echo "prRHeadSha  : ${{ parameters.prHeadSha }}"
       echo "ciGitRef    : ${{ parameters.ciGitRef }}"
       echo "environment : ${{ parameters.environmentName }}"
-  - name: check_required_values
-    displayName: 'Check required values'
+  - displayName: 'Check required values'
     bash: |
       if [ "${{ parameters.AAD_TENANT_ID }}" == '' ]; then
         echo "Missing secret: AAD_TENANT_ID" && exit 1
