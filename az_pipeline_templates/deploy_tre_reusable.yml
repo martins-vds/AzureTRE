@@ -99,6 +99,14 @@ parameters:
     displayName: Azure environment
     type: string
     default: ''
+  - name: prRef
+    displayName: Pull request reference
+    type: string
+    default: ''
+  - name: prHeadSha
+    displayName: Pull request head SHA
+    type: string
+    default: ''
 jobs:
 - job: deploy_management
   displayName: Deploy management
