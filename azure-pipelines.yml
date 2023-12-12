@@ -22,9 +22,6 @@ parameters:
       - "azuretre-dev"
 
 variables:
-  ${{ if eq(parameters.environment, '') }}:
-    - group: 'azuretre-dev'
-  ${{ else }}:
     - group: ${{ parameters.environment }}
 
 jobs:
@@ -33,10 +30,7 @@ jobs:
       ciGitRef: $(Build.SourceBranch)
       # e2eTestsCustomSelector: >-
       #   $[ (github.event_name == 'push' && 'extended or extended_aad') || 'extended or extended_aad or shared_services or airlock' ]
-      ${{ if eq(parameters.environment, '') }}:
-        environmentName: 'poc'
-      ${{ else }}:
-        environmentName: ${{ parameters.environment }}
+      environmentName: ${{ parameters.environment }}
       E2E_TESTS_NUMBER_PROCESSES: 1
       DEVCONTAINER_TAG: 'latest'
       AAD_TENANT_ID: $(AAD_TENANT_ID)
