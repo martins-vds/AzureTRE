@@ -17,13 +17,13 @@ parameters:
   - name: environment
     displayName: Environment
     type: string
-    default: poc
+    default: azuretre-dev
     values:
-      - "poc"
+      - "azuretre-dev"
 
 variables:
   ${{ if eq(parameters.environment, '') }}:
-    - group: 'poc'
+    - group: 'azuretre-dev'
   ${{ else }}:
     - group: ${{ parameters.environment }}
 
