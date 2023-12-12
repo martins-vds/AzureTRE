@@ -91,11 +91,81 @@ parameters:
     displayName: E2E tests custom selector
     type: string
     default: ''
-
+  - name: LOCATION
+    displayName: Location
+    type: string
+    default: ''
+  - name: AZURE_ENVIRONMENT
+    displayName: Azure environment
+    type: string
+    default: ''
 jobs:
- - job: test
-   pool:
-      vmImage: ubuntu-latest
-   steps:
-    - 'bash': |
-        echo "Hello world"
+- job: deploy_management
+  displayName: Deploy management
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+  - bash: |
+      echo "Inputs"
+      echo "======"
+      echo "prRef       : ${{ parameters.prRef }}"
+      echo "prRHeadSha  : ${{ parameters.prHeadSha }}"
+      echo "ciGitRef    : ${{ parameters.ciGitRef }}"
+      echo "environment : ${{ parameters.environmentName }}"
+  - name: check_required_values
+    displayName: 'Check required values'
+    bash: |
+      if [ "${{ parameters.AAD_TENANT_ID }}" == '' ]; then
+        echo "Missing secret: AAD_TENANT_ID" && exit 1
+      fi
+      if [ "${{ parameters.ACR_NAME }}" == '' ]; then
+        echo "Missing secret: ACR_NAME" && exit 1
+      fi
+      if [ "${{ parameters.API_CLIENT_ID }}" == '' ]; then
+        echo "Missing secret: API_CLIENT_ID" && exit 1
+      fi
+      if [ "${{ parameters.API_CLIENT_SECRET }}" == '' ]; then
+        echo "Missing secret: API_CLIENT_SECRET" && exit 1
+      fi
+      if [ "${{ parameters.APPLICATION_ADMIN_CLIENT_ID }}" == '' ]; then
+        echo "Missing secret: APPLICATION_ADMIN_CLIENT_ID" && exit 1
+      fi
+      if [ "${{ parameters.APPLICATION_ADMIN_CLIENT_SECRET }}" == '' ]; then
+        echo "Missing secret: APPLICATION_ADMIN_CLIENT_SECRET" && exit 1
+      fi
+      if [ "${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" == '' ]; then
+        echo "Missing secret: MGMT_RESOURCE_GROUP_NAME" && exit 1
+      fi
+      if [ "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" == '' ]; then
+        echo "Missing secret: MGMT_STORAGE_ACCOUNT_NAME" && exit 1
+      fi
+      if [ "${{ parameters.SWAGGER_UI_CLIENT_ID }}" == '' ]; then
+        echo "Missing secret: SWAGGER_UI_CLIENT_ID" && exit 1
+      fi
+      if [ "${{ parameters.TEST_APP_ID }}" == '' ]; then
+        echo "Missing secret: TEST_APP_ID" && exit 1
+      fi
+      if [ "${{ parameters.TEST_WORKSPACE_APP_ID }}" == '' ]; then
+        echo "Missing secret: TEST_WORKSPACE_APP_ID" && exit 1
+      fi
+      if [ "${{ parameters.TEST_WORKSPACE_APP_SECRET }}" == '' ]; then
+        echo "Missing secret: TEST_WORKSPACE_APP_SECRET" && exit 1
+      fi
+      if [ "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}" == '' ]; then
+        echo "Missing secret: TEST_ACCOUNT_CLIENT_ID" && exit 1
+      fi
+      if [ "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}" == '' ]; then
+        echo "Missing secret: TEST_ACCOUNT_CLIENT_SECRET" && exit 1
+      fi
+      if [ "${{ parameters.TRE_ID }}" == '' ]; then
+        echo "Missing secret: TRE_ID" && exit 1
+      fi
+      if [ "${{ parameters.AZURE_CREDENTIALS }}" == '' ]; then
+        echo "Missing secret: AZURE_CREDENTIALS" && exit 1
+      fi
+      if [ "${{ parameters.DEVCONTAINER_TAG }}" == '' ]; then
+        echo "Missing input: DEVCONTAINER_TAG" && exit 1
+      fi
+      if [ "${{ parameters.LOCATION }}" == '' ]; then
+        echo "Missing variable: LOCATION" && exit 1
+      fi
