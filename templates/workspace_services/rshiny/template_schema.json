@@ -105,7 +105,8 @@
                   "description": "AAD CDN",
                   "source_addresses": "{{ resource.properties.workspace_address_space }}",
                   "target_fqdns": [
-                    "aadcdn.msftauth.net"
+                    "aadcdn.msftauth.net",
+                    "*.openstreetmap.org"
                   ],
                   "protocols": [
                     {
@@ -165,7 +166,8 @@
                   "description": "AAD CDN",
                   "source_addresses": "{{ resource.properties.workspace_address_space }}",
                   "target_fqdns": [
-                    "aadcdn.msftauth.net"
+                    "aadcdn.msftauth.net",
+                    "*.openstreetmap.org"
                   ],
                   "protocols": [
                     {

@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y \
     libssl-dev \
     libudunits2-dev \
     libproj-dev \
-    libgdal-dev
+    libgdal-dev \
+    libgeos-dev
 
 # install R packages required
 # Change the packages list to suit your needs
