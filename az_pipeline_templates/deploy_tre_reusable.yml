@@ -197,29 +197,15 @@ jobs:
     inputs:
       azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
       scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        az acr login --name "${{ parameters.CI_CACHE_ACR_NAME }}"
-        echo "##vso[task.setvariable variable=outcome;isoutput=true]success"
+      scriptLocation: 'scriptPath'
+      scriptPath: '../devops/scripts/login_acr.sh'
+      arguments: '${{ parameters.CI_CACHE_ACR_NAME }}'
 
-  - bash: |
-      set -e
-
-      USER_UID=$(id -u)
-      USER_GID=$(id -g)
-      acr_domain_suffix=$(az cloud show --query suffixes.acrLoginServerEndpoint --output tsv)
-      CI_CACHE_ACR_URI=${{ parameters.CI_CACHE_ACR_NAME }}${acr_domain_suffix}
-      echo "##vso[task.setvariable variable=CI_CACHE_ACR_URI;isoutput=true]$CI_CACHE_ACR_URI"
-
-      docker_cache=()
-      if [ "$(ci_cache_cr_login.outcome }}" = "success" ]; then
-        docker_cache+=(--cache-from "$CI_CACHE_ACR_URI/tredev:${{ parameters.DEVCONTAINER_TAG }}")
-        docker_cache+=(--cache-from "$CI_CACHE_ACR_URI/tredev:latest")
-      fi
-
-      docker build . "${docker_cache[@]}" \
-        -t "tredev:${{ parameters.DEVCONTAINER_TAG }}" -f ".devcontainer/Dockerfile" \
-        --build-arg BUILDKIT_INLINE_CACHE=1 --build-arg USER_UID="${USER_UID}" --build-arg USER_GID="${USER_GID}"
-
-      docker image tag tredev:"${{ parameters.DEVCONTAINER_TAG }}" \
-        "$CI_CACHE_ACR_URI/tredev:${{ parameters.DEVCONTAINER_TAG }}"
+  - task: AzureCLI@2
+    displayName: Build Devcontainer
+    inputs:
+      azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
+      scriptType: 'bash'
+      scriptLocation: 'scriptPath'
+      scriptPath: '../devops/scripts/build_devcontainer.sh'
+      arguments: '${{ parameters.CI_CACHE_ACR_NAME }} $(ci_cache_cr_login.outcome) ${{ parameters.DEVCONTAINER_TAG }}'
