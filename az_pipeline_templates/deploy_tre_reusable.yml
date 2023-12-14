@@ -117,13 +117,6 @@ parameters:
     type: string
     default: ''
 
-resources:
-  repositories:
-    - repository: azuretre
-      type: git
-      name: AzureTRE
-      ref: ${{ parameters.prRef }}
-
 jobs:
 - job: deploy_management
   displayName: Deploy management
@@ -192,7 +185,8 @@ jobs:
       if [ "${{ parameters.LOCATION }}" == '' ]; then
         echo "Missing variable: LOCATION" && exit 1
       fi
-  - checkout: azuretre
+
+  - checkout: self
     clean: "true"
     persistCredentials: "false"
 
