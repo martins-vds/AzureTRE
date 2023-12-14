@@ -198,7 +198,7 @@ jobs:
       azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
       scriptType: 'bash'
       scriptLocation: 'scriptPath'
-      scriptPath: '../devops/scripts/login_acr.sh'
+      scriptPath: 'devops/scripts/login_acr.sh'
       arguments: '${{ parameters.CI_CACHE_ACR_NAME }}'
 
   - task: AzureCLI@2
@@ -207,5 +207,5 @@ jobs:
       azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
       scriptType: 'bash'
       scriptLocation: 'scriptPath'
-      scriptPath: '../devops/scripts/build_devcontainer.sh'
+      scriptPath: 'devops/scripts/build_devcontainer.sh'
       arguments: '${{ parameters.CI_CACHE_ACR_NAME }} $(ci_cache_cr_login.outcome) ${{ parameters.DEVCONTAINER_TAG }}'
