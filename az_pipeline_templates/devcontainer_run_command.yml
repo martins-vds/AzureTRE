@@ -10,12 +10,19 @@ parameters:
       - "AzureCloud"
     default: "AzureCloud"
   - name: API_CLIENT_ID
+    default: ""
   - name: AAD_TENANT_ID
+    default: ""
   - name: TEST_APP_ID
+    default: ""
   - name: TEST_ACCOUNT_CLIENT_ID
+    default: ""
   - name: TEST_ACCOUNT_CLIENT_SECRET
+    default: ""
   - name: TEST_WORKSPACE_APP_ID
+    default: ""
   - name: TEST_WORKSPACE_APP_SECRET
+    default: ""
   - name: TRE_ID
   - name: TERRAFORM_STATE_CONTAINER_NAME
     default: "tfstate"
@@ -34,7 +41,9 @@ parameters:
       - "true"
       - "false"
   - name: SWAGGER_UI_CLIENT_ID
+    default: ""
   - name: API_CLIENT_SECRET
+    default: ""
   - name: APPLICATION_ADMIN_CLIENT_ID
   - name: APPLICATION_ADMIN_CLIENT_SECRET
   - name: ACR_NAME
