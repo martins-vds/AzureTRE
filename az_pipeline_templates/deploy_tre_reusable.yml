@@ -213,7 +213,7 @@ jobs:
       scriptPath: 'devops/scripts/build_devcontainer.sh'
       arguments: '"${{ parameters.CI_CACHE_ACR_NAME }}" "$(ci_cache_cr_login.outcome)" "${{ parameters.DEVCONTAINER_TAG }}"'
 
-  - template: az_pipeline_templates/devcontainer_run_command.yml
+  - template: devcontainer_run_command.yml
     parameters:
       DISPLAY_NAME: 'Deploy management'
       COMMAND: "make bootstrap mgmt-deploy"
