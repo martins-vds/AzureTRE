@@ -116,7 +116,10 @@ parameters:
     displayName: Test user password
     type: string
     default: ''
-
+  - name: TERRAFORM_STATE_CONTAINER_NAME
+    displayName: Terraform state container name
+    type: string
+    default: 'tfstate'
 jobs:
 - job: deploy_management
   displayName: Deploy management
