@@ -45,10 +45,15 @@ parameters:
   - name: API_CLIENT_SECRET
     default: ""
   - name: APPLICATION_ADMIN_CLIENT_ID
+    default: ""
   - name: APPLICATION_ADMIN_CLIENT_SECRET
+    default: ""
   - name: ACR_NAME
+    default: ""
   - name: LOCATION
+    default: ""
   - name: BUNDLE_TYPE
+    default: ""
   - name: WORKSPACE_SERVICE_NAME
   - name: IS_API_SECURED
     default: "true"
