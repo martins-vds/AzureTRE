@@ -85,14 +85,18 @@ steps:
       inlineScript: |
         az acr login --name "${{ parameters.CI_CACHE_ACR_NAME }}"
 
-  - bash: |
+  - task: Bash@3
+    displayName: '${{ parameters.DISPLAY_NAME }} - Construct TRE URL'
+    targetType: 'inline'
+    script: |
       source devops/scripts/construct_tre_url.sh
       tre_url=$(construct_tre_url "${{ parameters.TRE_ID }}" "${{ parameters.LOCATION }}" "${{ parameters.AZURE_ENVIRONMENT }}")
       echo "##vso[task.setvariable variable=TRE_URL;isOutput=true]$tre_url"
-    displayName: 'Construct TRE URL'
 
-  - displayName: '${{ parameters.DISPLAY_NAME }} - Construct ARM_ENVIRONMENT'
-    bash: |
+  - task: Bash@3
+    displayName: '${{ parameters.DISPLAY_NAME }} - Construct ARM_ENVIRONMENT'
+    targetType: 'inline'
+    script: |
       source devops/scripts/convert_azure_env_to_arm_env.sh
       arm_environment=$(convert_azure_env_to_arm_env "${{ parameters.AZURE_ENVIRONMENT }}")
       echo "##vso[task.setvariable variable=ARM_ENVIRONMENT;isOutput=true]$arm_environment"
@@ -107,8 +111,10 @@ steps:
         echo "ACR_DOMAIN_SUFFIX=$(az cloud show --query suffixes.acrLoginServerEndpoint --output tsv)" >> $GITHUB_ENV
         echo "##vso[task.setvariable variable=ACR_DOMAIN_SUFFIX;isOutput=true]$ACR_DOMAIN_SUFFIX"
 
-  - displayName: '${{ parameters.DISPLAY_NAME }} - Run command in DevContainer'
-    bash: |
+  - task: Bash@3
+    displayName: '${{ parameters.DISPLAY_NAME }} - Run command in DevContainer'
+    targetType: 'inline'
+    script: |
       docker run --rm --mount \
         "type=bind,src=$[ variables['Build.SourcesDirectory'] ],dst=/workspaces/tre" \
         -v /var/run/docker.sock:/var/run/docker.sock \
