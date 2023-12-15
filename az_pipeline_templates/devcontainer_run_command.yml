@@ -93,6 +93,7 @@ steps:
     displayName: '${{ parameters.DISPLAY_NAME }} - Check for missing secrets'
     inputs:
       azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
+      addSpnToEnvironment: true
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
