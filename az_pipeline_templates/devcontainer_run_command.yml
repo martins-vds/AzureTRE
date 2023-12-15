@@ -142,11 +142,16 @@ steps:
         echo "##vso[task.setvariable variable=ACR_DOMAIN_SUFFIX;]$ACR_DOMAIN_SUFFIX"
         echo "Set ACR_DOMAIN_SUFFIX to $ACR_DOMAIN_SUFFIX"
 
-  - task: Bash@3
+  - task: AzureCLI@2
     displayName: '${{ parameters.DISPLAY_NAME }} - Run command in DevContainer'
     inputs:
-      targetType: 'inline'
-      script: |
+      azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        echo "Using $(ARM_ENVIRONMENT) arm environment"
+        echo "Using $(AZURE_ENVIRONMENT) azure environment"
+        echo "Using $(AZURE_CREDENTIALS_TENANT_ID) tenant id"
         docker run --rm --mount \
           "type=bind,src=$(Build.SourcesDirectory),dst=/workspaces/tre" \
           -v /var/run/docker.sock:/var/run/docker.sock \
