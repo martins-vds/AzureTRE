@@ -120,6 +120,10 @@ parameters:
     displayName: Terraform state container name
     type: string
     default: 'tfstate'
+  - name: SUBSCRIPTION_ID
+    displayName: Subscription ID
+    type: string
+    default: ''
 jobs:
 - job: deploy_management
   displayName: Deploy management
@@ -227,3 +231,4 @@ jobs:
       TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
       MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
       MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
+      SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
