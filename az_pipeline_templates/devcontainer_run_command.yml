@@ -6,6 +6,7 @@ parameters:
   - name: DEVCONTAINER_TAG
   - name: AZURE_CREDENTIALS
   - name: AZURE_ENVIRONMENT
+    type: string
     values:
       - "AzureCloud"
     default: "AzureCloud"
