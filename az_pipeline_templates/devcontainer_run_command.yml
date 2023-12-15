@@ -7,8 +7,6 @@ parameters:
   - name: AZURE_CREDENTIALS
   - name: AZURE_ENVIRONMENT
     type: string
-    values:
-      - "AzureCloud"
     default: "AzureCloud"
   - name: API_CLIENT_ID
     default: ""
