@@ -208,4 +208,19 @@ jobs:
       scriptType: 'bash'
       scriptLocation: 'scriptPath'
       scriptPath: 'devops/scripts/build_devcontainer.sh'
-      arguments: '${{ parameters.CI_CACHE_ACR_NAME }} $(ci_cache_cr_login.outcome) ${{ parameters.DEVCONTAINER_TAG }}'
+      arguments: '"${{ parameters.CI_CACHE_ACR_NAME }}" "$(ci_cache_cr_login.outcome)" "${{ parameters.DEVCONTAINER_TAG }}"'
+
+  - template: az_pipeline_templates/devcontainer_run_command.yml
+    parameters:
+      DISPLAY_NAME: 'Deploy management'
+      COMMAND: "make bootstrap mgmt-deploy"
+      DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+      CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+      AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+      AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+      TRE_ID: ${{ parameters.TRE_ID }}
+      LOCATION: ${{ parameters.LOCATION }}
+      ACR_NAME: ${{ parameters.ACR_NAME }}
+      TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
+      MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
+      MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
