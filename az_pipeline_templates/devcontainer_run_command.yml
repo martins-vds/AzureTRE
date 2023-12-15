@@ -55,6 +55,7 @@ parameters:
   - name: BUNDLE_TYPE
     default: ""
   - name: WORKSPACE_SERVICE_NAME
+    default: ""
   - name: IS_API_SECURED
     default: "true"
   - name: STATEFUL_RESOURCES_LOCKED
