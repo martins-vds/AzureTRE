@@ -87,19 +87,21 @@ steps:
 
   - task: Bash@3
     displayName: '${{ parameters.DISPLAY_NAME }} - Construct TRE URL'
-    targetType: 'inline'
-    script: |
-      source devops/scripts/construct_tre_url.sh
-      tre_url=$(construct_tre_url "${{ parameters.TRE_ID }}" "${{ parameters.LOCATION }}" "${{ parameters.AZURE_ENVIRONMENT }}")
-      echo "##vso[task.setvariable variable=TRE_URL;isOutput=true]$tre_url"
+    inputs:
+      targetType: 'inline'
+      script: |
+        source devops/scripts/construct_tre_url.sh
+        tre_url=$(construct_tre_url "${{ parameters.TRE_ID }}" "${{ parameters.LOCATION }}" "${{ parameters.AZURE_ENVIRONMENT }}")
+        echo "##vso[task.setvariable variable=TRE_URL;isOutput=true]$tre_url"
 
   - task: Bash@3
     displayName: '${{ parameters.DISPLAY_NAME }} - Construct ARM_ENVIRONMENT'
-    targetType: 'inline'
-    script: |
-      source devops/scripts/convert_azure_env_to_arm_env.sh
-      arm_environment=$(convert_azure_env_to_arm_env "${{ parameters.AZURE_ENVIRONMENT }}")
-      echo "##vso[task.setvariable variable=ARM_ENVIRONMENT;isOutput=true]$arm_environment"
+    inputs:
+      targetType: 'inline'
+      script: |
+        source devops/scripts/convert_azure_env_to_arm_env.sh
+        arm_environment=$(convert_azure_env_to_arm_env "${{ parameters.AZURE_ENVIRONMENT }}")
+        echo "##vso[task.setvariable variable=ARM_ENVIRONMENT;isOutput=true]$arm_environment"
 
   - task: AzureCLI@2
     displayName: '${{ parameters.DISPLAY_NAME }} - Construct ACR Domain Suffix'
@@ -113,63 +115,64 @@ steps:
 
   - task: Bash@3
     displayName: '${{ parameters.DISPLAY_NAME }} - Run command in DevContainer'
-    targetType: 'inline'
-    script: |
-      docker run --rm --mount \
-        "type=bind,src=$[ variables['Build.SourcesDirectory'] ],dst=/workspaces/tre" \
-        -v /var/run/docker.sock:/var/run/docker.sock \
-        --workdir /workspaces/tre \
-        --user vscode \
-        -e TF_INPUT="0" \
-        -e TF_IN_AUTOMATION="1" \
-        -e USE_ENV_VARS_NOT_FILES="true" \
-        -e BUNDLE_TYPE="${{ parameters.BUNDLE_TYPE }}" \
-        -e WORKSPACE_SERVICE_NAME="${{ parameters.WORKSPACE_SERVICE_NAME }}" \
-        -e ARM_ENVIRONMENT="$[ variables['ARM_ENVIRONMENT'] ]" \
-        -e TF_VAR_arm_environment="$[ variables['ARM_ENVIRONMENT'] ]" \
-        -e AZURE_ENVIRONMENT="$[ variables['AZURE_ENVIRONMENT'] ]" \
-        -e LOCATION="${{ parameters.LOCATION }}" \
-        -e TF_VAR_location="${{ parameters.LOCATION }}" \
-        -e RESOURCE_LOCATION="${{ parameters.LOCATION }}" \
-        -e ARM_CLIENT_ID="${{ fromJSON(parameters.AZURE_CREDENTIALS).clientId }}" \
-        -e ARM_CLIENT_SECRET="${{ fromJSON(parameters.AZURE_CREDENTIALS).clientSecret }}" \
-        -e ARM_TENANT_ID="${{ fromJSON(parameters.AZURE_CREDENTIALS).tenantId }}" \
-        -e ARM_SUBSCRIPTION_ID="${{ fromJSON(parameters.AZURE_CREDENTIALS).subscriptionId }}" \
-        -e TF_VAR_terraform_state_container_name="${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}" \
-        -e TF_VAR_mgmt_storage_account_name="${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" \
-        -e TF_VAR_mgmt_resource_group_name="${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" \
-        -e ACR_NAME=${{ parameters.ACR_NAME }} \
-        -e TF_VAR_acr_name=${{ parameters.ACR_NAME }} \
-        -e TF_VAR_aad_tenant_id="${{ parameters.AAD_TENANT_ID }}" \
-        -e TF_VAR_api_client_id="${{ parameters.API_CLIENT_ID }}" \
-        -e TF_VAR_api_client_secret="${{ parameters.API_CLIENT_SECRET }}" \
-        -e TF_VAR_application_admin_client_id="${{ parameters.APPLICATION_ADMIN_CLIENT_ID }}" \
-        -e TF_VAR_application_admin_client_secret="${{ parameters.APPLICATION_ADMIN_CLIENT_SECRET }}" \
-        -e TF_VAR_arm_subscription_id="${{ fromJSON(parameters.AZURE_CREDENTIALS).subscriptionId }}" \
-        -e TF_VAR_enable_swagger="${{ parameters.ENABLE_SWAGGER }}" \
-        -e SWAGGER_UI_CLIENT_ID="${{ parameters.SWAGGER_UI_CLIENT_ID }}" \
-        -e TF_VAR_swagger_ui_client_id="${{ parameters.SWAGGER_UI_CLIENT_ID }}" \
-        -e TF_VAR_core_address_space="${{ parameters.CORE_ADDRESS_SPACE }}" \
-        -e TF_VAR_tre_address_space="${{ parameters.TRE_ADDRESS_SPACE }}" \
-        -e API_CLIENT_ID="${{ parameters.API_CLIENT_ID }}" \
-        -e AAD_TENANT_ID="${{ parameters.AAD_TENANT_ID }}" \
-        -e TRE_ID="${{ parameters.TRE_ID }}" \
-        -e TF_VAR_tre_id="${{ parameters.TRE_ID }}" \
-        -e TRE_URL="$[ variables['TRE_URL'] ]" \
-        -e TEST_WORKSPACE_APP_ID="${{ parameters.TEST_WORKSPACE_APP_ID }}" \
-        -e TEST_WORKSPACE_APP_SECRET="${{ parameters.TEST_WORKSPACE_APP_SECRET }}" \
-        -e TEST_APP_ID="${{ parameters.TEST_APP_ID }}" \
-        -e TEST_ACCOUNT_CLIENT_ID="${{ parameters.TEST_ACCOUNT_CLIENT_ID }}" \
-        -e TEST_ACCOUNT_CLIENT_SECRET="${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}" \
-        -e IS_API_SECURED=${{ parameters.IS_API_SECURED }} \
-        -e DOCKER_BUILDKIT=1 \
-        -e TF_VAR_stateful_resources_locked=${{ parameters.STATEFUL_RESOURCES_LOCKED }} \
-        -e TF_VAR_enable_airlock_malware_scanning=${{ parameters.ENABLE_AIRLOCK_MALWARE_SCANNING }} \
-        -e CI_CACHE_ACR_NAME="${{ parameters.CI_CACHE_ACR_NAME }}" \
-        -e TF_VAR_core_app_service_plan_sku="${{ parameters.CORE_APP_SERVICE_PLAN_SKU }}" \
-        -e WORKSPACE_APP_SERVICE_PLAN_SKU="${{ parameters.WORKSPACE_APP_SERVICE_PLAN_SKU }}" \
-        -e TF_VAR_rp_bundle_values='${{ convertToJson(parameters.RP_BUNDLE_VALUES) }}' \
-        -e TF_VAR_resource_processor_number_processes_per_instance="${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}" \
-        -e E2E_TESTS_NUMBER_PROCESSES="${{ parameters.E2E_TESTS_NUMBER_PROCESSES }}" \
-        '${{ parameters.CI_CACHE_ACR_NAME }}$[ variables['ACR_DOMAIN_SUFFIX'] ]/tredev:${{ parameters.DEVCONTAINER_TAG }}' \
-      bash -c "${{ parameters.COMMAND }}"
+    inputs:
+      targetType: 'inline'
+      script: |
+        docker run --rm --mount \
+          "type=bind,src=$[ variables['Build.SourcesDirectory'] ],dst=/workspaces/tre" \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          --workdir /workspaces/tre \
+          --user vscode \
+          -e TF_INPUT="0" \
+          -e TF_IN_AUTOMATION="1" \
+          -e USE_ENV_VARS_NOT_FILES="true" \
+          -e BUNDLE_TYPE="${{ parameters.BUNDLE_TYPE }}" \
+          -e WORKSPACE_SERVICE_NAME="${{ parameters.WORKSPACE_SERVICE_NAME }}" \
+          -e ARM_ENVIRONMENT="$[ variables['ARM_ENVIRONMENT'] ]" \
+          -e TF_VAR_arm_environment="$[ variables['ARM_ENVIRONMENT'] ]" \
+          -e AZURE_ENVIRONMENT="$[ variables['AZURE_ENVIRONMENT'] ]" \
+          -e LOCATION="${{ parameters.LOCATION }}" \
+          -e TF_VAR_location="${{ parameters.LOCATION }}" \
+          -e RESOURCE_LOCATION="${{ parameters.LOCATION }}" \
+          -e ARM_CLIENT_ID="${{ fromJSON(parameters.AZURE_CREDENTIALS).clientId }}" \
+          -e ARM_CLIENT_SECRET="${{ fromJSON(parameters.AZURE_CREDENTIALS).clientSecret }}" \
+          -e ARM_TENANT_ID="${{ fromJSON(parameters.AZURE_CREDENTIALS).tenantId }}" \
+          -e ARM_SUBSCRIPTION_ID="${{ fromJSON(parameters.AZURE_CREDENTIALS).subscriptionId }}" \
+          -e TF_VAR_terraform_state_container_name="${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}" \
+          -e TF_VAR_mgmt_storage_account_name="${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" \
+          -e TF_VAR_mgmt_resource_group_name="${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" \
+          -e ACR_NAME=${{ parameters.ACR_NAME }} \
+          -e TF_VAR_acr_name=${{ parameters.ACR_NAME }} \
+          -e TF_VAR_aad_tenant_id="${{ parameters.AAD_TENANT_ID }}" \
+          -e TF_VAR_api_client_id="${{ parameters.API_CLIENT_ID }}" \
+          -e TF_VAR_api_client_secret="${{ parameters.API_CLIENT_SECRET }}" \
+          -e TF_VAR_application_admin_client_id="${{ parameters.APPLICATION_ADMIN_CLIENT_ID }}" \
+          -e TF_VAR_application_admin_client_secret="${{ parameters.APPLICATION_ADMIN_CLIENT_SECRET }}" \
+          -e TF_VAR_arm_subscription_id="${{ fromJSON(parameters.AZURE_CREDENTIALS).subscriptionId }}" \
+          -e TF_VAR_enable_swagger="${{ parameters.ENABLE_SWAGGER }}" \
+          -e SWAGGER_UI_CLIENT_ID="${{ parameters.SWAGGER_UI_CLIENT_ID }}" \
+          -e TF_VAR_swagger_ui_client_id="${{ parameters.SWAGGER_UI_CLIENT_ID }}" \
+          -e TF_VAR_core_address_space="${{ parameters.CORE_ADDRESS_SPACE }}" \
+          -e TF_VAR_tre_address_space="${{ parameters.TRE_ADDRESS_SPACE }}" \
+          -e API_CLIENT_ID="${{ parameters.API_CLIENT_ID }}" \
+          -e AAD_TENANT_ID="${{ parameters.AAD_TENANT_ID }}" \
+          -e TRE_ID="${{ parameters.TRE_ID }}" \
+          -e TF_VAR_tre_id="${{ parameters.TRE_ID }}" \
+          -e TRE_URL="$[ variables['TRE_URL'] ]" \
+          -e TEST_WORKSPACE_APP_ID="${{ parameters.TEST_WORKSPACE_APP_ID }}" \
+          -e TEST_WORKSPACE_APP_SECRET="${{ parameters.TEST_WORKSPACE_APP_SECRET }}" \
+          -e TEST_APP_ID="${{ parameters.TEST_APP_ID }}" \
+          -e TEST_ACCOUNT_CLIENT_ID="${{ parameters.TEST_ACCOUNT_CLIENT_ID }}" \
+          -e TEST_ACCOUNT_CLIENT_SECRET="${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}" \
+          -e IS_API_SECURED=${{ parameters.IS_API_SECURED }} \
+          -e DOCKER_BUILDKIT=1 \
+          -e TF_VAR_stateful_resources_locked=${{ parameters.STATEFUL_RESOURCES_LOCKED }} \
+          -e TF_VAR_enable_airlock_malware_scanning=${{ parameters.ENABLE_AIRLOCK_MALWARE_SCANNING }} \
+          -e CI_CACHE_ACR_NAME="${{ parameters.CI_CACHE_ACR_NAME }}" \
+          -e TF_VAR_core_app_service_plan_sku="${{ parameters.CORE_APP_SERVICE_PLAN_SKU }}" \
+          -e WORKSPACE_APP_SERVICE_PLAN_SKU="${{ parameters.WORKSPACE_APP_SERVICE_PLAN_SKU }}" \
+          -e TF_VAR_rp_bundle_values='${{ convertToJson(parameters.RP_BUNDLE_VALUES) }}' \
+          -e TF_VAR_resource_processor_number_processes_per_instance="${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}" \
+          -e E2E_TESTS_NUMBER_PROCESSES="${{ parameters.E2E_TESTS_NUMBER_PROCESSES }}" \
+          '${{ parameters.CI_CACHE_ACR_NAME }}$[ variables['ACR_DOMAIN_SUFFIX'] ]/tredev:${{ parameters.DEVCONTAINER_TAG }}' \
+        bash -c "${{ parameters.COMMAND }}"
