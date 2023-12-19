@@ -254,3 +254,30 @@ jobs:
       targetType: 'inline'
       script: |
         docker image push ${{ parameters.CI_CACHE_ACR_URI }}/tredev:${{ parameters.DEVCONTAINER_TAG }}
+- job: build_core_images
+  dependsOn: [deploy_management]
+  displayName: Build core images
+  pool:
+    vmImage: ubuntu-latest
+  strategy:
+    matrix:
+      build-and-push-api:
+        target: 'build-and-push-api'
+      build-and-push-resource-processor:
+        target: 'build-and-push-resource-processor'
+      build-and-push-airlock-processor:
+        target: 'build-and-push-airlock-processor'
+  steps:
+    - checkout: self
+      clean: "true"
+      persistCredentials: "false"
+
+    - template: devcontainer_run_command.yml
+      parameters:
+        DISPLAY_NAME: 'Docker Build'
+        COMMAND: "make $(target)"
+        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+        ACR_NAME: ${{ parameters.ACR_NAME }}
