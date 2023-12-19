@@ -239,14 +239,9 @@ jobs:
     inputs:
       azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
       scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        # shellcheck disable=SC2034,SC2015,SC2125
-        for i in {1..3}; do
-          az acr login --name "${{ parameters.CI_CACHE_ACR_NAME }}" && ec=0 && break || ec=\$? && sleep 10
-        done
-        # shellcheck disable=SC2242
-        (exit $ec)
+      scriptLocation: scriptPath
+      scriptPath: devops/scripts/run_with_retry.sh
+      arguments: '3 "az acr login --name \"${{ parameters.CI_CACHE_ACR_NAME }\""'
 
   - task: Bash@3
     displayName: Push cached devcontainer
