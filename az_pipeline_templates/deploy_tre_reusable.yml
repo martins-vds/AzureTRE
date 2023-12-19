@@ -210,6 +210,7 @@ jobs:
 
   - task: AzureCLI@2
     displayName: Build Devcontainer
+    name: build_devcontainer
     inputs:
       azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
       scriptType: 'bash'
@@ -248,7 +249,7 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        docker image push $(CI_CACHE_ACR_URI)/tredev:${{ parameters.DEVCONTAINER_TAG }}
+        docker image push $(build_devcontainer.CI_CACHE_ACR_URI)/tredev:${{ parameters.DEVCONTAINER_TAG }}
 - job: build_core_images
   dependsOn: [deploy_management]
   displayName: Build core images
