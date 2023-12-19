@@ -246,7 +246,7 @@ jobs:
           az acr login --name "${{ parameters.CI_CACHE_ACR_NAME }}" && ec=0 && break || ec=\$? && sleep 10
         done
         # shellcheck disable=SC2242
-        (exit \$ec)
+        (exit $ec)
 
   - task: Bash@3
     displayName: Push cached devcontainer
