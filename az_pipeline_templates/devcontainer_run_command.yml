@@ -4,7 +4,9 @@ parameters:
   - name: COMMAND
     type: string
   - name: DEVCONTAINER_TAG
+    default: ""
   - name: AZURE_CREDENTIALS
+    default: ""
   - name: AZURE_ENVIRONMENT
     type: string
     default: "AzureCloud"
@@ -23,10 +25,13 @@ parameters:
   - name: TEST_WORKSPACE_APP_SECRET
     default: ""
   - name: TRE_ID
+    default: ""
   - name: TERRAFORM_STATE_CONTAINER_NAME
     default: "tfstate"
   - name: MGMT_RESOURCE_GROUP_NAME
+    default: ""
   - name: MGMT_STORAGE_ACCOUNT_NAME
+    default: ""
   - name: CORE_ADDRESS_SPACE
     type: string
     default: "10.0.0.0/22"
@@ -88,6 +93,7 @@ parameters:
     type: object
     default: ""
   - name: SUBSCRIPTION_ID
+    default: ""
 steps:
   - task: AzureCLI@2
     displayName: '${{ parameters.DISPLAY_NAME }} - Check for missing secrets'
