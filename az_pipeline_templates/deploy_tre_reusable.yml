@@ -242,7 +242,7 @@ jobs:
       scriptType: 'bash'
       scriptLocation: scriptPath
       scriptPath: devops/scripts/run_with_retry.sh
-      arguments: '3 "az acr login --name \"${{ parameters.CI_CACHE_ACR_NAME }\""'
+      arguments: '3 "az acr login --name \"${{ parameters.CI_CACHE_ACR_NAME }}\""'
 
   - task: Bash@3
     displayName: Push cached devcontainer
