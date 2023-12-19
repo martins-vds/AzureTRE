@@ -253,7 +253,7 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        docker image push ${{ parameters.CI_CACHE_ACR_URI }}/tredev:${{ parameters.DEVCONTAINER_TAG }}
+        docker image push $(CI_CACHE_ACR_URI)/tredev:${{ parameters.DEVCONTAINER_TAG }}
 - job: build_core_images
   dependsOn: [deploy_management]
   displayName: Build core images
