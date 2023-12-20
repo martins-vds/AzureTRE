@@ -152,6 +152,10 @@ parameters:
     displayName: Workspace app service plan SKU
     type: string
     default: 'P1v2'
+  - name: TF_LOG
+    displayName: Terraform log level
+    type: string
+    default: ''
 jobs:
 - job: deploy_management
   displayName: Deploy management
