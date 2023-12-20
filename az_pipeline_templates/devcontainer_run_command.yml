@@ -109,7 +109,6 @@ steps:
 
   - task: AzureCLI@2
     displayName: '${{ parameters.DISPLAY_NAME }} - ACR Login'
-    condition: contains('${{ parameters.command }}', 'bootstrap')
     inputs:
       azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
       scriptType: bash
