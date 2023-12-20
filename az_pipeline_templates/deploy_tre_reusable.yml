@@ -282,3 +282,23 @@ jobs:
         AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
         AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
         ACR_NAME: ${{ parameters.ACR_NAME }}
+
+- job: start_tre
+  displayName: Start TRE
+  dependsOn: [deploy_management]
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+    - checkout: self
+      clean: "true"
+      persistCredentials: "false"
+
+    - template: devcontainer_run_command.yml
+      parameters:
+        COMMAND: "make tre-start"
+        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+        TRE_ID: ${{ parameters.TRE_ID }}
+
