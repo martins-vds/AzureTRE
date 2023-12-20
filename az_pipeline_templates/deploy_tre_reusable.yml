@@ -124,6 +124,34 @@ parameters:
     displayName: Subscription ID
     type: string
     default: ''
+  - name: CORE_ADDRESS_SPACE
+    displayName: Core address space
+    type: string
+    default: '10.0.0.0/22'
+  - name: CORE_APP_SERVICE_PLAN_SKU
+    displayName: Core app service plan SKU
+    type: string
+    default: 'P1v2'
+  - name: TRE_ADDRESS_SPACE
+    displayName: TRE address space
+    type: string
+    default: '10.0.0.0/16'
+  - name: ENABLE_SWAGGER
+    displayName: Enable Swagger
+    type: boolean
+    default: 'false'
+  - name: RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE
+    displayName: Resource processor number of processes per instance
+    type: number
+    default: '5'
+  - name: RP_BUNDLE_VALUES
+    displayName: RP bundle values
+    type: string
+    default: '{}'
+  - name: WORKSPACE_APP_SERVICE_PLAN_SKU
+    displayName: Workspace app service plan SKU
+    type: string
+    default: 'P1v2'
 jobs:
 - job: deploy_management
   displayName: Deploy management
@@ -282,6 +310,7 @@ jobs:
         AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
         AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
         ACR_NAME: ${{ parameters.ACR_NAME }}
+        LOCATION: ${{ parameters.LOCATION }}
 
 - job: start_tre
   displayName: Start TRE
@@ -295,10 +324,49 @@ jobs:
 
     - template: devcontainer_run_command.yml
       parameters:
+        DISPLAY_NAME: 'Start TRE'
         COMMAND: "make tre-start"
         DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
         CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
         AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
         AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
         TRE_ID: ${{ parameters.TRE_ID }}
+        LOCATION: ${{ parameters.LOCATION }}
 
+- job: deploy_tre
+  displayName: Deploy TRE
+  dependsOn: [start_tre, build_core_images]
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+    - checkout: self
+      clean: "true"
+      persistCredentials: "false"
+
+    - template: devcontainer_run_command.yml
+      parameters:
+        DISPLAY_NAME: 'Deploy TRE Core'
+        COMMAND: "TF_VAR_ci_git_ref=${{ parameters.ciGitRef }} TF_LOG=${{ parameters.TF_LOG }} make deploy-core"
+        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+        TRE_ID: ${{ parameters.TRE_ID }}
+        LOCATION: ${{ parameters.LOCATION }}
+        ACR_NAME: ${{ parameters.ACR_NAME }}
+        TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
+        MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
+        MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
+        CORE_ADDRESS_SPACE: ${{ parameters.CORE_ADDRESS_SPACE }}
+        TRE_ADDRESS_SPACE: ${{ parameters.TRE_ADDRESS_SPACE }}
+        ENABLE_SWAGGER: ${{ parameters.ENABLE_SWAGGER }}
+        SWAGGER_UI_CLIENT_ID: "${{ parameters.SWAGGER_UI_CLIENT_ID }}"
+        API_CLIENT_SECRET: "${{ parameters.API_CLIENT_SECRET }}"
+        APPLICATION_ADMIN_CLIENT_ID: "${{ parameters.APPLICATION_ADMIN_CLIENT_ID }}"
+        APPLICATION_ADMIN_CLIENT_SECRET: "${{ parameters.APPLICATION_ADMIN_CLIENT_SECRET }}"
+        STATEFUL_RESOURCES_LOCKED: "${{ github.ref == 'refs/heads/main' && inputs.prRef == '' && true || false }}"
+        CORE_APP_SERVICE_PLAN_SKU: ${{ parameters.CORE_APP_SERVICE_PLAN_SKU }}
+        RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
+        RP_BUNDLE_VALUES: ${{ parameters.RP_BUNDLE_VALUES }}
