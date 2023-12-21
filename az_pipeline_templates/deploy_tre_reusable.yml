@@ -365,7 +365,7 @@ jobs:
         MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
         CORE_ADDRESS_SPACE: ${{ parameters.CORE_ADDRESS_SPACE }}
         TRE_ADDRESS_SPACE: ${{ parameters.TRE_ADDRESS_SPACE }}
-        ENABLE_SWAGGER: ${{ parameters.ENABLE_SWAGGER }}
+        ENABLE_SWAGGER: "${{ parameters.ENABLE_SWAGGER }}"
         SWAGGER_UI_CLIENT_ID: "${{ parameters.SWAGGER_UI_CLIENT_ID }}"
         API_CLIENT_SECRET: "${{ parameters.API_CLIENT_SECRET }}"
         APPLICATION_ADMIN_CLIENT_ID: "${{ parameters.APPLICATION_ADMIN_CLIENT_ID }}"
@@ -377,5 +377,5 @@ jobs:
           STATEFUL_RESOURCES_LOCKED: 'false'
         CORE_APP_SERVICE_PLAN_SKU: ${{ parameters.CORE_APP_SERVICE_PLAN_SKU }}
         RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
-        RP_BUNDLE_VALUES: ${{ parameters.RP_BUNDLE_VALUES }}
+        RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
         SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
