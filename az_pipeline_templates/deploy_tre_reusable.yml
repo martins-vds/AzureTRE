@@ -159,6 +159,18 @@ parameters:
     displayName: Terraform log level
     type: string
     default: ''
+  - name: BUNDLES
+    displayName: Bundles
+    type: object
+    default: {}
+  - name: SHARED_BUNDLES
+    displayName: Shared bundles
+    type: object
+    default: {}
+  - name: USER_RESOURCE_BUNDLES
+    displayName: User resource bundles
+    type: object
+    default: {}
 jobs:
 - job: deploy_management
   displayName: Deploy management
@@ -382,3 +394,173 @@ jobs:
         RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
         RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
         SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+    - template: devcontainer_run_command.yml
+      parameters:
+        DISPLAY_NAME: 'API Health Check'
+        COMMAND: "make api-healthcheck"
+        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME }}
+        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+        TRE_ID: ${{ parameters.TRE_ID }}
+        LOCATION: ${{ parameters.LOCATION }}
+        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+- job: publish_bundles
+  displayName: Publish bundles
+  dependsOn: [deploy_management]
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+    - checkout: self
+      clean: "true"
+      persistCredentials: "false"
+
+    - ${{ each bundle in parameters.BUNDLES }}:
+        - template: devcontainer_run_command.yml
+          parameters:
+            DISPLAY_NAME: 'Publish bundle'
+            COMMAND: >-
+              for i in {1..3}; do make bundle-build bundle-publish DIR=${{ bundle.BUNDLE_DIR }}
+              && ec=0 && break || ec=\$? && sleep 30; done; (exit \$ec)
+            DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+            AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+            AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+            CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+            ACR_NAME: ${{ parameters.ACR_NAME }}
+            SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+    - ${{ each bundle in parameters.USER_RESOURCE_BUNDLES }}:
+        - template: devcontainer_run_command.yml
+          parameters:
+            DISPLAY_NAME: 'Publish bundle'
+            COMMAND: >-
+              for i in {1..3}; do make bundle-build bundle-publish DIR=${{ bundle.BUNDLE_DIR }}
+              && ec=0 && break || ec=\$? && sleep 30; done; (exit \$ec)
+            DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+            AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+            AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+            CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+            ACR_NAME: ${{ parameters.ACR_NAME }}
+            SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+- job: publish_shared_bundles
+  displayName: Publish shared bundles
+  dependsOn: [deploy_management]
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+    - checkout: self
+      clean: "true"
+      persistCredentials: "false"
+
+    - ${{ each bundle in parameters.SHARED_BUNDLES }}:
+        - template: devcontainer_run_command.yml
+          parameters:
+            DISPLAY_NAME: 'Publish shared bundle'
+            COMMAND: >-
+              for i in {1..3}; do make bundle-build bundle-publish DIR=${{ bundle.BUNDLE_DIR }}
+              && ec=0 && break || ec=\$? && sleep 30; done; (exit \$ec)
+            DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+            AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+            AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+            CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+            ACR_NAME: ${{ parameters.ACR_NAME }}
+            SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+- job: register_shared_bundles
+  displayName: Register shared bundles
+  dependsOn: [publish_shared_bundles, deploy_tre]
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+    - checkout: self
+      clean: "true"
+      persistCredentials: "false"
+
+    - ${{ each bundle in parameters.SHARED_BUNDLES }}:
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: 'Register shared bundles'
+          COMMAND: >-
+            for i in {1..3}; do make bundle-register DIR=${{ bundle.BUNDLE_DIR }}
+            && ec=0 && break || ec=\$? && sleep 10; done; (exit \$ec)
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          ACR_NAME: ${{ parameters.ACR_NAME }}
+          API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+          AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+          TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+          TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+          TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+          TRE_ID: ${{ parameters.TRE_ID }}
+          LOCATION: ${{ parameters.LOCATION }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
+
+- job: register_bundles
+  displayName: Register bundles
+  dependsOn: [publish_bundles, deploy_tre]
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+    - checkout: self
+      clean: "true"
+      persistCredentials: "false"
+
+    - ${{ each bundle in parameters.BUNDLES }}:
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: 'Register bundles'
+          COMMAND: >-
+            for i in {1..3}; do make bundle-register DIR=${{ bundle.BUNDLE_DIR }}
+            && ec=0 && break || ec=\$? && sleep 10; done; (exit \$ec)
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          ACR_NAME: ${{ parameters.ACR_NAME }}
+          API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+          AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+          TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+          TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+          TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+          TRE_ID: ${{ parameters.TRE_ID }}
+          LOCATION: ${{ parameters.LOCATION }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
+
+- job: register_user_resource_bundles
+  displayName: Register user resource bundles
+  dependsOn: [register_bundles, publish_bundles, deploy_tre]
+  pool:
+    vmImage: ubuntu-latest
+  steps:
+    - checkout: self
+      clean: "true"
+      persistCredentials: "false"
+
+    - ${{ each bundle in parameters.USER_RESOURCE_BUNDLES }}:
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: 'Register user resource bundles'
+          COMMAND: >-
+            for i in {1..3}; do make bundle-register DIR=${{ bundle.BUNDLE_DIR }}
+            && ec=0 && break || ec=\$? && sleep 10; done; (exit \$ec)
+          DEVCONTAINER_TAG: ${{ inputs.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ secrets.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ vars.AZURE_ENVIRONMENT }}
+          ACR_NAME: ${{ secrets.ACR_NAME }}
+          API_CLIENT_ID: "${{ secrets.API_CLIENT_ID }}"
+          AAD_TENANT_ID: "${{ secrets.AAD_TENANT_ID }}"
+          TEST_APP_ID: "${{ secrets.TEST_APP_ID }}"
+          TEST_ACCOUNT_CLIENT_ID: "${{ secrets.TEST_ACCOUNT_CLIENT_ID }}"
+          TEST_ACCOUNT_CLIENT_SECRET: "${{ secrets.TEST_ACCOUNT_CLIENT_SECRET }}"
+          TRE_ID: ${{ secrets.TRE_ID }}
+          LOCATION: ${{ vars.LOCATION }}
+          BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
+          WORKSPACE_SERVICE_NAME: ${{ bundle.WORKSPACE_SERVICE_NAME }}
