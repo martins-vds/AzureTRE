@@ -395,17 +395,17 @@ jobs:
         RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
         SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'API Health Check'
-        COMMAND: "make api-healthcheck"
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME }}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        TRE_ID: ${{ parameters.TRE_ID }}
-        LOCATION: ${{ parameters.LOCATION }}
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+    # - template: devcontainer_run_command.yml
+    #   parameters:
+    #     DISPLAY_NAME: 'API Health Check'
+    #     COMMAND: "make api-healthcheck"
+    #     DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+    #     CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME }}
+    #     AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+    #     AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+    #     TRE_ID: ${{ parameters.TRE_ID }}
+    #     LOCATION: ${{ parameters.LOCATION }}
+    #     SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
 - job: publish_bundles
   displayName: Publish bundles
