@@ -92,10 +92,6 @@ parameters:
     displayName: CI cache ACR name
     type: string
     default: ''
-  - name: e2eTestsCustomSelector
-    displayName: E2E tests custom selector
-    type: string
-    default: ''
   - name: LOCATION
     displayName: Location
     type: string
