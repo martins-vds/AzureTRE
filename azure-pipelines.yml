@@ -9,6 +9,14 @@ parameters:
     default: azuretre-dev
     values:
       - "azuretre-dev"
+  - name: e2eTestsCustomSelector
+    displayName: E2E Tests Custom Selector
+    type: string
+    default: ""
+    values:
+      - ""
+      - "extended or extended_aad"
+      - "extended or extended_aad or shared_services or airlock"
 
 variables:
     - group: '${{ parameters.environment }}'
@@ -17,9 +25,8 @@ jobs:
   - template: az_pipeline_templates/deploy_tre_reusable.yml
     parameters:
       ciGitRef: $(Build.SourceBranch)
-      # e2eTestsCustomSelector: >-
-      #   $[ (github.event_name == 'push' && 'extended or extended_aad') || 'extended or extended_aad or shared_services or airlock' ]
       environmentName: ${{ parameters.environment }}
+      e2eTestsCustomSelector: ${{ parameters.e2eTestsCustomSelector }}
       E2E_TESTS_NUMBER_PROCESSES: 1
       DEVCONTAINER_TAG: 'latest'
       AAD_TENANT_ID: $(AAD_TENANT_ID)

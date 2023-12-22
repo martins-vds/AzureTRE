@@ -8,6 +8,10 @@ parameters:
     displayName: Environment name
     type: string
     default: ''
+  - name: e2eTestsCustomSelector
+    displayName: E2E tests custom selector
+    type: string
+    default: ''
   - name: E2E_TESTS_NUMBER_PROCESSES
     displayName: Number of processes for e2e tests
     type: number
@@ -662,3 +666,79 @@ jobs:
         MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
         SWAGGER_UI_CLIENT_ID: "${{ parameters.SWAGGER_UI_CLIENT_ID }}"
         SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+- job: e2e_tests_smoke
+  displayName: Run E2E Tests (Smoke)
+  dependsOn: [deploy_shared_services, register_bundles, deploy_ui]
+  pool:
+    vmImage: ubuntu-latest
+  timeoutInMinutes: "10"
+  steps:
+    - checkout: self
+      clean: "true"
+      persistCredentials: "false"
+
+    - template: devcontainer_run_command.yml
+      parameters:
+        DISPLAY_NAME: 'Run E2E Tests (Smoke)'
+        COMMAND: "make test-e2e-smoke"
+        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+        LOCATION: ${{ parameters.LOCATION }}
+        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+        TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+        TEST_WORKSPACE_APP_ID: "${{ parameters.TEST_WORKSPACE_APP_ID }}"
+        TEST_WORKSPACE_APP_SECRET: "${{ parameters.TEST_WORKSPACE_APP_SECRET }}"
+        TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+        TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+        TRE_ID: ${{ parameters.TRE_ID }}
+        IS_API_SECURED: false
+        WORKSPACE_APP_SERVICE_PLAN_SKU: ${{ parameters.WORKSPACE_APP_SERVICE_PLAN_SKU }}
+        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+    - publish: "./e2e_tests/pytest_e2e_smoke.xml"
+      artifact: E2E Test (Smoke) Results
+      displayName: Upload Test Results
+      condition: succeededOrFailed()
+
+- job: e2e_tests_custom
+  displayName: Run E2E Tests (Custom)
+  condition: ne(variables['parameters.e2eTestsCustomSelector'], '')
+  dependsOn: [deploy_shared_services, register_bundles, register_user_resource_bundles]
+  pool:
+    vmImage: ubuntu-latest
+  timeoutInMinutes: "300"
+  steps:
+    - checkout: self
+      clean: "true"
+      persistCredentials: "false"
+
+    - template: devcontainer_run_command.yml
+      parameters:
+        DISPLAY_NAME: 'Run E2E Tests (Custom)'
+        COMMAND: "make test-e2e-custom SELECTOR='${{ parameters.e2eTestsCustomSelector }}'"
+        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+        LOCATION: ${{ parameters.LOCATION }}
+        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+        TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+        TEST_WORKSPACE_APP_ID: "${{ parameters.TEST_WORKSPACE_APP_ID }}"
+        TEST_WORKSPACE_APP_SECRET: "${{ parameters.TEST_WORKSPACE_APP_SECRET }}"
+        TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+        TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+        TRE_ID: ${{ parameters.TRE_ID }}
+        IS_API_SECURED: false
+        WORKSPACE_APP_SERVICE_PLAN_SKU: ${{ parameters.WORKSPACE_APP_SERVICE_PLAN_SKU }}
+        E2E_TESTS_NUMBER_PROCESSES: ${{ parameters.E2E_TESTS_NUMBER_PROCESSES }}
+        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+    - publish: "./e2e_tests/pytest_e2e_custom.xml"
+      artifact: E2E Test (Smoke) Results
+      displayName: Upload Test Results
+      condition: succeededOrFailed()
