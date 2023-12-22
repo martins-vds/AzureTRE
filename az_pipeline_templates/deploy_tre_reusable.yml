@@ -619,20 +619,20 @@ jobs:
       parameters:
         DISPLAY_NAME: 'State Store Migrations'
         COMMAND: "make db-migrate"
-        DEVCONTAINER_TAG: ${{ inputs.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ secrets.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ vars.AZURE_ENVIRONMENT }}
-        API_CLIENT_ID: "${{ secrets.API_CLIENT_ID }}"
-        AAD_TENANT_ID: "${{ secrets.AAD_TENANT_ID }}"
-        TEST_APP_ID: "${{ secrets.TEST_APP_ID }}"
-        TEST_ACCOUNT_CLIENT_ID: "${{ secrets.TEST_ACCOUNT_CLIENT_ID }}"
-        TEST_ACCOUNT_CLIENT_SECRET: "${{ secrets.TEST_ACCOUNT_CLIENT_SECRET }}"
-        TRE_ID: ${{ secrets.TRE_ID }}
-        LOCATION: ${{ vars.LOCATION }}
-        TERRAFORM_STATE_CONTAINER_NAME: ${{ vars.TERRAFORM_STATE_CONTAINER_NAME }}
-        MGMT_RESOURCE_GROUP_NAME: ${{ secrets.MGMT_RESOURCE_GROUP_NAME }}
-        MGMT_STORAGE_ACCOUNT_NAME: ${{ secrets.MGMT_STORAGE_ACCOUNT_NAME }}
+        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+        TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+        TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+        TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+        TRE_ID: ${{ parameters.TRE_ID }}
+        LOCATION: ${{ parameters.LOCATION }}
+        TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
+        MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
+        MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
         SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
 - job: deploy_ui
