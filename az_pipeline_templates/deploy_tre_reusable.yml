@@ -143,24 +143,31 @@ parameters:
   - name: E2E_TESTS_NUMBER_PROCESSES
     displayName: Number of processes for e2e tests
     type: string
+    default: ''
   - name: WORKSPACE_APP_SERVICE_PLAN_SKU
     displayName: Workspace app service plan SKU
     type: string
+    default: ''
   - name: RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE
     displayName: Resource processor number of processes per instance
     type: string
+    default: ''
   - name: ENABLE_SWAGGER
     displayName: Enable Swagger
     type: string
+    default: ''
   - name: CORE_ADDRESS_SPACE
     displayName: Core address space
     type: string
+    default: ''
   - name: CORE_APP_SERVICE_PLAN_SKU
     displayName: Core app service plan SKU
     type: string
+    default: ''
   - name: TRE_ADDRESS_SPACE
     displayName: TRE address space
     type: string
+    default: ''
 jobs:
 - job: deploy_management
   displayName: Deploy management
