@@ -167,8 +167,6 @@ parameters:
     displayName: Core app service plan SKU
     type: string
     default: 'P1v2'
-    values:
-      - 'P1v2'
   - name: TRE_ADDRESS_SPACE
     displayName: TRE address space
     type: string
