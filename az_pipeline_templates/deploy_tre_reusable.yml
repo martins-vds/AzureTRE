@@ -151,23 +151,23 @@ parameters:
   - name: RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE
     displayName: Resource processor number of processes per instance
     type: string
-    default: '5'
+    default: "5"
   - name: ENABLE_SWAGGER
     displayName: Enable Swagger
     type: string
-    default: 'false'
+    default: "false"
   - name: CORE_ADDRESS_SPACE
     displayName: Core address space
     type: string
-    default: '10.0.0.0/22'
+    default: "10.0.0.0/22"
   - name: CORE_APP_SERVICE_PLAN_SKU
     displayName: Core app service plan SKU
     type: string
-    default: 'P1v2'
+    default: "P1v2"
   - name: TRE_ADDRESS_SPACE
     displayName: TRE address space
     type: string
-    default: '10.0.0.0/16'
+    default: "10.0.0.0/16"
 jobs:
 - job: deploy_management
   displayName: Deploy management
