@@ -156,9 +156,6 @@ parameters:
     displayName: Enable Swagger
     type: string
     default: 'false'
-    values:
-      - 'true'
-      - 'false'
   - name: CORE_ADDRESS_SPACE
     displayName: Core address space
     type: string
