@@ -20,6 +20,14 @@ parameters:
     values:
       - "extended or extended_aad"
       - "extended or extended_aad or shared_services or airlock"
+  - name: deployFirewall
+    displayName: Deploy Firewall
+    type: boolean
+    default: 'false'
+  - name: deployBastion
+    displayName: Deploy Bastion
+    type: boolean
+    default: 'false'
 
 variables:
     - group: '${{ parameters.environment }}'
@@ -108,9 +116,10 @@ jobs:
           BUNDLE_DIR: "./templates/workspace_services/ohdsi"
           BUNDLE_NAME: "ohdsi"
       SHARED_BUNDLES:
-        - BUNDLE_TYPE: "shared_service"
-          BUNDLE_DIR: "./templates/shared_services/firewall"
-          BUNDLE_NAME: "firewall"
+        - ${{ if eq(parameters.deployFirewall, 'true') }}:
+          - BUNDLE_TYPE: "shared"
+            BUNDLE_DIR: "./templates/shared_services/firewall"
+            BUNDLE_NAME: "firewall"
         - BUNDLE_TYPE: "shared_service"
           BUNDLE_DIR: "./templates/shared_services/gitea"
           BUNDLE_NAME: "gitea_shared"
