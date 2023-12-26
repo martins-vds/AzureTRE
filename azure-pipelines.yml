@@ -69,7 +69,7 @@ jobs:
       WORKSPACE_APP_SERVICE_PLAN_SKU: 'P1v2'
       RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: "5"
       ENABLE_SWAGGER: 'false'
-      ${{ if eq(paraemters.enableBastion , 'true') }}:
+      ${{ if eq(parameters.enableBastion , 'true') }}:
         ENABLE_BASTION: 'true'
       CORE_ADDRESS_SPACE: '10.0.0.0/22'
       CORE_APP_SERVICE_PLAN_SKU: 'P1v2'
