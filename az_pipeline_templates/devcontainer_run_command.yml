@@ -114,6 +114,7 @@ steps:
         echo "##vso[task.setvariable variable=AZURE_CREDENTIALS_CLIENT_SECRET;isSecret=true]$servicePrincipalKey"
 
   - task: AzureCLI@2
+    condition: not(contains(parameters.COMMAND, 'bootstrap'))
     displayName: '${{ parameters.DISPLAY_NAME }} - ACR Login'
     inputs:
       azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
