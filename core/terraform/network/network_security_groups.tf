@@ -152,7 +152,7 @@ resource "azurerm_network_security_group" "app_gw" {
 resource "azurerm_subnet_network_security_group_association" "app_gw" {
   subnet_id                 = azurerm_subnet.app_gw.id
   network_security_group_id = azurerm_network_security_group.app_gw.id
-  depends_on                = var.enable_bastion ? [azurerm_subnet_network_security_group_association.bastion] : []
+  depends_on                =  [azurerm_subnet_network_security_group_association.bastion]
 }
 
 # Network security group with only default security rules
