@@ -290,7 +290,7 @@ jobs:
 
   - task: AzureCLI@2
     displayName: ACR Login
-    condition: eq(variables['ci_cache_cr_login.outcome'], 'success')
+    condition: ne(variables['ci_cache_cr_login.outcome'], 'success')
     inputs:
       azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
       scriptType: 'bash'
