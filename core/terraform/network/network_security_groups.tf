@@ -1,6 +1,7 @@
 # Network security group for Azure Bastion subnet
 # See https://docs.microsoft.com/azure/bastion/bastion-nsg
 resource "azurerm_network_security_group" "bastion" {
+  count = var.enable_bastion ? 1 : 0
   name                = "nsg-bastion-subnet"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -106,6 +107,7 @@ resource "azurerm_network_security_group" "bastion" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "bastion" {
+  count                     = var.enable_bastion ? 1 : 0
   subnet_id                 = azurerm_subnet.bastion.id
   network_security_group_id = azurerm_network_security_group.bastion.id
   # depend on the last subnet we created in the vnet
@@ -150,7 +152,7 @@ resource "azurerm_network_security_group" "app_gw" {
 resource "azurerm_subnet_network_security_group_association" "app_gw" {
   subnet_id                 = azurerm_subnet.app_gw.id
   network_security_group_id = azurerm_network_security_group.app_gw.id
-  depends_on                = [azurerm_subnet_network_security_group_association.bastion]
+  depends_on                = var.enable_bastion ? [azurerm_subnet_network_security_group_association.bastion] : []
 }
 
 # Network security group with only default security rules

@@ -24,8 +24,8 @@ parameters:
     displayName: Deploy Firewall
     type: boolean
     default: 'false'
-  - name: deployBastion
-    displayName: Deploy Bastion
+  - name: enableBastion
+    displayName: Enable Bastion Host
     type: boolean
     default: 'false'
 
@@ -69,6 +69,8 @@ jobs:
       WORKSPACE_APP_SERVICE_PLAN_SKU: 'P1v2'
       RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: "5"
       ENABLE_SWAGGER: 'false'
+      ${{ if eq(paraemters.enableBastion , 'true') }}:
+        ENABLE_BASTION: 'true'
       CORE_ADDRESS_SPACE: '10.0.0.0/22'
       CORE_APP_SERVICE_PLAN_SKU: 'P1v2'
       TRE_ADDRESS_SPACE: '10.0.0.0/16'

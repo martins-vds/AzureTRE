@@ -86,6 +86,7 @@ module "network" {
   resource_group_name = azurerm_resource_group.core.name
   core_address_space  = var.core_address_space
   arm_environment     = var.arm_environment
+  enable_bastion      = var.enable_bastion
 }
 
 module "appgateway" {

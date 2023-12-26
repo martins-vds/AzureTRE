@@ -44,6 +44,12 @@ parameters:
     values:
       - "true"
       - "false"
+  - name: ENABLE_BASTION
+    default: "false"
+    type: string
+    values:
+      - "true"
+      - "false"
   - name: SWAGGER_UI_CLIENT_ID
     default: ""
   - name: API_CLIENT_SECRET
@@ -198,6 +204,7 @@ steps:
           -e TF_VAR_application_admin_client_secret="${{ parameters.APPLICATION_ADMIN_CLIENT_SECRET }}" \
           -e TF_VAR_arm_subscription_id="${{ parameters.SUBSCRIPTION_ID }}" \
           -e TF_VAR_enable_swagger="${{ parameters.ENABLE_SWAGGER }}" \
+          -e TF_VAR_enable_bastion="${{ parameters.ENABLE_BASTION }}" \
           -e SWAGGER_UI_CLIENT_ID="${{ parameters.SWAGGER_UI_CLIENT_ID }}" \
           -e TF_VAR_swagger_ui_client_id="${{ parameters.SWAGGER_UI_CLIENT_ID }}" \
           -e TF_VAR_core_address_space="${{ parameters.CORE_ADDRESS_SPACE }}" \

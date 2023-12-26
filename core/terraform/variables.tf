@@ -76,6 +76,13 @@ variable "enable_swagger" {
   sensitive   = false
 }
 
+variable "enable_bastion" {
+  type = bool
+  default = false
+  description = "Determines whether the bastion host will be deployed."
+  sensitive = false
+}
+
 variable "swagger_ui_client_id" {
   type        = string
   description = "The client id (app id) of the registration in Azure AD for the Swagger UI"

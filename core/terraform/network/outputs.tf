@@ -3,7 +3,7 @@ output "core_vnet_id" {
 }
 
 output "bastion_subnet_id" {
-  value = azurerm_subnet.bastion.id
+  value = var.enable_bastion ? azurerm_subnet.bastion.id : null
 }
 
 output "azure_firewall_subnet_id" {

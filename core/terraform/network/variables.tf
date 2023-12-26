@@ -13,3 +13,8 @@ variable "core_address_space" {
 variable "arm_environment" {
   type = string
 }
+
+variable "enable_bastion" {
+  type    = bool
+  default = false
+}
