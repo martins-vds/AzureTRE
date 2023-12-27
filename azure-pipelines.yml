@@ -119,7 +119,7 @@ jobs:
           BUNDLE_DIR: "./templates/workspace_services/ohdsi"
           BUNDLE_NAME: "ohdsi"
       SHARED_BUNDLES:
-        - BUNDLE_TYPE: "shared"
+        - BUNDLE_TYPE: "shared_service"
           BUNDLE_DIR: "./templates/shared_services/firewall"
           BUNDLE_NAME: "firewall"
         - BUNDLE_TYPE: "shared_service"
