@@ -609,7 +609,7 @@ jobs:
       clean: "true"
       persistCredentials: "false"
 
-    - ${{ if eq(parameters.DEPLOY_FIREWALL, 'true') }}
+    - ${{ if eq(parameters.DEPLOY_FIREWALL, 'true') }}:
       - template: devcontainer_run_command.yml
         parameters:
           DISPLAY_NAME: 'Deploy firewall'
