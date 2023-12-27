@@ -71,6 +71,7 @@ jobs:
       ENABLE_SWAGGER: 'false'
       ${{ if eq(parameters.enableBastion , 'true') }}:
         ENABLE_BASTION: 'true'
+      DEPLOY_FIREWALL: ${{ parameters.deployFirewall }}:
       CORE_ADDRESS_SPACE: '10.0.0.0/22'
       CORE_APP_SERVICE_PLAN_SKU: 'P1v2'
       TRE_ADDRESS_SPACE: '10.0.0.0/16'
@@ -118,10 +119,9 @@ jobs:
           BUNDLE_DIR: "./templates/workspace_services/ohdsi"
           BUNDLE_NAME: "ohdsi"
       SHARED_BUNDLES:
-        - ${{ if eq(parameters.deployFirewall, 'true') }}:
-          - BUNDLE_TYPE: "shared"
-            BUNDLE_DIR: "./templates/shared_services/firewall"
-            BUNDLE_NAME: "firewall"
+        - BUNDLE_TYPE: "shared"
+          BUNDLE_DIR: "./templates/shared_services/firewall"
+          BUNDLE_NAME: "firewall"
         - BUNDLE_TYPE: "shared_service"
           BUNDLE_DIR: "./templates/shared_services/gitea"
           BUNDLE_NAME: "gitea_shared"
