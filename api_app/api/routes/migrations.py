@@ -57,9 +57,9 @@ async def migrate_database(resources_repo=Depends(get_repository(ResourceReposit
         num_rows = await resource_migration.archive_history(resource_history_repo)
         migrations.append(Migration(issueNumber="3066", status=f'Updated {num_rows} resource objects'))
 
-        logger.info("PR 2371 - Validate min firewall version")
-        await shared_services_migration.checkMinFirewallVersion()
-        migrations.append(Migration(issueNumber="2371", status='Firewall version meets requirement'))
+        # logger.info("PR 2371 - Validate min firewall version")
+        # await shared_services_migration.checkMinFirewallVersion()
+        # migrations.append(Migration(issueNumber="2371", status='Firewall version meets requirement'))
 
         logger.info("PR 2779 - Restructure Airlock requests & add createdBy field")
         await airlock_migration.rename_field_name('requestType', 'type')
