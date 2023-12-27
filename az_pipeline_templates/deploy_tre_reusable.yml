@@ -166,6 +166,10 @@ parameters:
     values:
       - 'true'
       - 'false'
+  - name: DEPLOY_FIREWALL
+    displayName: Deploy Firewall
+    type: boolean
+    default: 'false'
   - name: CORE_ADDRESS_SPACE
     displayName: Core address space
     type: string
@@ -605,22 +609,23 @@ jobs:
       clean: "true"
       persistCredentials: "false"
 
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Deploy firewall'
-        COMMAND: "make deploy-shared-service DIR=./templates/shared_services/firewall/ BUNDLE_TYPE=shared_service"
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
-        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
-        TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
-        TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
-        TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
-        TRE_ID: ${{ parameters.TRE_ID }}
-        LOCATION: ${{ parameters.LOCATION }}
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+    - ${{ if eq(parameters.DEPLOY_FIREWALL, 'true') }}
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: 'Deploy firewall'
+          COMMAND: "make deploy-shared-service DIR=./templates/shared_services/firewall/ BUNDLE_TYPE=shared_service"
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+          AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+          TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+          TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+          TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+          TRE_ID: ${{ parameters.TRE_ID }}
+          LOCATION: ${{ parameters.LOCATION }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
     - template: devcontainer_run_command.yml
       parameters:
