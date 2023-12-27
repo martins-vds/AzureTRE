@@ -71,7 +71,7 @@ jobs:
       ENABLE_SWAGGER: 'false'
       ${{ if eq(parameters.enableBastion , 'true') }}:
         ENABLE_BASTION: 'true'
-      DEPLOY_FIREWALL: ${{ parameters.deployFirewall }}:
+      DEPLOY_FIREWALL: ${{ parameters.deployFirewall }}
       CORE_ADDRESS_SPACE: '10.0.0.0/22'
       CORE_APP_SERVICE_PLAN_SKU: 'P1v2'
       TRE_ADDRESS_SPACE: '10.0.0.0/16'
