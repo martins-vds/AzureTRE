@@ -6,6 +6,11 @@ description: "An Azure TRE service for Azure Bastion"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
 
+mixins:
+  - az:
+      clientVersion: 2.55.0
+  - exec
+
 credentials:
   - name: azure_tenant_id
     env: ARM_TENANT_ID
@@ -21,61 +26,15 @@ parameters:
     type: string
   - name: tre_id
     type: string
-  - name: mgmt_acr_name
+  - name: bastion_subscription_id
     type: string
-    env: mgmt_acr_name
-    description: "The devops ACR name"
-  - name: mgmt_resource_group_name
+    description: "Subscription containing the Azure Bastion service"
+  - name: bastion_resource_group
     type: string
-    description: "Resource group containing the devops ACR"
-    env: MGMT_RESOURCE_GROUP_NAME
-  - name: bastion_disable_copy
-    type: boolean
-    default: true
-    env: BASTION_DISABLE_COPY
-    description: "Bastion disable copy configuration"
-  - name: bastion_disable_paste
-    type: boolean
-    default: false
-    env: BASTION_DISABLE_PASTE
-    description: "Bastion disable paste configuration"
-  - name: bastion_enable_drive
-    type: boolean
-    default: true
-    env: BASTION_ENABLE_DRIVE
-    description: "Bastion enable drive configuration"
-  - name: bastion_drive_name
+    description: "Resource group containing the Azure Bastion service"
+  - name: bastion_name
     type: string
-    default: "transfer"
-    env: BASTION_DRIVE_NAME
-    description: "Bastion drive name configuration"
-  - name: bastion_drive_path
-    type: string
-    default: "/guac-transfer"
-    env: BASTION_DRIVE_PATH
-    description: "Bastion drive path configuration"
-  - name: bastion_disable_download
-    type: boolean
-    default: true
-    env: BASTION_DISABLE_DOWNLOAD
-    description: "Bastion disable download configuration"
-  - name: bastion_disable_upload
-    type: boolean
-    default: true
-    env: BASTION_DISABLE_UPLOAD
-  - name: bastion_scale_units
-    type: integer
-    default: 2
-    env: BASTION_SCALE_UNITS
-    description: "Bastion scale units configuration"
-  - name: is_exposed_externally
-    type: boolean
-    default: true
-    env: IS_EXPOSED_EXTERNALLY
-    description: "Determines if the web app will be available over public/internet or private networks"
-  - name: aad_authority_url
-    type: string
-    default: "https://login.microsoftonline.com"
+    description: "The name of the Azure Bastion service"
   # the following are added automatically by the resource processor
   - name: id
     type: string
@@ -100,108 +59,67 @@ parameters:
     type: string
 
 outputs:
-  - name: authentication_callback_uri
-    type: string
-    applyTo:
-      - install
-      - upgrade
-  - name: web_apps_addresses
-    type: string
-    applyTo:
-      - install
-      - upgrade
-  - name: admin_connection_uri
-    type: string
-    applyTo:
-      - install
-      - upgrade
-
-mixins:
-  - terraform:
-      clientVersion: 1.4.6
+- name: bastion_subscription_id
+  type: string
+  applyTo:
+    - install
+- name: bastion_resource_group
+  type: string
+  applyTo:
+    - install
+- name: bastion_name
+  type: string
+  applyTo:
+    - install
 
 install:
-  - terraform:
-      description: "Deploy Bastion Service"
-      vars:
-        workspace_id: ${ bundle.parameters.workspace_id }
-        tre_id: ${ bundle.parameters.tre_id }
-        mgmt_acr_name: ${ bundle.parameters.mgmt_acr_name }
-        mgmt_resource_group_name: ${ bundle.parameters.mgmt_resource_group_name }
-        bastion_disable_copy: ${ bundle.parameters.bastion_disable_copy }
-        bastion_disable_paste: ${ bundle.parameters.bastion_disable_paste }
-        bastion_enable_drive: ${ bundle.parameters.bastion_enable_drive }
-        bastion_drive_name: ${ bundle.parameters.bastion_drive_name }
-        bastion_drive_path: ${ bundle.parameters.bastion_drive_path }
-        bastion_disable_download: ${ bundle.parameters.bastion_disable_download }
-        bastion_disable_upload: ${ bundle.parameters.bastion_disable_upload }
-        bastion_scale_units: ${ bundle.parameters.bastion_scale_units }
-        is_exposed_externally: ${ bundle.parameters.is_exposed_externally }
-        tre_resource_id: ${ bundle.parameters.id }
-        aad_authority_url: ${ bundle.parameters.aad_authority_url }
-        arm_environment: ${ bundle.parameters.arm_environment }
-      backendConfig:
-        resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
-        storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
-        container_name: ${ bundle.parameters.tfstate_container_name }
-        key: tre-service-guacamole-${ bundle.parameters.id }
+  - az:
+      description: "Login to Azure"
+      arguments:
+        - login
+      flags:
+        identity:
+        username: ${ bundle.credentials.azure_client_id }
+  - az:
+      arguments:
+        - account
+        - set
+      flags:
+        subscription: ${bundle.parameters.bastion_subscription_id}
+  - az:
+      arguments:
+        - account
+        - show
       outputs:
-        - name: authentication_callback_uri
-        - name: web_apps_addresses
-        - name: admin_connection_uri
+        - name: bastion_subscription_id
+          jsonPath: "$.id"
+  - az:
+      arguments:
+        - extension
+        - add
+      flags:
+        name: bastion
+        upgrade:
+        yes:
+  - az:
+      arguments:
+        - network
+        - bastion
+        - show
+      flags:
+        resource-group: ${bundle.parameters.bastion_resource_group}
+        name: ${bundle.parameters.bastion_name}
+      outputs:
+        - name: bastion_name
+          jsonPath: "$.name"
+        - name: bastion_resource_group
+          jsonPath: "$.resourceGroup"
 
 upgrade:
-  - terraform:
-      description: "Upgrade Bastion Service"
-      vars:
-        workspace_id: ${ bundle.parameters.workspace_id }
-        tre_id: ${ bundle.parameters.tre_id }
-        mgmt_acr_name: ${ bundle.parameters.mgmt_acr_name }
-        mgmt_resource_group_name: ${ bundle.parameters.mgmt_resource_group_name }
-        bastion_disable_copy: ${ bundle.parameters.bastion_disable_copy }
-        bastion_disable_paste: ${ bundle.parameters.bastion_disable_paste }
-        bastion_enable_drive: ${ bundle.parameters.bastion_enable_drive }
-        bastion_drive_name: ${ bundle.parameters.bastion_drive_name }
-        bastion_drive_path: ${ bundle.parameters.bastion_drive_path }
-        bastion_disable_download: ${ bundle.parameters.bastion_disable_download }
-        bastion_disable_upload: ${ bundle.parameters.bastion_disable_upload }
-        bastion_scale_units: ${ bundle.parameters.bastion_scale_units }
-        is_exposed_externally: ${ bundle.parameters.is_exposed_externally }
-        tre_resource_id: ${ bundle.parameters.id }
-        aad_authority_url: ${ bundle.parameters.aad_authority_url }
-        arm_environment: ${ bundle.parameters.arm_environment }
-      backendConfig:
-        resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
-        storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
-        container_name: ${ bundle.parameters.tfstate_container_name }
-        key: tre-service-guacamole-${ bundle.parameters.id }
-      outputs:
-        - name: authentication_callback_uri
-        - name: web_apps_addresses
-        - name: admin_connection_uri
+  - exec:
+      command: echo "Upgrade not supported yet"
 
 uninstall:
-  - terraform:
-      description: "Delete the Bastion Service"
-      vars:
-        workspace_id: ${ bundle.parameters.workspace_id }
-        tre_id: ${ bundle.parameters.tre_id }
-        mgmt_acr_name: ${ bundle.parameters.mgmt_acr_name }
-        mgmt_resource_group_name: ${ bundle.parameters.mgmt_resource_group_name }
-        bastion_disable_copy: ${ bundle.parameters.bastion_disable_copy }
-        bastion_disable_paste: ${ bundle.parameters.bastion_disable_paste }
-        bastion_enable_drive: ${ bundle.parameters.bastion_enable_drive }
-        bastion_drive_name: ${ bundle.parameters.bastion_drive_name }
-        bastion_drive_path: ${ bundle.parameters.bastion_drive_path }
-        bastion_disable_download: ${ bundle.parameters.bastion_disable_download }
-        bastion_disable_upload: ${ bundle.parameters.bastion_disable_upload }
-        bastion_scale_units: ${ bundle.parameters.bastion_scale_units }
-        is_exposed_externally: ${ bundle.parameters.is_exposed_externally }
-        tre_resource_id: ${ bundle.parameters.id }
-        aad_authority_url: ${ bundle.parameters.aad_authority_url }
-        arm_environment: ${ bundle.parameters.arm_environment }
-      backendConfig:
-        resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
-        storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
-        container_name: ${ bundle.parameters.tfstate_container_name }
-        key: tre-service-guacamole-${ bundle.parameters.id }
+  - exec:
+      command: echo "Uninstall not supported yet"
+

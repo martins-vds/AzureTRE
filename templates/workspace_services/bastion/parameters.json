@@ -22,15 +22,21 @@
       }
     },
     {
-      "name": "mgmt_acr_name",
+      "name": "bastion_subscription_id",
       "source": {
-        "env": "ACR_NAME"
+        "env": "BASTION_SUBSCRIPTION_ID"
       }
     },
     {
-      "name": "mgmt_resource_group_name",
+      "name": "bastion_resource_group",
       "source": {
-        "env": "MGMT_RESOURCE_GROUP_NAME"
+        "env": "BASTION_RESOURCE_GROUP"
+      }
+    },
+    {
+      "name": "bastion_name",
+      "source": {
+        "env": "BASTION_NAME"
       }
     },
     {
@@ -49,61 +55,6 @@
       "name": "tfstate_storage_account_name",
       "source": {
         "env": "MGMT_STORAGE_ACCOUNT_NAME"
-      }
-    },
-
-    {
-      "name": "bastion_disable_copy",
-      "source": {
-        "env": "BASTION_DISABLE_COPY"
-      }
-    },
-    {
-      "name": "bastion_disable_download",
-      "source": {
-        "env": "BASTION_DISABLE_DOWNLOAD"
-      }
-    },
-    {
-      "name": "bastion_disable_upload",
-      "source": {
-        "env": "BASTION_DISABLE_UPLOAD"
-      }
-    },
-    {
-      "name": "bastion_disable_paste",
-      "source": {
-        "env": "BASTION_DISABLE_PASTE"
-      }
-    },
-    {
-      "name": "bastion_drive_name",
-      "source": {
-        "env": "BASTION_DRIVE_NAME"
-      }
-    },
-    {
-      "name": "bastion_drive_path",
-      "source": {
-        "env": "BASTION_DRIVE_PATH"
-      }
-    },
-    {
-      "name": "bastion_enable_drive",
-      "source": {
-        "env": "BASTION_ENABLE_DRIVE"
-      }
-    },
-    {
-      "name": "is_exposed_externally",
-      "source": {
-        "env": "IS_EXPOSED_EXTERNALLY"
-      }
-    },
-    {
-      "name": "aad_authority_url",
-      "source": {
-        "env": "AAD_AUTHORITY_URL"
       }
     },
     {

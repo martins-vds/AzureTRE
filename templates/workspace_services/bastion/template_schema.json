@@ -10,7 +10,7 @@
       "type": "string",
       "title": "Name for the workspace service",
       "description": "The name of the workspace service to be displayed to users",
-      "default": "Virtual Desktops",
+      "default": "Bastion Virtual Desktops",
       "updateable": true
     },
     "description": {
@@ -27,172 +27,26 @@
       "default": "Access Windows and Linux virtual machines via Azure Bastion. Documentation for using this service can be found here: [https://bastion.apache.org/doc/gug/using-bastion.html](https://bastion.apache.org/doc/gug/using-bastion.html)",
       "updateable": true
     },
-    "bastion_disable_copy": {
-      "$id": "#/properties/bastion_disable_copy",
-      "type": "boolean",
-      "title": "Disable 'Copy'",
-      "description": "Disable Copy functionality",
+    "bastion_subscription_id": {
+      "type": "string",
+      "title": "Subscription ID for Azure Bastion",
+      "description": "The subscription ID for the Azure Bastion service",
+      "default": "",
       "updateable": true
     },
-    "bastion_disable_paste": {
-      "$id": "#/properties/bastion_disable_paste",
-      "type": "boolean",
-      "title": "Disable 'Paste'",
-      "description": "Disable Paste functionality",
+    "bastion_resource_group": {
+      "type": "string",
+      "title": "Resource Group for Azure Bastion",
+      "description": "The resource group for the Azure Bastion service",
+      "default": "",
       "updateable": true
     },
-    "bastion_enable_drive": {
-      "$id": "#/properties/bastion_enable_drive",
-      "type": "boolean",
-      "title": "Enable Drive",
-      "description": "Enable mounted drive",
+    "bastion_name": {
+      "type": "string",
+      "title": "Name of Azure Bastion",
+      "description": "The name of the Azure Bastion service",
+      "default": "",
       "updateable": true
-    },
-    "bastion_disable_download": {
-      "$id": "#/properties/bastion_disable_download",
-      "type": "boolean",
-      "title": "Disable files download",
-      "description": "Disable files download",
-      "updateable": true,
-      "default": true
-    },
-    "bastion_disable_upload": {
-      "$id": "#/properties/bastion_disable_upload",
-      "type": "boolean",
-      "title": "Disable files upload",
-      "description": "Disable files upload",
-      "updateable": true,
-      "default": true
-    },
-    "is_exposed_externally": {
-      "$id": "#/properties/is_exposed_externally",
-      "type": "boolean",
-      "title": "Expose externally",
-      "description": "Is the Bastion service exposed outside of the vnet",
-      "default": true
     }
-  },
-  "pipeline": {
-    "install": [
-      {
-        "stepId": "main"
-      },
-      {
-        "stepId": "12ba0dad-ea6c-4d0d-9255-d316212f5ffa",
-        "stepTitle": "Add Bastion URI as AAD redirect URI",
-        "resourceType": "workspace",
-        "resourceAction": "upgrade",
-        "properties": [
-          {
-            "name": "aad_redirect_uris",
-            "type": "array",
-            "arraySubstitutionAction": "replace",
-            "arrayMatchField": "name",
-            "value": {
-              "name": "{{ resource.id }}",
-              "value": "{{ resource.properties.authentication_callback_uri }}"
-            }
-          }
-        ]
-      },
-      {
-        "stepId": "260421b3-7308-491f-b531-e007cdc0ff46",
-        "stepTitle": "Add network firewall rules for bastion",
-        "resourceTemplateName": "tre-shared-service-firewall",
-        "resourceType": "shared-service",
-        "resourceAction": "upgrade",
-        "properties": [
-          {
-            "name": "network_rule_collections",
-            "type": "array",
-            "arraySubstitutionAction": "replace",
-            "arrayMatchField": "name",
-            "value": {
-              "name": "nrc_svc_{{ resource.id }}_bastion",
-              "action": "Allow",
-              "rules": [
-                {
-                  "name": "AzureAD",
-                  "description": "AAD access for authNZ",
-                  "source_addresses": "{{ resource.properties.web_apps_addresses }}",
-                  "destination_addresses": [
-                    "AzureActiveDirectory"
-                  ],
-                  "destination_ports": [
-                    "*"
-                  ],
-                  "protocols": [
-                    "TCP"
-                  ]
-                }
-              ]
-            }
-          }
-        ]
-      }
-    ],
-    "upgrade": [
-      {
-        "stepId": "main"
-      },
-      {
-        "stepId": "741c7ff2-eff5-47b2-bf62-2b410d65c96b",
-        "stepTitle": "Update Bastion URI in AAD",
-        "resourceType": "workspace",
-        "resourceAction": "upgrade",
-        "properties": [
-          {
-            "name": "aad_redirect_uris",
-            "type": "array",
-            "arraySubstitutionAction": "replace",
-            "arrayMatchField": "name",
-            "value": {
-              "name": "{{ resource.id }}",
-              "value": "{{ resource.properties.authentication_callback_uri }}"
-            }
-          }
-        ]
-      }
-    ],
-    "uninstall": [
-      {
-        "stepId": "758d8043-4455-45ee-b9b5-a0586bb9f6cf",
-        "stepTitle": "Remove network firewall rules for bastion",
-        "resourceTemplateName": "tre-shared-service-firewall",
-        "resourceType": "shared-service",
-        "resourceAction": "upgrade",
-        "properties": [
-          {
-            "name": "network_rule_collections",
-            "type": "array",
-            "arraySubstitutionAction": "remove",
-            "arrayMatchField": "name",
-            "value": {
-              "name": "nrc_svc_{{ resource.id }}_bastion"
-            }
-          }
-        ]
-      },
-      {
-        "stepId": "9a1d6b95-26c8-4165-8010-573dd4e2b45c",
-        "stepTitle": "Update bastion URI to AAD redirect URI",
-        "resourceType": "workspace",
-        "resourceAction": "upgrade",
-        "properties": [
-          {
-            "name": "aad_redirect_uris",
-            "type": "array",
-            "arraySubstitutionAction": "remove",
-            "arrayMatchField": "name",
-            "value": {
-              "name": "{{ resource.id }}"
-            }
-          }
-        ]
-      },
-      {
-        "stepId": "main"
-      }
-    ]
   }
 }
