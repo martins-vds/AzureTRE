@@ -19,3 +19,6 @@ variable "tre_resource_id" {
 variable "arm_environment" {
   type = string
 }
+variable "enable_bastion" {
+  type = bool
+}

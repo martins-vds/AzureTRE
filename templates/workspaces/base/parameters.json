@@ -137,6 +137,12 @@
       }
     },
     {
+      "name": "enable_bastion",
+      "source":{
+        "env": "ENABLE_BASTION"
+      }
+    },
+    {
       "name": "arm_environment",
       "source": {
         "env": "ARM_ENVIRONMENT"

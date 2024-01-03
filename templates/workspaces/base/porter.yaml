@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-workspace-base
-version: 1.5.3
+version: 1.6.0
 description: "A base Azure TRE workspace"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -116,6 +116,9 @@ parameters:
     default: true
   - name: arm_environment
     type: string
+  - name: enable_bastion
+    type: boolean
+    default: false
 
 outputs:
   - name: app_role_id_workspace_owner
@@ -183,6 +186,7 @@ install:
         app_service_plan_sku: ${ bundle.parameters.app_service_plan_sku }
         enable_airlock: ${ bundle.parameters.enable_airlock }
         arm_environment: ${ bundle.parameters.arm_environment }
+        enable_bastion: ${ bundle.parameters.enable_bastion }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -223,6 +227,7 @@ upgrade:
         app_service_plan_sku: ${ bundle.parameters.app_service_plan_sku }
         enable_airlock: ${ bundle.parameters.enable_airlock }
         arm_environment: ${ bundle.parameters.arm_environment }
+        enable_bastion: ${ bundle.parameters.enable_bastion }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -286,6 +291,7 @@ uninstall:
         app_service_plan_sku: ${ bundle.parameters.app_service_plan_sku }
         enable_airlock: ${ bundle.parameters.enable_airlock }
         arm_environment: ${ bundle.parameters.arm_environment }
+        enable_bastion: ${ bundle.parameters.enable_bastion }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
