@@ -93,6 +93,24 @@
       "source": {
         "env": "ARM_ENVIRONMENT"
       }
+    },
+    {
+      "name": "parent_bastion_subscription_id",
+      "source": {
+        "env": "PARENT_BASTION_SUBSCRIPTION_ID"
+      }
+    },
+    {
+      "name": "parent_bastion_resource_group",
+      "source": {
+        "env": "PARENT_BASTION_RESOURCE_GROUP"
+      }
+    },
+    {
+      "name": "parent_bastion_name",
+      "source": {
+        "env": "PARENT_BASTION_NAME"
+      }
     }
   ]
 }

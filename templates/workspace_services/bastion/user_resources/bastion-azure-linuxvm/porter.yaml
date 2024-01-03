@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-bastion-linuxvm
-version: 0.0.1
+version: 0.0.2
 description: "An Azure TRE User Resource Template for Bastion (Linux)"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -63,10 +63,15 @@ parameters:
     type: string
     description: Azure resource ID for the compute image gallery to pull images from (if specifying custom images by name)
     default: ""
-  - name: mgmt_acr_name
+  - name: parent_bastion_subscription_id
     type: string
-    env: mgmt_acr_name
-    description: "The devops ACR name"
+    description: "Subscription ID for the shared Bastion"
+  - name: parent_bastion_resource_group
+    type: string
+    description: "Resource group containing the shared Bastion"
+  - name: parent_bastion_name
+    type: string
+    description: "Name of the shared Bastion"
 
   # the following are added automatically by the resource processor
   - name: id
@@ -128,13 +133,6 @@ outputs:
       - start
       - stop
       - reset_password
-
-dependencies:
-  requires:
-    - bundle:
-      # TODO: change this to the parameterize the bastion service name
-        reference: azuretrepoc2.azurecr.io/tre-service-bastion:v0.1.0
-      name: bastion
 
 mixins:
   - exec

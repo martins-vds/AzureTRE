@@ -31,13 +31,35 @@ class UserResourceRepository(ResourceRepository):
     def active_user_resources_query(workspace_id: str, service_id: str):
         return f'SELECT * FROM c WHERE {IS_NOT_DELETED_CLAUSE} AND c.resourceType = "{ResourceType.UserResource}" AND c.parentWorkspaceServiceId = "{service_id}" AND c.workspaceId = "{workspace_id}"'
 
-    async def create_user_resource_item(self, user_resource_input: UserResourceInCreate, workspace_id: str, parent_workspace_service_id: str, parent_template_name: str, user_id: str, user_roles: List[str]) -> Tuple[UserResource, ResourceTemplate]:
+    def get_parent_workspace_properties(self, template: ResourceTemplate, parent_workspace_properties: dict) -> dict:
+        """
+        returns a dict of parent workspace properties that are required by the template
+        """
+
+        parent_prefix = "parent_"
+
+        if not parent_workspace_properties:
+            return {}
+
+        parent_property_keys = [key[len(parent_prefix):] for key in template.properties.keys() if key.startswith("parent_")]
+        if not parent_property_keys:
+            return {}
+        else:
+            template_parent_workspace_properties = {f'{parent_prefix}{key}': parent_workspace_properties[key] for key in parent_property_keys}
+
+        return template_parent_workspace_properties
+
+
+    async def create_user_resource_item(self, user_resource_input: UserResourceInCreate, workspace_id: str, parent_workspace_service_id: str, parent_template_name: str, parent_workspace_properties: dict, user_id: str, user_roles: List[str]) -> Tuple[UserResource, ResourceTemplate]:
         full_user_resource_id = str(uuid.uuid4())
 
         template = await self.validate_input_against_template(user_resource_input.templateName, user_resource_input, ResourceType.UserResource, user_roles, parent_template_name)
 
+        # get parent workspace properties
+        resource_parent_spec_parameters = self.get_parent_workspace_properties(template, parent_workspace_properties)
+
         # we don't want something in the input to overwrite the system parameters, so dict.update can't work.
-        resource_spec_parameters = {**user_resource_input.properties, **self.get_user_resource_spec_params()}
+        resource_spec_parameters = {**user_resource_input.properties, **self.get_user_resource_spec_params(), **resource_parent_spec_parameters}
 
         user_resource = UserResource(
             id=full_user_resource_id,

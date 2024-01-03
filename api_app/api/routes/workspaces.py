@@ -406,7 +406,7 @@ async def create_user_resource(
         workspace_service=Depends(get_deployed_workspace_service_by_id_from_path)) -> OperationInResponse:
 
     try:
-        user_resource, resource_template = await user_resource_repo.create_user_resource_item(user_resource_create, workspace.id, workspace_service.id, workspace_service.templateName, user.id, user.roles)
+        user_resource, resource_template = await user_resource_repo.create_user_resource_item(user_resource_create, workspace.id, workspace_service.id, workspace_service.templateName, workspace_service.properties, user.id, user.roles)
     except (ValidationError, ValueError) as e:
         logger.exception("Failed create user resource model instance")
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
