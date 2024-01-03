@@ -230,7 +230,7 @@ async def _deploy_vm(airlock_request: AirlockRequest, user: User, workspace: Wor
     )
 
     user_resource, resource_template = await user_resource_repo.create_user_resource_item(
-        user_resource_create, review_workspace_id, review_workspace_service_id, workspace_service.templateName, user.id, user.roles)
+        user_resource_create, review_workspace_id, review_workspace_service_id, workspace_service.templateName, workspace_service.properties, user.id, user.roles)
 
     operation = await save_and_deploy_resource(
         resource=user_resource,
