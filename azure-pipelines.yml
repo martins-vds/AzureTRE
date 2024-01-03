@@ -160,3 +160,7 @@ jobs:
           BUNDLE_DIR: "./templates/workspace_services/guacamole/user_resources/guacamole-azure-import-reviewvm"
           BUNDLE_NAME: "guacamole_azure_import_reviewvm"
           WORKSPACE_SERVICE_NAME: "tre-service-guacamole"
+        - BUNDLE_TYPE: "user_resource"
+          BUNDLE_DIR: "./templates/workspace_services/bastion/user_resources/bastion-azure-linuxvm"
+          BUNDLE_NAME: "bastion-azure-linuxvm"
+          WORKSPACE_SERVICE_NAME: "tre-servitre-service-bastion-linuxvm"
