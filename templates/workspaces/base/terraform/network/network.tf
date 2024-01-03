@@ -86,7 +86,8 @@ moved {
 }
 
 resource "azurerm_subnet_route_table_association" "rt_services_subnet_association" {
-  route_table_id = data.azurerm_route_table.rt.id
+  count = var.enable_firewall ? 1 : 0
+  route_table_id = data.azurerm_route_table.rt[0].id
   subnet_id      = azurerm_subnet.services.id
   depends_on = [
     # meant to resolve AnotherOperation errors with one operation in the vnet at a time
@@ -96,7 +97,8 @@ resource "azurerm_subnet_route_table_association" "rt_services_subnet_associatio
 
 
 resource "azurerm_subnet_route_table_association" "rt_webapps_subnet_association" {
-  route_table_id = data.azurerm_route_table.rt.id
+  count = var.enable_firewall ? 1 : 0
+  route_table_id = data.azurerm_route_table.rt[0].id
   subnet_id      = azurerm_subnet.webapps.id
   depends_on = [
     # meant to resolve AnotherOperation errors with one operation in the vnet at a time

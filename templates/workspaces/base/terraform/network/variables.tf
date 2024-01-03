@@ -22,3 +22,6 @@ variable "arm_environment" {
 variable "enable_bastion" {
   type = bool
 }
+variable "enable_firewall" {
+  type = bool
+}

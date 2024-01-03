@@ -128,3 +128,8 @@ variable "enable_bastion" {
   default     = false
   description = "Enable Bastion"
 }
+variable "enable_firewall" {
+  type        = bool
+  default     = false
+  description = "Enable Firewall"
+}

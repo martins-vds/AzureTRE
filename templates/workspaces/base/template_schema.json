@@ -29,6 +29,13 @@
       "default": false,
       "updateable": true
     },
+    "enable_firewall":{
+      "type": "boolean",
+      "title": "Enable Firewall",
+      "description": "Allow access to the workspace via Azure Firewall",
+      "default": false,
+      "updateable": true
+    },
     "app_service_plan_sku": {
       "type": "string",
       "title": "App Service Plan SKU",

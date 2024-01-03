@@ -26,6 +26,7 @@ module "network" {
   tre_workspace_tags     = local.tre_workspace_tags
   arm_environment        = var.arm_environment
   enable_bastion         = var.enable_bastion
+  enable_firewall        = var.enable_firewall
 }
 
 module "aad" {

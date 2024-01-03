@@ -143,6 +143,12 @@
       }
     },
     {
+      "name": "enable_firewall",
+      "source":{
+        "env": "ENABLE_FIREWALL"
+      }
+    },
+    {
       "name": "arm_environment",
       "source": {
         "env": "ARM_ENVIRONMENT"

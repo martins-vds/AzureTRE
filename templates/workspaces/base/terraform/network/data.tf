@@ -35,6 +35,7 @@ data "azurerm_subnet" "airlockprocessor" {
 }
 
 data "azurerm_route_table" "rt" {
+  count = var.enable_firewall ? 1 : 0
   name                = "rt-${var.tre_id}"
   resource_group_name = local.core_resource_group_name
 }
