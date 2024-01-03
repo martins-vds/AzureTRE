@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-bastion-linuxvm
-version: 0.0.2
+version: 0.0.3
 description: "An Azure TRE User Resource Template for Bastion (Linux)"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -176,7 +176,7 @@ install:
         - rest
       flags:
         method: post
-        uri: https://management.azure.com/subscriptions/${ bundle.dependencies.bastion.outputs.bastion_subscription_id }/resourceGroups/${ bundle.dependencies.bastion.outputs.bastion_resource_group }/providers/Microsoft.Network/bastionHosts/${ bundle.dependencies.bastion.outputs.bastion_name }/getShareableLinks?api-version=2023-06-01
+        uri: https://management.azure.com/subscriptions/${ bundle.parameters.parent_bastion_subscription_id }/resourceGroups/${ bundle.parameters.parent_bastion_resource_group }/providers/Microsoft.Network/bastionHosts/${ bundle.parameters.parent_bastion_name }/getShareableLinks?api-version=2023-06-01
         body: '{"vms":[{"vm":{"id":"${ bundle.outputs.azure_resource_id }"}}]}'
       outputs:
         - name: connection_uri
