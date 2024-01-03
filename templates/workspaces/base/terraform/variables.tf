@@ -122,3 +122,9 @@ variable "workspace_owner_object_id" {
 variable "arm_environment" {
   type = string
 }
+
+variable "enable_bastion" {
+  type        = bool
+  default     = false
+  description = "Enable Bastion"
+}
