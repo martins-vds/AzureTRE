@@ -163,4 +163,4 @@ jobs:
         - BUNDLE_TYPE: "user_resource"
           BUNDLE_DIR: "./templates/workspace_services/bastion/user_resources/bastion-azure-linuxvm"
           BUNDLE_NAME: "bastion-azure-linuxvm"
-          WORKSPACE_SERVICE_NAME: "tre-servitre-service-bastion-linuxvm"
+          WORKSPACE_SERVICE_NAME: "tre-service-bastion"
