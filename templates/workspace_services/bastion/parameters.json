@@ -9,7 +9,8 @@
       "source": {
         "env": "ID"
       }
-    },    {
+    },
+    {
       "name": "workspace_id",
       "source": {
         "env": "WORKSPACE_ID"
@@ -65,4 +66,3 @@
     }
   ]
 }
-

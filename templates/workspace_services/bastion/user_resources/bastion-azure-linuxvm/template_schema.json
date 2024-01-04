@@ -39,6 +39,38 @@
       "title": "Shared storage",
       "default": true,
       "description": "Enable access to shared storage"
+    },
+    "parent_bastion_subscription_id":{
+      "$id": "#/properties/parent_bastion_subscription_id",
+      "type": "string",
+      "title": "Parent Bastion Subscription ID",
+      "description": "Subscription ID of the parent bastion",
+      "readOnly": true
+    },
+    "parent_bastion_resource_group":{
+      "$id": "#/properties/parent_bastion_resource_group",
+      "type": "string",
+      "title": "Parent Bastion Resource Group",
+      "description": "Resource group of the parent bastion",
+      "readOnly": true
+    },
+    "parent_bastion_name":{
+      "$id": "#/properties/parent_bastion_name",
+      "type": "string",
+      "title": "Parent Bastion Name",
+      "description": "Name of the parent bastion",
+      "readOnly": true
+    }
+  },
+  "uiSchema": {
+    "parent_bastion_subscription_id": {
+      "classNames": "tre-hidden"
+    },
+    "parent_bastion_resource_group": {
+      "classNames": "tre-hidden"
+    },
+    "parent_bastion_name": {
+      "classNames": "tre-hidden"
     }
   }
 }
