@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-bastion-linuxvm
-version: 0.0.6
+version: 0.0.7
 description: "An Azure TRE User Resource Template for Bastion (Linux)"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -211,6 +211,7 @@ upgrade:
         - name: hostname
         - name: connection_uri
         - name: azure_resource_id
+  # TODO: Get Shareable Link and update the connection_uri output
 
 uninstall:
   - exec:
@@ -239,6 +240,7 @@ uninstall:
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
         key: ${ bundle.parameters.id }
+  # TODO: Delete Shareable Link
 
 start:
   - terraform:
