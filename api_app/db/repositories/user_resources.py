@@ -33,24 +33,29 @@ class UserResourceRepository(ResourceRepository):
     def active_user_resources_query(workspace_id: str, service_id: str):
         return f'SELECT * FROM c WHERE {IS_NOT_DELETED_CLAUSE} AND c.resourceType = "{ResourceType.UserResource}" AND c.parentWorkspaceServiceId = "{service_id}" AND c.workspaceId = "{workspace_id}"'
 
-    def get_parent_workspace_properties(self, properties: dict, parent_workspace_properties: dict) -> dict:
+    def get_parent_workspace_properties(self, user_resource_template_properties: dict, user_resource_input_properties: dict, parent_workspace_properties: dict) -> dict:
         """
         returns a dict of parent workspace properties that are required by the template
         """
 
         parent_prefix = "parent_"
-        properties_copy = {**properties}
+        properties_copy = {**user_resource_input_properties}
 
         if not parent_workspace_properties:
             return properties_copy
 
-        parent_property_keys = [key for key in properties_copy.keys() if key.startswith("parent_")]
+        template_parent_properties = {key for key in user_resource_template_properties.keys() if key.startswith(parent_prefix)}
 
-        if parent_property_keys:
-            for key in parent_property_keys:
-                parent_property_name = key[len(parent_prefix):]
-                if parent_property_name in parent_workspace_properties:
-                    properties_copy[key] = parent_workspace_properties[parent_property_name]
+        # if the template doesn't have any parent properties, we don't need to do anything
+        if not template_parent_properties:
+            return properties_copy
+
+        updated_template_parent_properties = {f'{parent_prefix}{key}': value for key, value in parent_workspace_properties.items() if f'{parent_prefix}{key}' in template_parent_properties}
+
+        if not updated_template_parent_properties:
+            return properties_copy
+
+        properties_copy.update(updated_template_parent_properties)
 
         return properties_copy
 
@@ -61,7 +66,7 @@ class UserResourceRepository(ResourceRepository):
         template = await self.validate_input_against_template(user_resource_input.templateName, user_resource_input, ResourceType.UserResource, user_roles, parent_template_name)
 
         # get parent workspace properties
-        resource_parent_spec_parameters = self.get_parent_workspace_properties(user_resource_input.properties, parent_workspace_properties)
+        resource_parent_spec_parameters = self.get_parent_workspace_properties(template.properties, user_resource_input.properties, parent_workspace_properties)
 
         # we don't want something in the input to overwrite the system parameters, so dict.update can't work.
         resource_spec_parameters = {**resource_parent_spec_parameters, **self.get_user_resource_spec_params()}
