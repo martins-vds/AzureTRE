@@ -10,6 +10,9 @@ parameters:
     values:
       - "all"
       - "core"
+      - "workspace-bundles"
+      - "user-resource-bundles"
+      - "shared-bundles"
   - name: environment
     displayName: Environment
     type: string

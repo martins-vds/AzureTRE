@@ -7,6 +7,9 @@ parameters:
     values:
       - "all"
       - "core"
+      - "workspace-bundles"
+      - "user-resource-bundles"
+      - "shared-bundles"
   - name: ciGitRef
     displayName: Git reference
     type: string
@@ -430,22 +433,24 @@ jobs:
 
 - job: publish_bundles
   displayName: Publish bundles
-  condition: ${{ eq(parameters.deployStages, 'all') }}
+  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles'), eq(parameters.deployStages, 'user-resource-bundles')) }}
   dependsOn: [deploy_management]
   pool:
     vmImage: ubuntu-latest
   strategy:
     matrix:
-      ${{ each bundle in parameters.BUNDLES }}:
-        ${{ bundle.BUNDLE_NAME }}:
-          BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
-          BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
-          BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
-      ${{ each bundle in parameters.USER_RESOURCE_BUNDLES }}:
-        ${{ bundle.BUNDLE_NAME }}:
-          BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
-          BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
-          BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
+      ${{ if or(eq(parameters.deployStages, 'workspace-bundles'), eq(parameters.deployStages, 'all')) }}:
+        ${{ each bundle in parameters.BUNDLES }}:
+          ${{ bundle.BUNDLE_NAME }}:
+            BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
+            BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
+            BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
+      ${{ if or(eq(parameters.deployStages, 'user-resource-bundles'), eq(parameters.deployStages, 'all')) }}:
+        ${{ each bundle in parameters.USER_RESOURCE_BUNDLES }}:
+          ${{ bundle.BUNDLE_NAME }}:
+            BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
+            BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
+            BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
   steps:
     - checkout: self
       clean: "true"
@@ -466,7 +471,7 @@ jobs:
 
 - job: publish_shared_bundles
   displayName: Publish shared bundles
-  condition: ${{ eq(parameters.deployStages, 'all') }}
+  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }}
   dependsOn: [deploy_management]
   pool:
     vmImage: ubuntu-latest
@@ -497,7 +502,7 @@ jobs:
 
 - job: register_shared_bundles
   displayName: Register shared bundles
-  condition: ${{ eq(parameters.deployStages, 'all') }}
+  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }}
   dependsOn: [publish_shared_bundles, deploy_tre]
   pool:
     vmImage: ubuntu-latest
@@ -536,7 +541,7 @@ jobs:
 
 - job: register_bundles
   displayName: Register bundles
-  condition: ${{ eq(parameters.deployStages, 'all') }}
+  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles')) }}
   dependsOn: [publish_bundles, deploy_tre]
   pool:
     vmImage: ubuntu-latest
@@ -575,7 +580,7 @@ jobs:
 
 - job: register_user_resource_bundles
   displayName: Register user resource bundles
-  condition: ${{ eq(parameters.deployStages, 'all') }}
+  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'user-resource-bundles')) }}
   dependsOn: [register_bundles, publish_bundles, deploy_tre]
   pool:
     vmImage: ubuntu-latest
@@ -616,7 +621,7 @@ jobs:
 
 - job: deploy_shared_services
   displayName: Deploy shared services
-  condition: ${{ eq(parameters.deployStages, 'all') }}
+  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }}
   dependsOn: [register_shared_bundles, deploy_tre]
   pool:
     vmImage: ubuntu-latest
