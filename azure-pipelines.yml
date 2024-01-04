@@ -162,5 +162,5 @@ jobs:
           WORKSPACE_SERVICE_NAME: "tre-service-guacamole"
         - BUNDLE_TYPE: "user_resource"
           BUNDLE_DIR: "./templates/workspace_services/bastion/user_resources/bastion-azure-linuxvm"
-          BUNDLE_NAME: "bastion-azure-linuxvm"
+          BUNDLE_NAME: "bastion_azure_linuxvm"
           WORKSPACE_SERVICE_NAME: "tre-service-bastion"
