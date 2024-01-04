@@ -1,3 +1,4 @@
+import json
 import uuid
 from typing import List, Tuple
 
@@ -15,7 +16,7 @@ from models.schemas.resource import ResourcePatch
 from models.schemas.workspace_service import WorkspaceServiceInCreate
 from db.errors import ResourceIsNotDeployed, EntityDoesNotExist
 from models.domain.resource import ResourceType
-
+from services.logging import logger
 
 class WorkspaceServiceRepository(ResourceRepository):
     @classmethod
@@ -65,6 +66,8 @@ class WorkspaceServiceRepository(ResourceRepository):
 
         # we don't want something in the input to overwrite the system parameters, so dict.update can't work.
         resource_spec_parameters = {**workspace_service_input.properties, **self.get_workspace_service_spec_params()}
+
+        logger.debug("Creating workspace service with id %s, template %s, and parameters %s", full_workspace_service_id, template.id, json.dumps(resource_spec_parameters))
 
         workspace_service = WorkspaceService(
             id=full_workspace_service_id,
