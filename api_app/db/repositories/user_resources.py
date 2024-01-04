@@ -1,3 +1,4 @@
+import json
 import uuid
 from typing import List, Tuple
 
@@ -15,6 +16,7 @@ from models.domain.user_resource import UserResource
 from models.schemas.resource import ResourcePatch
 from models.schemas.user_resource import UserResourceInCreate
 
+from services.logging import logger
 
 class UserResourceRepository(ResourceRepository):
     @classmethod
@@ -63,6 +65,8 @@ class UserResourceRepository(ResourceRepository):
 
         # we don't want something in the input to overwrite the system parameters, so dict.update can't work.
         resource_spec_parameters = {**resource_parent_spec_parameters, **self.get_user_resource_spec_params()}
+
+        logger.debug("Creating workspace user resource with id %s, template %s, and parameters %s", full_user_resource_id, template.id, json.dumps(resource_spec_parameters))
 
         user_resource = UserResource(
             id=full_user_resource_id,
