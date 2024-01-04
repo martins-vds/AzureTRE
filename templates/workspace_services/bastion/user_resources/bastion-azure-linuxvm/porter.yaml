@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-bastion-linuxvm
-version: 0.0.5
+version: 0.0.6
 description: "An Azure TRE User Resource Template for Bastion (Linux)"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -66,15 +66,18 @@ parameters:
   - name: parent_bastion_subscription_id
     type: string
     description: "Subscription ID for the shared Bastion"
-    default: ""
+    applyTo:
+      - install
   - name: parent_bastion_resource_group
     type: string
     description: "Resource group containing the shared Bastion"
-    default: ""
+    applyTo:
+      - install
   - name: parent_bastion_name
     type: string
-    default: ""
     description: "Name of the shared Bastion"
+    applyTo:
+      - install
 
   # the following are added automatically by the resource processor
   - name: id
