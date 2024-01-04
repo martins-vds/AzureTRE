@@ -322,7 +322,7 @@ jobs:
         docker image push $(build_devcontainer.CI_CACHE_ACR_URI)/tredev:${{ parameters.DEVCONTAINER_TAG }}
 - job: build_core_images
   dependsOn: [deploy_management]
-  condition: ${{ and(succeeded(), or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'core'))) }}
+  condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'core')) }})
   displayName: Build core images
   pool:
     vmImage: ubuntu-latest
