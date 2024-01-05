@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-bastion
-version: 0.1.0
+version: 0.1.1
 description: "An Azure TRE service for Azure Bastion"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -63,14 +63,17 @@ outputs:
   type: string
   applyTo:
     - install
+    - upgrade
 - name: bastion_resource_group
   type: string
   applyTo:
     - install
+    - upgrade
 - name: bastion_name
   type: string
   applyTo:
     - install
+    - upgrade
 
 install:
   - az:
@@ -116,10 +119,52 @@ install:
           jsonPath: "$.resourceGroup"
 
 upgrade:
-  - exec:
-      command: echo "Upgrade not supported yet"
+  - az:
+      description: "Login to Azure"
+      arguments:
+        - login
+      flags:
+        identity:
+        username: ${ bundle.credentials.azure_client_id }
+  - az:
+      arguments:
+        - account
+        - set
+      flags:
+        subscription: ${bundle.parameters.bastion_subscription_id}
+  - az:
+      arguments:
+        - account
+        - show
+      outputs:
+        - name: bastion_subscription_id
+          jsonPath: "$.id"
+  - az:
+      arguments:
+        - extension
+        - add
+      flags:
+        name: bastion
+        upgrade:
+        yes:
+  - az:
+      arguments:
+        - network
+        - bastion
+        - show
+      flags:
+        resource-group: ${bundle.parameters.bastion_resource_group}
+        name: ${bundle.parameters.bastion_name}
+      outputs:
+        - name: bastion_name
+          jsonPath: "$.name"
+        - name: bastion_resource_group
+          jsonPath: "$.resourceGroup"
 
 uninstall:
   - exec:
-      command: echo "Uninstall not supported yet"
+      command: echo
+      description: "Uninstall"
+      arguments:
+        - "This workspace does not implement uninstall action yet"
 
