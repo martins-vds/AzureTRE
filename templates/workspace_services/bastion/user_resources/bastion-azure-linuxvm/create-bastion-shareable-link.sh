@@ -27,6 +27,7 @@ create_shareable_link() {
   elif [[ "$status_code" -eq 200 ]]; then
     echo "$response" | tail -n 1
   else
+    echo "$response" | tail -n 1 | jq -r .error.message
     exit 1
   fi
 }
@@ -42,6 +43,7 @@ wait_for_link_creation() {
     if [[ "$status_code" -eq 200 || "$status_code" -eq 202 ]]; then
       break
     elif [[ "$status_code" -eq 400 ]]; then
+      echo "$response" | tail -n 1 | jq -r .error.message
       exit 1
     fi
     sleep 5
