@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -o errexit
 set -o pipefail
 
 bastion_subscription_id=$1
@@ -22,7 +21,7 @@ create_shareable_link() {
   status_code=$(echo "$response" | head -n 1 | cut -d$' ' -f2)
 
   if [[ "$status_code" -eq 202 ]]; then
-    location=$(echo "$response" | grep -oP '[l|L]ocation: \K.*')
+    location=$(echo "$response" | grep -oP '[l|L]ocation: \K.*' | tr -d '\r\n')
     wait_for_link_creation "$access_token" "$location"
   elif [[ "$status_code" -eq 200 ]]; then
     echo "$response" | tail -n 1
@@ -37,19 +36,30 @@ wait_for_link_creation() {
   local location=$2
 
   while true; do
-    response=$(curl -isS -H "Authorization: Bearer $access_token" -H "Content-Type: application/json" "$location")
+    response=$(curl -isSG -H "Authorization: Bearer $access_token" -H "Content-Type: application/json" "$location")
     status_code=$(echo "$response" | head -n 1 | cut -d$' ' -f2)
+    retry_after_string=$(echo "$response" | grep -oP '[r|R]etry-[a|A]fter: \K.*')
 
-    if [[ "$status_code" -eq 200 || "$status_code" -eq 202 ]]; then
+    if [[ -n "$retry_after_string" ]]; then
+      retry_after=$(echo "$retry_after_string" | tr -d '\r\n')
+    else
+      retry_after=""
+    fi
+
+    if [[ "$status_code" -eq 200 ]]; then
+      echo "$response" | tail -n 1
       break
     elif [[ "$status_code" -eq 400 ]]; then
       echo "$response" | tail -n 1 | jq -r .error.message
       exit 1
     fi
-    sleep 5
-  done
 
-  echo "$response" | tail -n 1
+    if [[ -n "$retry_after" ]]; then
+      sleep "$retry_after"
+    else
+      sleep 5
+    fi
+  done
 }
 
 request_body="$(cat <<EOF

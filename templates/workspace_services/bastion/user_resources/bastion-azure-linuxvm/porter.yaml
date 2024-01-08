@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-bastion-linuxvm
-version: 0.0.10
+version: 0.0.11
 description: "An Azure TRE User Resource Template for Bastion (Linux)"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -209,7 +209,6 @@ upgrade:
       outputs:
         - name: ip
         - name: hostname
-        - name: connection_uri
         - name: azure_resource_id
   # TODO: Get Shareable Link and update the connection_uri output
 
