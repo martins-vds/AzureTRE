@@ -12,7 +12,7 @@ sudo rm -f /etc/apt/sources.list.d/*
 # Update apt packages from configured Nexus sources
 sudo apt-get update
 
-# Install xrdp so Guacamole can connect via RDP
+# Install xrdp so Bastion can connect via RDP
 sudo apt-get install xrdp -y
 sudo adduser xrdp ssl-cert
 
