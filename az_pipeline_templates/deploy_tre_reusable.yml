@@ -356,7 +356,7 @@ jobs:
 - job: start_tre
   displayName: Start TRE
   dependsOn: [deploy_management]
-  condition: ${{ eq(parameters.deployStages, 'all') }}
+  condition: ${{ and(succeeded(), eq(parameters.deployStages, 'all')) }}
   pool:
     vmImage: ubuntu-latest
   steps:
@@ -378,7 +378,7 @@ jobs:
 - job: deploy_tre
   displayName: Deploy TRE
   dependsOn: [start_tre, build_core_images]
-  condition: ${{ eq(parameters.deployStages, 'all') }}
+  condition: ${{ and(succeeded(), eq(parameters.deployStages, 'all')) }}
   pool:
     vmImage: ubuntu-latest
   steps:
@@ -433,7 +433,7 @@ jobs:
 
 - job: publish_bundles
   displayName: Publish bundles
-  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles'), eq(parameters.deployStages, 'user-resource-bundles')) }}
+  condition: ${{ and(succeeded(), or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles'), eq(parameters.deployStages, 'user-resource-bundles'))) }}
   dependsOn: [deploy_management]
   pool:
     vmImage: ubuntu-latest
@@ -471,7 +471,7 @@ jobs:
 
 - job: publish_shared_bundles
   displayName: Publish shared bundles
-  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }}
+  condition: ${{ and(succeeded(), or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles'))) }}
   dependsOn: [deploy_management]
   pool:
     vmImage: ubuntu-latest
@@ -502,7 +502,7 @@ jobs:
 
 - job: register_shared_bundles
   displayName: Register shared bundles
-  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }}
+  condition: ${{ and(succeeded(), or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles'))) }}
   dependsOn: [publish_shared_bundles, deploy_tre]
   pool:
     vmImage: ubuntu-latest
@@ -541,7 +541,7 @@ jobs:
 
 - job: register_bundles
   displayName: Register bundles
-  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles')) }}
+  condition: ${{ and(succeeded(), or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles'))) }}
   dependsOn: [publish_bundles, deploy_tre]
   pool:
     vmImage: ubuntu-latest
@@ -580,7 +580,7 @@ jobs:
 
 - job: register_user_resource_bundles
   displayName: Register user resource bundles
-  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'user-resource-bundles')) }}
+  condition: ${{ and(succeeded(), or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'user-resource-bundles'))) }}
   dependsOn: [register_bundles, publish_bundles, deploy_tre]
   pool:
     vmImage: ubuntu-latest
@@ -621,7 +621,7 @@ jobs:
 
 - job: deploy_shared_services
   displayName: Deploy shared services
-  condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }}
+  condition: ${{ and(succeeded(), or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles'))) }}
   dependsOn: [register_shared_bundles, deploy_tre]
   pool:
     vmImage: ubuntu-latest
@@ -670,7 +670,7 @@ jobs:
 
 - job: deploy_ui
   displayName: Deploy UI
-  condition: ${{ eq(parameters.deployStages, 'all') }}
+  condition: ${{ and(succeeded(), eq(parameters.deployStages, 'all')) }}
   dependsOn: [deploy_tre]
   pool:
     vmImage: ubuntu-latest
@@ -700,7 +700,7 @@ jobs:
 - job: e2e_tests_smoke
   displayName: Run E2E Tests (Smoke)
   dependsOn: [deploy_shared_services, register_bundles, deploy_ui]
-  condition: ${{ eq(parameters.deployStages, 'all') }}
+  condition: ${{ and(succeeded(), eq(parameters.deployStages, 'all')) }}
   pool:
     vmImage: ubuntu-latest
   timeoutInMinutes: "10"
@@ -737,7 +737,7 @@ jobs:
 
 - job: e2e_tests_custom
   displayName: Run E2E Tests (Custom)
-  condition: ${{ and(ne(parameters.e2eTestsCustomSelector, ''), eq(parameters.deployStages, 'all')) }}
+  condition: ${{ and(succeeded(), ne(parameters.e2eTestsCustomSelector, ''), eq(parameters.deployStages, 'all')) }}
   dependsOn: [deploy_shared_services, register_bundles, register_user_resource_bundles]
   pool:
     vmImage: ubuntu-latest
