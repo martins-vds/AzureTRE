@@ -38,8 +38,8 @@ terraform {
 BOOTSTRAP_BACKEND
 
 # Set up Terraform
-echo -e "\n\e[34m»»» ✨ \e[96mTerraform init\e[0m..."
-terraform init -input=false -backend=true -reconfigure
+echo -e "\n\e[34m»»» ✨ \e[96mterraform init -upgrade\e[0m..."
+terraform init -upgrade -input=false -backend=true -reconfigure
 
 # Import the storage account & res group into state
 echo -e "\n\e[34m»»» 📤 \e[96mImporting resources to state\e[0m..."

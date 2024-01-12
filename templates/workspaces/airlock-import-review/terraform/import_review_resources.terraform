@@ -1,4 +1,4 @@
-# This file has a .terraform file extension in order to avoid 'terraform init's validation checks that are executed by the 'make bundle-build' command.
+# This file has a .terraform file extension in order to avoid 'terraform init -upgrade's validation checks that are executed by the 'make bundle-build' command.
 # The Dockerfile includes a RUN command to change the extension from .terraform to .tf after the files from the base workspace are copied to this directory.
 
 locals {
