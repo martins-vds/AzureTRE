@@ -6,7 +6,8 @@ resource "azurerm_storage_account" "stg" {
   account_replication_type        = "GRS"
   allow_nested_items_to_be_public = false
   is_hns_enabled                  = true
-  tags                            = local.tre_workspace_tags
+  public_network_access_enabled   = false
+  tags = local.tre_workspace_tags
 
   lifecycle { ignore_changes = [tags] }
 }

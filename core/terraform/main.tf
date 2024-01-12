@@ -80,13 +80,15 @@ module "azure_monitor" {
 }
 
 module "network" {
-  source              = "./network"
-  tre_id              = var.tre_id
-  location            = var.location
-  resource_group_name = azurerm_resource_group.core.name
-  core_address_space  = var.core_address_space
-  arm_environment     = var.arm_environment
-  enable_bastion      = var.enable_bastion
+  source                    = "./network"
+  tre_id                    = var.tre_id
+  location                  = var.location
+  resource_group_name       = azurerm_resource_group.core.name
+  core_address_space        = var.core_address_space
+  arm_environment           = var.arm_environment
+  enable_bastion            = var.enable_bastion
+  mgmt_storage_account_name = var.mgmt_storage_account_name
+  mgmt_resource_group_name  = var.mgmt_resource_group_name
 }
 
 module "appgateway" {

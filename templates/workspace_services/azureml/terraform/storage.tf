@@ -4,6 +4,7 @@ resource "azurerm_storage_account" "aml" {
   resource_group_name      = data.azurerm_resource_group.ws.name
   account_tier             = "Standard"
   account_replication_type = "GRS"
+  public_network_access_enabled   = false
   tags                     = local.tre_workspace_service_tags
   network_rules {
     default_action = "Deny"

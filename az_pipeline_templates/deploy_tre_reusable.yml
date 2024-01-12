@@ -737,7 +737,7 @@ jobs:
 
 - job: e2e_tests_custom
   displayName: Run E2E Tests (Custom)
-  condition: and(succeeded(), ${{ ne(parameters.e2eTestsCustomSelector, ''), eq(parameters.deployStages, 'all') }})
+  condition: and(succeeded(), ${{ and(ne(parameters.e2eTestsCustomSelector, ''), eq(parameters.deployStages, 'all')) }})
   dependsOn: [deploy_shared_services, register_bundles, register_user_resource_bundles]
   pool:
     vmImage: ubuntu-latest
