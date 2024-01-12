@@ -144,6 +144,9 @@ dmypy.json
 *.tfstate
 *.tfstate.*
 
+# terraform lock files
+.terraform.lock.hcl
+
 # Crash log files
 crash.log
 
