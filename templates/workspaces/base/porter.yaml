@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-workspace-base
-version: 1.6.1
+version: 1.6.2
 description: "A base Azure TRE workspace"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -190,6 +190,7 @@ install:
         enable_airlock: ${ bundle.parameters.enable_airlock }
         arm_environment: ${ bundle.parameters.arm_environment }
         enable_bastion: ${ bundle.parameters.enable_bastion }
+        enable_firewall: ${ bundle.parameters.enable_firewall }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -231,6 +232,7 @@ upgrade:
         enable_airlock: ${ bundle.parameters.enable_airlock }
         arm_environment: ${ bundle.parameters.arm_environment }
         enable_bastion: ${ bundle.parameters.enable_bastion }
+        enable_firewall: ${ bundle.parameters.enable_firewall }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -295,6 +297,7 @@ uninstall:
         enable_airlock: ${ bundle.parameters.enable_airlock }
         arm_environment: ${ bundle.parameters.arm_environment }
         enable_bastion: ${ bundle.parameters.enable_bastion }
+        enable_firewall: ${ bundle.parameters.enable_firewall }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
