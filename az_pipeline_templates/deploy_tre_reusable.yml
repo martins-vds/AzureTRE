@@ -192,6 +192,10 @@ parameters:
     displayName: TRE address space
     type: string
     default: "10.0.0.0/16"
+  - name: VMSS_RESOURCE_GROUP_NAME
+    displayName: VMSS resource group name
+    type: string
+    default: ""
   - name: VMSS_VNET
     displayName: VMSS VNET
     type: string
@@ -211,14 +215,13 @@ jobs:
         persistCredentials: "false"
 
       - task: AzureCLI@2
-        displayName: Login to CI cache ACR
-        continueOnError: true
+        displayName: Enable VMSS
         inputs:
           azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
           scriptType: "bash"
           scriptLocation: "scriptPath"
           scriptPath: "devops/scripts/allow-devops-vmss.sh"
-          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.VMSS_VNET }}" "${{ parameters.VMSS_SUBNET }}"'
+          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.VMSS_RESOURCE_GROUP_NAME }}" "${{ parameters.VMSS_VNET }}" "${{ parameters.VMSS_SUBNET }}"'
 
   - job: deploy_management
     displayName: Deploy management
@@ -814,11 +817,10 @@ jobs:
         persistCredentials: "false"
 
       - task: AzureCLI@2
-        displayName: Login to CI cache ACR
-        continueOnError: true
+        displayName: Block VMSS
         inputs:
           azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
           scriptType: "bash"
           scriptLocation: "scriptPath"
-          scriptPath: "devops/scripts/allow-devops-vmss.sh"
-          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.VMSS_VNET }}" "${{ parameters.VMSS_SUBNET }}"'
+          scriptPath: "devops/scripts/block-devops-vmss.sh"
+          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.VMSS_RESOURCE_GROUP_NAME }}" "${{ parameters.VMSS_VNET }}" "${{ parameters.VMSS_SUBNET }}"'
