@@ -77,10 +77,10 @@ variable "enable_swagger" {
 }
 
 variable "enable_bastion" {
-  type = bool
-  default = false
+  type        = bool
+  default     = false
   description = "Determines whether the bastion host will be deployed."
-  sensitive = false
+  sensitive   = false
 }
 
 variable "swagger_ui_client_id" {
@@ -200,4 +200,22 @@ variable "logging_level" {
     condition     = contains(["INFO", "DEBUG", "WARNING", "ERROR"], var.logging_level)
     error_message = "logging_level must be one of ERROR, WARNING, INFO, DEBUG"
   }
+}
+
+variable "build_agents_resource_group_name" {
+  type        = string
+  description = "The resource group name for the build agents"
+  default = ""
+}
+
+variable "build_agents_vnet_name" {
+  type        = string
+  description = "The vnet name for the build agents"
+  default = ""
+}
+
+variable "build_agents_subnet_name" {
+  type        = string
+  description = "The subnet name for the build agents"
+  default = ""
 }

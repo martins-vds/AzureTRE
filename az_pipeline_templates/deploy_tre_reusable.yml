@@ -192,15 +192,15 @@ parameters:
     displayName: TRE address space
     type: string
     default: "10.0.0.0/16"
-  - name: VMSS_RESOURCE_GROUP_NAME
+  - name: BUILD_AGENTS_RESOURCE_GROUP_NAME
     displayName: VMSS resource group name
     type: string
     default: ""
-  - name: VMSS_VNET
+  - name: BUILD_AGENTS_VNET_NAME
     displayName: VMSS VNET
     type: string
     default: ""
-  - name: VMSS_SUBNET
+  - name: BUILD_AGENTS_SUBNET_NAME
     displayName: VMSS subnet
     type: string
     default: ""
@@ -221,7 +221,7 @@ jobs:
           scriptType: "bash"
           scriptLocation: "scriptPath"
           scriptPath: "devops/scripts/allow-devops-vmss.sh"
-          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.VMSS_RESOURCE_GROUP_NAME }}" "${{ parameters.VMSS_VNET }}" "${{ parameters.VMSS_SUBNET }}"'
+          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}" "${{ parameters.BUILD_AGENTS_VNET_NAME }}" "${{ parameters.BUILD_AGENTS_SUBNET_NAME }}"'
 
   - job: deploy_management
     displayName: Deploy management
@@ -291,7 +291,15 @@ jobs:
           if [ "${{ parameters.LOCATION }}" == '' ]; then
             echo "Missing variable: LOCATION" && exit 1
           fi
-
+          if [ "${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}" == '' ]; then
+            echo "Missing variable: BUILD_AGENTS_RESOURCE_GROUP_NAME" && exit 1
+          fi
+          if [ "${{ parameters.BUILD_AGENTS_VNET_NAME }}" == '' ]; then
+            echo "Missing variable: BUILD_AGENTS_VNET_NAME" && exit 1
+          fi
+          if [ "${{ parameters.BUILD_AGENTS_SUBNET_NAME }}" == '' ]; then
+            echo "Missing variable: BUILD_AGENTS_SUBNET_NAME" && exit 1
+          fi
       - checkout: self
         clean: "true"
         persistCredentials: "false"
@@ -332,6 +340,9 @@ jobs:
           MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
           MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
+          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
+          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
       - task: AzureCLI@2
         displayName: ACR Login
@@ -448,6 +459,9 @@ jobs:
           RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
           RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
+          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
+          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
       - template: devcontainer_run_command.yml
         parameters:
@@ -498,6 +512,9 @@ jobs:
           CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
           ACR_NAME: ${{ parameters.ACR_NAME }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
+          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
+          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: publish_shared_bundles
     displayName: Publish shared bundles
@@ -529,6 +546,9 @@ jobs:
           CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
           ACR_NAME: ${{ parameters.ACR_NAME }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
+          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
+          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: register_shared_bundles
     displayName: Register shared bundles
@@ -568,6 +588,9 @@ jobs:
           LOCATION: ${{ parameters.LOCATION }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           BUNDLE_TYPE: $(BUNDLE_TYPE)
+          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
+          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
+          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: register_bundles
     displayName: Register bundles
@@ -607,6 +630,9 @@ jobs:
           LOCATION: ${{ parameters.LOCATION }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           BUNDLE_TYPE: $(BUNDLE_TYPE)
+          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
+          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
+          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: register_user_resource_bundles
     displayName: Register user resource bundles
@@ -648,6 +674,9 @@ jobs:
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           BUNDLE_TYPE: $(BUNDLE_TYPE)
           WORKSPACE_SERVICE_NAME: $(WORKSPACE_SERVICE_NAME)
+          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
+          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
+          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: deploy_shared_services
     displayName: Deploy shared services
@@ -677,6 +706,9 @@ jobs:
               TRE_ID: ${{ parameters.TRE_ID }}
               LOCATION: ${{ parameters.LOCATION }}
               SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+              BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
+              BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
+              BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
       - template: devcontainer_run_command.yml
         parameters:
@@ -697,6 +729,9 @@ jobs:
           MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
           MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
+          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
+          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: deploy_ui
     displayName: Deploy UI
@@ -824,4 +859,4 @@ jobs:
           scriptType: "bash"
           scriptLocation: "scriptPath"
           scriptPath: "devops/scripts/block-devops-vmss.sh"
-          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.VMSS_RESOURCE_GROUP_NAME }}" "${{ parameters.VMSS_VNET }}" "${{ parameters.VMSS_SUBNET }}"'
+          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}" "${{ parameters.BUILD_AGENTS_VNET_NAME }}" "${{ parameters.BUILD_AGENTS_SUBNET_NAME }}"'

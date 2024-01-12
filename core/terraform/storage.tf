@@ -7,6 +7,12 @@ resource "azurerm_storage_account" "stg" {
   allow_nested_items_to_be_public = false
   public_network_access_enabled   = false
   tags                            = local.tre_core_tags
+
+  network_rules {
+    default_action = "Deny"
+    virtual_network_subnet_ids = [ data.azurerm_subnet.build_agents_subnet.id ]
+  }
+
   lifecycle { ignore_changes = [tags] }
 }
 
