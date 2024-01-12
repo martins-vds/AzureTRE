@@ -3,7 +3,7 @@ parameters:
   - name: deployStages
     displayName: Deploy Stages
     type: string
-    default: 'all'
+    default: "all"
     values:
       - "all"
       - "core"
@@ -13,131 +13,131 @@ parameters:
   - name: ciGitRef
     displayName: Git reference
     type: string
-    default: ''
+    default: ""
   - name: environmentName
     displayName: Environment name
     type: string
-    default: ''
+    default: ""
   - name: e2eTestsCustomSelector
     displayName: E2E tests custom selector
     type: string
-    default: ''
+    default: ""
   - name: DEVCONTAINER_TAG
     displayName: Devcontainer tag
     type: string
-    default: 'latest'
+    default: "latest"
   - name: AAD_TENANT_ID
     displayName: AAD tenant ID
     type: string
-    default: ''
+    default: ""
   - name: ACR_NAME
     displayName: ACR name
     type: string
-    default: ''
+    default: ""
   - name: AZURE_CREDENTIALS
     displayName: Azure credentials
     type: string
-    default: ''
+    default: ""
   - name: API_CLIENT_ID
     displayName: API client ID
     type: string
-    default: ''
+    default: ""
   - name: API_CLIENT_SECRET
     displayName: API client secret
     type: string
-    default: ''
+    default: ""
   - name: APPLICATION_ADMIN_CLIENT_ID
     displayName: Application admin client ID
     type: string
-    default: ''
+    default: ""
   - name: APPLICATION_ADMIN_CLIENT_SECRET
     displayName: Application admin client secret
     type: string
-    default: ''
+    default: ""
   - name: MGMT_RESOURCE_GROUP_NAME
     displayName: Management resource group name
     type: string
-    default: ''
+    default: ""
   - name: MS_TEAMS_WEBHOOK_URI
     displayName: MS Teams webhook URI
     type: string
-    default: ''
+    default: ""
   - name: MGMT_STORAGE_ACCOUNT_NAME
     displayName: Management storage account name
     type: string
-    default: ''
+    default: ""
   - name: SWAGGER_UI_CLIENT_ID
     displayName: Swagger UI client ID
     type: string
-    default: ''
+    default: ""
   - name: TEST_APP_ID
     displayName: Test app ID
     type: string
-    default: ''
+    default: ""
   - name: TEST_WORKSPACE_APP_ID
     displayName: Test workspace app ID
     type: string
-    default: ''
+    default: ""
   - name: TEST_WORKSPACE_APP_SECRET
     displayName: Test workspace app secret
     type: string
-    default: ''
+    default: ""
   - name: TEST_ACCOUNT_CLIENT_ID
     displayName: Test account client ID
     type: string
-    default: ''
+    default: ""
   - name: TEST_ACCOUNT_CLIENT_SECRET
     displayName: Test account client secret
     type: string
-    default: ''
+    default: ""
   - name: TRE_ID
     displayName: TRE ID
     type: string
-    default: ''
+    default: ""
   - name: CI_CACHE_ACR_NAME
     displayName: CI cache ACR name
     type: string
-    default: ''
+    default: ""
   - name: LOCATION
     displayName: Location
     type: string
-    default: ''
+    default: ""
   - name: AZURE_ENVIRONMENT
     displayName: Azure environment
     type: string
-    default: 'AzureCloud'
+    default: "AzureCloud"
   - name: prRef
     displayName: Pull request reference
     type: string
-    default: ''
+    default: ""
   - name: prHeadSha
     displayName: Pull request head SHA
     type: string
-    default: ''
+    default: ""
   - name: TEST_USER_NAME
     displayName: Test user name
     type: string
-    default: ''
+    default: ""
   - name: TEST_USER_PASSWORD
     displayName: Test user password
     type: string
-    default: ''
+    default: ""
   - name: TERRAFORM_STATE_CONTAINER_NAME
     displayName: Terraform state container name
     type: string
-    default: 'tfstate'
+    default: "tfstate"
   - name: SUBSCRIPTION_ID
     displayName: Subscription ID
     type: string
-    default: ''
+    default: ""
   - name: RP_BUNDLE_VALUES
     displayName: RP bundle values
     type: string
-    default: '{}'
+    default: "{}"
   - name: TF_LOG
     displayName: Terraform log level
     type: string
-    default: ''
+    default: ""
   - name: BUNDLES
     displayName: Bundles
     type: object
@@ -153,488 +153,532 @@ parameters:
   - name: E2E_TESTS_NUMBER_PROCESSES
     displayName: Number of processes for e2e tests
     type: string
-    default: ''
+    default: ""
   - name: WORKSPACE_APP_SERVICE_PLAN_SKU
     displayName: Workspace app service plan SKU
     type: string
-    default: 'P1v2'
+    default: "P1v2"
   - name: RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE
     displayName: Resource processor number of processes per instance
     type: number
-    default: '5'
+    default: "5"
   - name: ENABLE_SWAGGER
     displayName: Enable Swagger
     type: string
-    default: 'false'
+    default: "false"
     values:
-      - 'true'
-      - 'false'
+      - "true"
+      - "false"
   - name: ENABLE_BASTION
     displayName: Enable Bastion
     type: string
-    default: 'false'
+    default: "false"
     values:
-      - 'true'
-      - 'false'
+      - "true"
+      - "false"
   - name: DEPLOY_FIREWALL
     displayName: Deploy Firewall
     type: boolean
-    default: 'false'
+    default: "false"
   - name: CORE_ADDRESS_SPACE
     displayName: Core address space
     type: string
-    default: '10.0.0.0/22'
+    default: "10.0.0.0/22"
   - name: CORE_APP_SERVICE_PLAN_SKU
     displayName: Core app service plan SKU
     type: string
-    default: 'P1v2'
+    default: "P1v2"
   - name: TRE_ADDRESS_SPACE
     displayName: TRE address space
     type: string
-    default: '10.0.0.0/16'
+    default: "10.0.0.0/16"
+  - name: VMSS_VNET
+    displayName: VMSS VNET
+    type: string
+    default: ""
+  - name: VMSS_SUBNET
+    displayName: VMSS subnet
+    type: string
+    default: ""
 jobs:
-- job: deploy_management
-  displayName: Deploy management
-  pool:
-    name: Ubuntu2204-vmss
-  steps:
-  - bash: |
-      echo "Inputs"
-      echo "======"
-      echo "prRef       : ${{ parameters.prRef }}"
-      echo "prRHeadSha  : ${{ parameters.prHeadSha }}"
-      echo "ciGitRef    : ${{ parameters.ciGitRef }}"
-      echo "environment : ${{ parameters.environmentName }}"
-  - bash: |
-      if [ "${{ parameters.AAD_TENANT_ID }}" == '' ]; then
-        echo "Missing secret: AAD_TENANT_ID" && exit 1
-      fi
-      if [ "${{ parameters.ACR_NAME }}" == '' ]; then
-        echo "Missing secret: ACR_NAME" && exit 1
-      fi
-      if [ "${{ parameters.API_CLIENT_ID }}" == '' ]; then
-        echo "Missing secret: API_CLIENT_ID" && exit 1
-      fi
-      if [ "${{ parameters.API_CLIENT_SECRET }}" == '' ]; then
-        echo "Missing secret: API_CLIENT_SECRET" && exit 1
-      fi
-      if [ "${{ parameters.APPLICATION_ADMIN_CLIENT_ID }}" == '' ]; then
-        echo "Missing secret: APPLICATION_ADMIN_CLIENT_ID" && exit 1
-      fi
-      if [ "${{ parameters.APPLICATION_ADMIN_CLIENT_SECRET }}" == '' ]; then
-        echo "Missing secret: APPLICATION_ADMIN_CLIENT_SECRET" && exit 1
-      fi
-      if [ "${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" == '' ]; then
-        echo "Missing secret: MGMT_RESOURCE_GROUP_NAME" && exit 1
-      fi
-      if [ "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" == '' ]; then
-        echo "Missing secret: MGMT_STORAGE_ACCOUNT_NAME" && exit 1
-      fi
-      if [ "${{ parameters.SWAGGER_UI_CLIENT_ID }}" == '' ]; then
-        echo "Missing secret: SWAGGER_UI_CLIENT_ID" && exit 1
-      fi
-      if [ "${{ parameters.TEST_APP_ID }}" == '' ]; then
-        echo "Missing secret: TEST_APP_ID" && exit 1
-      fi
-      if [ "${{ parameters.TEST_WORKSPACE_APP_ID }}" == '' ]; then
-        echo "Missing secret: TEST_WORKSPACE_APP_ID" && exit 1
-      fi
-      if [ "${{ parameters.TEST_WORKSPACE_APP_SECRET }}" == '' ]; then
-        echo "Missing secret: TEST_WORKSPACE_APP_SECRET" && exit 1
-      fi
-      if [ "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}" == '' ]; then
-        echo "Missing secret: TEST_ACCOUNT_CLIENT_ID" && exit 1
-      fi
-      if [ "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}" == '' ]; then
-        echo "Missing secret: TEST_ACCOUNT_CLIENT_SECRET" && exit 1
-      fi
-      if [ "${{ parameters.TRE_ID }}" == '' ]; then
-        echo "Missing secret: TRE_ID" && exit 1
-      fi
-      if [ "${{ parameters.AZURE_CREDENTIALS }}" == '' ]; then
-        echo "Missing secret: AZURE_CREDENTIALS" && exit 1
-      fi
-      if [ "${{ parameters.DEVCONTAINER_TAG }}" == '' ]; then
-        echo "Missing input: DEVCONTAINER_TAG" && exit 1
-      fi
-      if [ "${{ parameters.LOCATION }}" == '' ]; then
-        echo "Missing variable: LOCATION" && exit 1
-      fi
+  - job: enable_vmss
+    displayName: Enable VMSS
+    pool:
+      name: Ubuntu2204-vmss
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
 
-  - checkout: self
-    clean: "true"
-    persistCredentials: "false"
+      - task: AzureCLI@2
+        displayName: Login to CI cache ACR
+        continueOnError: true
+        inputs:
+          azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
+          scriptType: "bash"
+          scriptLocation: "scriptPath"
+          scriptPath: "devops/scripts/allow-devops-vmss.sh"
+          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.VMSS_VNET }}" "${{ parameters.VMSS_SUBNET }}"'
 
-  - task: AzureCLI@2
-    name: ci_cache_cr_login
-    displayName: Login to CI cache ACR
-    continueOnError: true
-    inputs:
-      azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
-      scriptType: 'bash'
-      scriptLocation: 'scriptPath'
-      scriptPath: 'devops/scripts/login_acr.sh'
-      arguments: '${{ parameters.CI_CACHE_ACR_NAME }}'
+  - job: deploy_management
+    displayName: Deploy management
+    dependsOn: [enable_vmss]
+    pool:
+      name: Ubuntu2204-vmss
+    steps:
+      - bash: |
+          echo "Inputs"
+          echo "======"
+          echo "prRef       : ${{ parameters.prRef }}"
+          echo "prRHeadSha  : ${{ parameters.prHeadSha }}"
+          echo "ciGitRef    : ${{ parameters.ciGitRef }}"
+          echo "environment : ${{ parameters.environmentName }}"
+      - bash: |
+          if [ "${{ parameters.AAD_TENANT_ID }}" == '' ]; then
+            echo "Missing secret: AAD_TENANT_ID" && exit 1
+          fi
+          if [ "${{ parameters.ACR_NAME }}" == '' ]; then
+            echo "Missing secret: ACR_NAME" && exit 1
+          fi
+          if [ "${{ parameters.API_CLIENT_ID }}" == '' ]; then
+            echo "Missing secret: API_CLIENT_ID" && exit 1
+          fi
+          if [ "${{ parameters.API_CLIENT_SECRET }}" == '' ]; then
+            echo "Missing secret: API_CLIENT_SECRET" && exit 1
+          fi
+          if [ "${{ parameters.APPLICATION_ADMIN_CLIENT_ID }}" == '' ]; then
+            echo "Missing secret: APPLICATION_ADMIN_CLIENT_ID" && exit 1
+          fi
+          if [ "${{ parameters.APPLICATION_ADMIN_CLIENT_SECRET }}" == '' ]; then
+            echo "Missing secret: APPLICATION_ADMIN_CLIENT_SECRET" && exit 1
+          fi
+          if [ "${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" == '' ]; then
+            echo "Missing secret: MGMT_RESOURCE_GROUP_NAME" && exit 1
+          fi
+          if [ "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" == '' ]; then
+            echo "Missing secret: MGMT_STORAGE_ACCOUNT_NAME" && exit 1
+          fi
+          if [ "${{ parameters.SWAGGER_UI_CLIENT_ID }}" == '' ]; then
+            echo "Missing secret: SWAGGER_UI_CLIENT_ID" && exit 1
+          fi
+          if [ "${{ parameters.TEST_APP_ID }}" == '' ]; then
+            echo "Missing secret: TEST_APP_ID" && exit 1
+          fi
+          if [ "${{ parameters.TEST_WORKSPACE_APP_ID }}" == '' ]; then
+            echo "Missing secret: TEST_WORKSPACE_APP_ID" && exit 1
+          fi
+          if [ "${{ parameters.TEST_WORKSPACE_APP_SECRET }}" == '' ]; then
+            echo "Missing secret: TEST_WORKSPACE_APP_SECRET" && exit 1
+          fi
+          if [ "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}" == '' ]; then
+            echo "Missing secret: TEST_ACCOUNT_CLIENT_ID" && exit 1
+          fi
+          if [ "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}" == '' ]; then
+            echo "Missing secret: TEST_ACCOUNT_CLIENT_SECRET" && exit 1
+          fi
+          if [ "${{ parameters.TRE_ID }}" == '' ]; then
+            echo "Missing secret: TRE_ID" && exit 1
+          fi
+          if [ "${{ parameters.AZURE_CREDENTIALS }}" == '' ]; then
+            echo "Missing secret: AZURE_CREDENTIALS" && exit 1
+          fi
+          if [ "${{ parameters.DEVCONTAINER_TAG }}" == '' ]; then
+            echo "Missing input: DEVCONTAINER_TAG" && exit 1
+          fi
+          if [ "${{ parameters.LOCATION }}" == '' ]; then
+            echo "Missing variable: LOCATION" && exit 1
+          fi
 
-  - task: AzureCLI@2
-    displayName: Build Devcontainer
-    name: build_devcontainer
-    inputs:
-      azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
-      scriptType: 'bash'
-      scriptLocation: 'scriptPath'
-      scriptPath: 'devops/scripts/build_devcontainer.sh'
-      arguments: '"${{ parameters.CI_CACHE_ACR_NAME }}" "$(ci_cache_cr_login.outcome)" "${{ parameters.DEVCONTAINER_TAG }}"'
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
 
-  - template: devcontainer_run_command.yml
-    parameters:
-      DISPLAY_NAME: 'Deploy management'
-      COMMAND: "make bootstrap mgmt-deploy"
-      DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-      CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-      AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-      AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-      TRE_ID: ${{ parameters.TRE_ID }}
-      LOCATION: ${{ parameters.LOCATION }}
-      ACR_NAME: ${{ parameters.ACR_NAME }}
-      TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
-      MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
-      MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
-      SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+      - task: AzureCLI@2
+        name: ci_cache_cr_login
+        displayName: Login to CI cache ACR
+        continueOnError: true
+        inputs:
+          azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
+          scriptType: "bash"
+          scriptLocation: "scriptPath"
+          scriptPath: "devops/scripts/login_acr.sh"
+          arguments: "${{ parameters.CI_CACHE_ACR_NAME }}"
 
-  - task: AzureCLI@2
-    displayName: ACR Login
-    condition: ne(variables['ci_cache_cr_login.outcome'], 'success')
-    inputs:
-      azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
-      scriptType: 'bash'
-      scriptLocation: 'inlineScript'
-      inlineScript: |
-        # shellcheck disable=SC2034,SC2015,SC2125
-        for i in {1..3}; do
-          az acr login --name "${{ parameters.CI_CACHE_ACR_NAME }}" && ec=0 && break || ec=$? && sleep 10
-        done
-        # shellcheck disable=SC2242
-        (exit $ec)
+      - task: AzureCLI@2
+        displayName: Build Devcontainer
+        name: build_devcontainer
+        inputs:
+          azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
+          scriptType: "bash"
+          scriptLocation: "scriptPath"
+          scriptPath: "devops/scripts/build_devcontainer.sh"
+          arguments: '"${{ parameters.CI_CACHE_ACR_NAME }}" "$(ci_cache_cr_login.outcome)" "${{ parameters.DEVCONTAINER_TAG }}"'
 
-  - task: Bash@3
-    displayName: Push cached devcontainer
-    inputs:
-      targetType: 'inline'
-      script: |
-        docker image push $(build_devcontainer.CI_CACHE_ACR_URI)/tredev:${{ parameters.DEVCONTAINER_TAG }}
-- job: build_core_images
-  dependsOn: [deploy_management]
-  condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'core')) }})
-  displayName: Build core images
-  pool:
-    name: Ubuntu2204-vmss
-  strategy:
-    matrix:
-      build-and-push-api:
-        target: 'build-and-push-api'
-      build-and-push-resource-processor:
-        target: 'build-and-push-resource-processor'
-      build-and-push-airlock-processor:
-        target: 'build-and-push-airlock-processor'
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "Deploy management"
+          COMMAND: "make bootstrap mgmt-deploy"
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          TRE_ID: ${{ parameters.TRE_ID }}
+          LOCATION: ${{ parameters.LOCATION }}
+          ACR_NAME: ${{ parameters.ACR_NAME }}
+          TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
+          MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
+          MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Docker Build'
-        COMMAND: "make $(target)"
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        ACR_NAME: ${{ parameters.ACR_NAME }}
-        LOCATION: ${{ parameters.LOCATION }}
+      - task: AzureCLI@2
+        displayName: ACR Login
+        condition: ne(variables['ci_cache_cr_login.outcome'], 'success')
+        inputs:
+          azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
+          scriptType: "bash"
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            # shellcheck disable=SC2034,SC2015,SC2125
+            for i in {1..3}; do
+              az acr login --name "${{ parameters.CI_CACHE_ACR_NAME }}" && ec=0 && break || ec=$? && sleep 10
+            done
+            # shellcheck disable=SC2242
+            (exit $ec)
 
-- job: start_tre
-  displayName: Start TRE
-  dependsOn: [deploy_management]
-  condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
-  pool:
-    name: Ubuntu2204-vmss
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
+      - task: Bash@3
+        displayName: Push cached devcontainer
+        inputs:
+          targetType: "inline"
+          script: |
+            docker image push $(build_devcontainer.CI_CACHE_ACR_URI)/tredev:${{ parameters.DEVCONTAINER_TAG }}
+  - job: build_core_images
+    dependsOn: [deploy_management]
+    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'core')) }})
+    displayName: Build core images
+    pool:
+      name: Ubuntu2204-vmss
+    strategy:
+      matrix:
+        build-and-push-api:
+          target: "build-and-push-api"
+        build-and-push-resource-processor:
+          target: "build-and-push-resource-processor"
+        build-and-push-airlock-processor:
+          target: "build-and-push-airlock-processor"
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
 
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Start TRE'
-        COMMAND: "make tre-start"
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        TRE_ID: ${{ parameters.TRE_ID }}
-        LOCATION: ${{ parameters.LOCATION }}
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "Docker Build"
+          COMMAND: "make $(target)"
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          ACR_NAME: ${{ parameters.ACR_NAME }}
+          LOCATION: ${{ parameters.LOCATION }}
+  - job: start_tre
+    displayName: Start TRE
+    dependsOn: [deploy_management]
+    condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
+    pool:
+      name: Ubuntu2204-vmss
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
 
-- job: deploy_tre
-  displayName: Deploy TRE
-  dependsOn: [start_tre, build_core_images]
-  condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
-  pool:
-    name: Ubuntu2204-vmss
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "Start TRE"
+          COMMAND: "make tre-start"
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          TRE_ID: ${{ parameters.TRE_ID }}
+          LOCATION: ${{ parameters.LOCATION }}
 
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Deploy TRE Core'
-        COMMAND: "TF_VAR_ci_git_ref=${{ parameters.ciGitRef }} TF_LOG=${{ parameters.TF_LOG }} make deploy-core"
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
-        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
-        TRE_ID: ${{ parameters.TRE_ID }}
-        LOCATION: ${{ parameters.LOCATION }}
-        ACR_NAME: ${{ parameters.ACR_NAME }}
-        TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
-        MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
-        MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
-        CORE_ADDRESS_SPACE: ${{ parameters.CORE_ADDRESS_SPACE }}
-        TRE_ADDRESS_SPACE: ${{ parameters.TRE_ADDRESS_SPACE }}
-        ENABLE_SWAGGER: "${{ parameters.ENABLE_SWAGGER }}"
-        ENABLE_BASTION: "${{ parameters.ENABLE_BASTION }}"
-        SWAGGER_UI_CLIENT_ID: "${{ parameters.SWAGGER_UI_CLIENT_ID }}"
-        API_CLIENT_SECRET: "${{ parameters.API_CLIENT_SECRET }}"
-        APPLICATION_ADMIN_CLIENT_ID: "${{ parameters.APPLICATION_ADMIN_CLIENT_ID }}"
-        APPLICATION_ADMIN_CLIENT_SECRET: "${{ parameters.APPLICATION_ADMIN_CLIENT_SECRET }}"
-        ${{ if and(eq(parameters.ciGitRef, 'refs/heads/main'),eq(parameters.prRef, '')) }}:
-          STATEFUL_RESOURCES_LOCKED: 'true'
-        ${{ else }}:
-          STATEFUL_RESOURCES_LOCKED: 'false'
-        CORE_APP_SERVICE_PLAN_SKU: ${{ parameters.CORE_APP_SERVICE_PLAN_SKU }}
-        RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
-        RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+  - job: deploy_tre
+    displayName: Deploy TRE
+    dependsOn: [start_tre, build_core_images]
+    condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
+    pool:
+      name: Ubuntu2204-vmss
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
 
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'API Health Check'
-        COMMAND: "make api-healthcheck"
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME }}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        TRE_ID: ${{ parameters.TRE_ID }}
-        LOCATION: ${{ parameters.LOCATION }}
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "Deploy TRE Core"
+          COMMAND: "TF_VAR_ci_git_ref=${{ parameters.ciGitRef }} TF_LOG=${{ parameters.TF_LOG }} make deploy-core"
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+          AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+          TRE_ID: ${{ parameters.TRE_ID }}
+          LOCATION: ${{ parameters.LOCATION }}
+          ACR_NAME: ${{ parameters.ACR_NAME }}
+          TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
+          MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
+          MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
+          CORE_ADDRESS_SPACE: ${{ parameters.CORE_ADDRESS_SPACE }}
+          TRE_ADDRESS_SPACE: ${{ parameters.TRE_ADDRESS_SPACE }}
+          ENABLE_SWAGGER: "${{ parameters.ENABLE_SWAGGER }}"
+          ENABLE_BASTION: "${{ parameters.ENABLE_BASTION }}"
+          SWAGGER_UI_CLIENT_ID: "${{ parameters.SWAGGER_UI_CLIENT_ID }}"
+          API_CLIENT_SECRET: "${{ parameters.API_CLIENT_SECRET }}"
+          APPLICATION_ADMIN_CLIENT_ID: "${{ parameters.APPLICATION_ADMIN_CLIENT_ID }}"
+          APPLICATION_ADMIN_CLIENT_SECRET: "${{ parameters.APPLICATION_ADMIN_CLIENT_SECRET }}"
+          ? ${{ if and(eq(parameters.ciGitRef, 'refs/heads/main'),eq(parameters.prRef, '')) }}
+          : STATEFUL_RESOURCES_LOCKED: "true"
+          ${{ else }}:
+            STATEFUL_RESOURCES_LOCKED: "false"
+          CORE_APP_SERVICE_PLAN_SKU: ${{ parameters.CORE_APP_SERVICE_PLAN_SKU }}
+          RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
+          RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
-- job: publish_bundles
-  displayName: Publish bundles
-  condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles'), eq(parameters.deployStages, 'user-resource-bundles')) }})
-  dependsOn: [deploy_management]
-  pool:
-    name: Ubuntu2204-vmss
-  strategy:
-    matrix:
-      ${{ if or(eq(parameters.deployStages, 'workspace-bundles'), eq(parameters.deployStages, 'all')) }}:
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "API Health Check"
+          COMMAND: "make api-healthcheck"
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME }}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          TRE_ID: ${{ parameters.TRE_ID }}
+          LOCATION: ${{ parameters.LOCATION }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+  - job: publish_bundles
+    displayName: Publish bundles
+    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles'), eq(parameters.deployStages, 'user-resource-bundles')) }})
+    dependsOn: [deploy_management]
+    pool:
+      name: Ubuntu2204-vmss
+    strategy:
+      matrix:
+        ? ${{ if or(eq(parameters.deployStages, 'workspace-bundles'), eq(parameters.deployStages, 'all')) }}
+        : ${{ each bundle in parameters.BUNDLES }}:
+            ${{ bundle.BUNDLE_NAME }}:
+              BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
+              BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
+              BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
+        ? ${{ if or(eq(parameters.deployStages, 'user-resource-bundles'), eq(parameters.deployStages, 'all')) }}
+        : ${{ each bundle in parameters.USER_RESOURCE_BUNDLES }}:
+            ${{ bundle.BUNDLE_NAME }}:
+              BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
+              BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
+              BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
+
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "Publish bundle - $(BUNDLE_NAME)"
+          COMMAND: >-
+            for i in {1..3}; do make bundle-build bundle-publish DIR=$(BUNDLE_DIR)
+            && ec=0 && break || ec=\$? && sleep 30; done; (exit \$ec)
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          ACR_NAME: ${{ parameters.ACR_NAME }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+  - job: publish_shared_bundles
+    displayName: Publish shared bundles
+    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }})
+    dependsOn: [deploy_management]
+    pool:
+      name: Ubuntu2204-vmss
+    strategy:
+      matrix:
+        ${{ each bundle in parameters.SHARED_BUNDLES }}:
+          ${{ bundle.BUNDLE_NAME }}:
+            BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
+            BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
+            BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
+
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "Publish shared bundle - $(BUNDLE_NAME)"
+          COMMAND: >-
+            for i in {1..3}; do make bundle-build bundle-publish DIR=$(BUNDLE_DIR)
+            && ec=0 && break || ec=\$? && sleep 30; done; (exit \$ec)
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          ACR_NAME: ${{ parameters.ACR_NAME }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+  - job: register_shared_bundles
+    displayName: Register shared bundles
+    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }})
+    dependsOn: [publish_shared_bundles, deploy_tre]
+    pool:
+      name: Ubuntu2204-vmss
+    strategy:
+      matrix:
+        ${{ each bundle in parameters.SHARED_BUNDLES }}:
+          ${{ bundle.BUNDLE_NAME }}:
+            BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
+            BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
+            BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
+
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "Register shared bundles - $(BUNDLE_NAME)"
+          COMMAND: >-
+            for i in {1..3}; do make bundle-register DIR=$(BUNDLE_DIR)
+            && ec=0 && break || ec=\$? && sleep 10; done; (exit \$ec)
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          ACR_NAME: ${{ parameters.ACR_NAME }}
+          API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+          AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+          TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+          TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+          TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+          TRE_ID: ${{ parameters.TRE_ID }}
+          LOCATION: ${{ parameters.LOCATION }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          BUNDLE_TYPE: $(BUNDLE_TYPE)
+
+  - job: register_bundles
+    displayName: Register bundles
+    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles')) }})
+    dependsOn: [publish_bundles, deploy_tre]
+    pool:
+      name: Ubuntu2204-vmss
+    strategy:
+      matrix:
         ${{ each bundle in parameters.BUNDLES }}:
           ${{ bundle.BUNDLE_NAME }}:
             BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
             BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
             BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
-      ${{ if or(eq(parameters.deployStages, 'user-resource-bundles'), eq(parameters.deployStages, 'all')) }}:
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
+
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "Register bundles - $(BUNDLE_NAME)"
+          COMMAND: >-
+            for i in {1..3}; do make bundle-register DIR=$(BUNDLE_DIR)
+            && ec=0 && break || ec=\$? && sleep 10; done; (exit \$ec)
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          ACR_NAME: ${{ parameters.ACR_NAME }}
+          API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+          AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+          TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+          TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+          TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+          TRE_ID: ${{ parameters.TRE_ID }}
+          LOCATION: ${{ parameters.LOCATION }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          BUNDLE_TYPE: $(BUNDLE_TYPE)
+
+  - job: register_user_resource_bundles
+    displayName: Register user resource bundles
+    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'user-resource-bundles')) }})
+    dependsOn: [register_bundles, publish_bundles, deploy_tre]
+    pool:
+      name: Ubuntu2204-vmss
+    strategy:
+      matrix:
         ${{ each bundle in parameters.USER_RESOURCE_BUNDLES }}:
           ${{ bundle.BUNDLE_NAME }}:
             BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
             BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
             BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
+            WORKSPACE_SERVICE_NAME: ${{ bundle.WORKSPACE_SERVICE_NAME }}
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
 
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Publish bundle - $(BUNDLE_NAME)'
-        COMMAND: >-
-          for i in {1..3}; do make bundle-build bundle-publish DIR=$(BUNDLE_DIR)
-          && ec=0 && break || ec=\$? && sleep 30; done; (exit \$ec)
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        ACR_NAME: ${{ parameters.ACR_NAME }}
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-
-- job: publish_shared_bundles
-  displayName: Publish shared bundles
-  condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }})
-  dependsOn: [deploy_management]
-  pool:
-    name: Ubuntu2204-vmss
-  strategy:
-    matrix:
-      ${{ each bundle in parameters.SHARED_BUNDLES }}:
-        ${{ bundle.BUNDLE_NAME }}:
-          BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
-          BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
-          BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
-
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Publish shared bundle - $(BUNDLE_NAME)'
-        COMMAND: >-
-          for i in {1..3}; do make bundle-build bundle-publish DIR=$(BUNDLE_DIR)
-          && ec=0 && break || ec=\$? && sleep 30; done; (exit \$ec)
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        ACR_NAME: ${{ parameters.ACR_NAME }}
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-
-- job: register_shared_bundles
-  displayName: Register shared bundles
-  condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }})
-  dependsOn: [publish_shared_bundles, deploy_tre]
-  pool:
-    name: Ubuntu2204-vmss
-  strategy:
-    matrix:
-      ${{ each bundle in parameters.SHARED_BUNDLES }}:
-        ${{ bundle.BUNDLE_NAME }}:
-          BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
-          BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
-          BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
-
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Register shared bundles - $(BUNDLE_NAME)'
-        COMMAND: >-
-          for i in {1..3}; do make bundle-register DIR=$(BUNDLE_DIR)
-          && ec=0 && break || ec=\$? && sleep 10; done; (exit \$ec)
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        ACR_NAME: ${{ parameters.ACR_NAME }}
-        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
-        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
-        TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
-        TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
-        TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
-        TRE_ID: ${{ parameters.TRE_ID }}
-        LOCATION: ${{ parameters.LOCATION }}
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-        BUNDLE_TYPE: $(BUNDLE_TYPE)
-
-- job: register_bundles
-  displayName: Register bundles
-  condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles')) }})
-  dependsOn: [publish_bundles, deploy_tre]
-  pool:
-    name: Ubuntu2204-vmss
-  strategy:
-    matrix:
-      ${{ each bundle in parameters.BUNDLES }}:
-        ${{ bundle.BUNDLE_NAME }}:
-          BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
-          BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
-          BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
-
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Register bundles - $(BUNDLE_NAME)'
-        COMMAND: >-
-          for i in {1..3}; do make bundle-register DIR=$(BUNDLE_DIR)
-          && ec=0 && break || ec=\$? && sleep 10; done; (exit \$ec)
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        ACR_NAME: ${{ parameters.ACR_NAME }}
-        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
-        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
-        TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
-        TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
-        TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
-        TRE_ID: ${{ parameters.TRE_ID }}
-        LOCATION: ${{ parameters.LOCATION }}
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-        BUNDLE_TYPE: $(BUNDLE_TYPE)
-
-- job: register_user_resource_bundles
-  displayName: Register user resource bundles
-  condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'user-resource-bundles')) }})
-  dependsOn: [register_bundles, publish_bundles, deploy_tre]
-  pool:
-    name: Ubuntu2204-vmss
-  strategy:
-    matrix:
-      ${{ each bundle in parameters.USER_RESOURCE_BUNDLES }}:
-        ${{ bundle.BUNDLE_NAME }}:
-          BUNDLE_DIR: ${{ bundle.BUNDLE_DIR }}
-          BUNDLE_TYPE: ${{ bundle.BUNDLE_TYPE }}
-          BUNDLE_NAME: ${{ bundle.BUNDLE_NAME }}
-          WORKSPACE_SERVICE_NAME: ${{ bundle.WORKSPACE_SERVICE_NAME }}
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
-
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Register user resource bundles - $(BUNDLE_NAME)'
-        COMMAND: >-
-          for i in {1..3}; do make bundle-register DIR=$(BUNDLE_DIR)
-          && ec=0 && break || ec=\$? && sleep 10; done; (exit \$ec)
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        ACR_NAME: ${{ parameters.ACR_NAME }}
-        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
-        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
-        TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
-        TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
-        TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
-        TRE_ID: ${{ parameters.TRE_ID }}
-        LOCATION: ${{ parameters.LOCATION }}
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-        BUNDLE_TYPE: $(BUNDLE_TYPE)
-        WORKSPACE_SERVICE_NAME: $(WORKSPACE_SERVICE_NAME)
-
-- job: deploy_shared_services
-  displayName: Deploy shared services
-  condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }})
-  dependsOn: [register_shared_bundles, deploy_tre]
-  pool:
-    name: Ubuntu2204-vmss
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
-
-    - ${{ if eq(parameters.DEPLOY_FIREWALL, 'true') }}:
       - template: devcontainer_run_command.yml
         parameters:
-          DISPLAY_NAME: 'Deploy firewall'
-          COMMAND: "make deploy-shared-service DIR=./templates/shared_services/firewall/ BUNDLE_TYPE=shared_service"
+          DISPLAY_NAME: "Register user resource bundles - $(BUNDLE_NAME)"
+          COMMAND: >-
+            for i in {1..3}; do make bundle-register DIR=$(BUNDLE_DIR)
+            && ec=0 && break || ec=\$? && sleep 10; done; (exit \$ec)
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          ACR_NAME: ${{ parameters.ACR_NAME }}
+          API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+          AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+          TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+          TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+          TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+          TRE_ID: ${{ parameters.TRE_ID }}
+          LOCATION: ${{ parameters.LOCATION }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          BUNDLE_TYPE: $(BUNDLE_TYPE)
+          WORKSPACE_SERVICE_NAME: $(WORKSPACE_SERVICE_NAME)
+
+  - job: deploy_shared_services
+    displayName: Deploy shared services
+    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }})
+    dependsOn: [register_shared_bundles, deploy_tre]
+    pool:
+      name: Ubuntu2204-vmss
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
+
+      - ${{ if eq(parameters.DEPLOY_FIREWALL, 'true') }}:
+          - template: devcontainer_run_command.yml
+            parameters:
+              DISPLAY_NAME: "Deploy firewall"
+              COMMAND: "make deploy-shared-service DIR=./templates/shared_services/firewall/ BUNDLE_TYPE=shared_service"
+              DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+              CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+              AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+              AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+              API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+              AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+              TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+              TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+              TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+              TRE_ID: ${{ parameters.TRE_ID }}
+              LOCATION: ${{ parameters.LOCATION }}
+              SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "State Store Migrations"
+          COMMAND: "make db-migrate"
           DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
           CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
           AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
@@ -646,130 +690,135 @@ jobs:
           TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
           TRE_ID: ${{ parameters.TRE_ID }}
           LOCATION: ${{ parameters.LOCATION }}
+          TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
+          MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
+          MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'State Store Migrations'
-        COMMAND: "make db-migrate"
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
-        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
-        TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
-        TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
-        TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
-        TRE_ID: ${{ parameters.TRE_ID }}
-        LOCATION: ${{ parameters.LOCATION }}
-        TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
-        MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
-        MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+  - job: deploy_ui
+    displayName: Deploy UI
+    condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
+    dependsOn: [deploy_tre]
+    pool:
+      name: Ubuntu2204-vmss
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
 
-- job: deploy_ui
-  displayName: Deploy UI
-  condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
-  dependsOn: [deploy_tre]
-  pool:
-    name: Ubuntu2204-vmss
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "Deploy UI"
+          COMMAND: "make build-and-deploy-ui"
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+          AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+          TRE_ID: ${{ parameters.TRE_ID }}
+          LOCATION: ${{ parameters.LOCATION }}
+          TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
+          MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
+          MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
+          SWAGGER_UI_CLIENT_ID: "${{ parameters.SWAGGER_UI_CLIENT_ID }}"
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Deploy UI'
-        COMMAND: "make build-and-deploy-ui"
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
-        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
-        TRE_ID: ${{ parameters.TRE_ID }}
-        LOCATION: ${{ parameters.LOCATION }}
-        TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
-        MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
-        MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
-        SWAGGER_UI_CLIENT_ID: "${{ parameters.SWAGGER_UI_CLIENT_ID }}"
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+  - job: e2e_tests_smoke
+    displayName: Run E2E Tests (Smoke)
+    dependsOn: [deploy_shared_services, register_bundles, deploy_ui]
+    condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
+    pool:
+      name: Ubuntu2204-vmss
+    timeoutInMinutes: "10"
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
 
-- job: e2e_tests_smoke
-  displayName: Run E2E Tests (Smoke)
-  dependsOn: [deploy_shared_services, register_bundles, deploy_ui]
-  condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
-  pool:
-    name: Ubuntu2204-vmss
-  timeoutInMinutes: "10"
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "Run E2E Tests (Smoke)"
+          COMMAND: "make test-e2e-smoke"
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          LOCATION: ${{ parameters.LOCATION }}
+          API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+          AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+          TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+          TEST_WORKSPACE_APP_ID: "${{ parameters.TEST_WORKSPACE_APP_ID }}"
+          TEST_WORKSPACE_APP_SECRET: "${{ parameters.TEST_WORKSPACE_APP_SECRET }}"
+          TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+          TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+          TRE_ID: ${{ parameters.TRE_ID }}
+          IS_API_SECURED: false
+          WORKSPACE_APP_SERVICE_PLAN_SKU: ${{ parameters.WORKSPACE_APP_SERVICE_PLAN_SKU }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Run E2E Tests (Smoke)'
-        COMMAND: "make test-e2e-smoke"
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        LOCATION: ${{ parameters.LOCATION }}
-        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
-        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
-        TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
-        TEST_WORKSPACE_APP_ID: "${{ parameters.TEST_WORKSPACE_APP_ID }}"
-        TEST_WORKSPACE_APP_SECRET: "${{ parameters.TEST_WORKSPACE_APP_SECRET }}"
-        TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
-        TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
-        TRE_ID: ${{ parameters.TRE_ID }}
-        IS_API_SECURED: false
-        WORKSPACE_APP_SERVICE_PLAN_SKU: ${{ parameters.WORKSPACE_APP_SERVICE_PLAN_SKU }}
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+      - publish: "./e2e_tests/pytest_e2e_smoke.xml"
+        artifact: E2E Test (Smoke) Results
+        displayName: Upload Test Results
+        condition: succeededOrFailed()
 
-    - publish: "./e2e_tests/pytest_e2e_smoke.xml"
-      artifact: E2E Test (Smoke) Results
-      displayName: Upload Test Results
-      condition: succeededOrFailed()
+  - job: e2e_tests_custom
+    displayName: Run E2E Tests (Custom)
+    condition: and(succeeded(), ${{ and(ne(parameters.e2eTestsCustomSelector, ''), eq(parameters.deployStages, 'all')) }})
+    dependsOn:
+      [deploy_shared_services, register_bundles, register_user_resource_bundles]
+    pool:
+      name: Ubuntu2204-vmss
+    timeoutInMinutes: "300"
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
 
-- job: e2e_tests_custom
-  displayName: Run E2E Tests (Custom)
-  condition: and(succeeded(), ${{ and(ne(parameters.e2eTestsCustomSelector, ''), eq(parameters.deployStages, 'all')) }})
-  dependsOn: [deploy_shared_services, register_bundles, register_user_resource_bundles]
-  pool:
-    name: Ubuntu2204-vmss
-  timeoutInMinutes: "300"
-  steps:
-    - checkout: self
-      clean: "true"
-      persistCredentials: "false"
+      - template: devcontainer_run_command.yml
+        parameters:
+          DISPLAY_NAME: "Run E2E Tests (Custom)"
+          COMMAND: "make test-e2e-custom SELECTOR='${{ parameters.e2eTestsCustomSelector }}'"
+          DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
+          CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
+          AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          LOCATION: ${{ parameters.LOCATION }}
+          API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
+          AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
+          TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
+          TEST_WORKSPACE_APP_ID: "${{ parameters.TEST_WORKSPACE_APP_ID }}"
+          TEST_WORKSPACE_APP_SECRET: "${{ parameters.TEST_WORKSPACE_APP_SECRET }}"
+          TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
+          TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
+          TRE_ID: ${{ parameters.TRE_ID }}
+          IS_API_SECURED: false
+          WORKSPACE_APP_SERVICE_PLAN_SKU: ${{ parameters.WORKSPACE_APP_SERVICE_PLAN_SKU }}
+          E2E_TESTS_NUMBER_PROCESSES: ${{ parameters.E2E_TESTS_NUMBER_PROCESSES }}
+          SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
-    - template: devcontainer_run_command.yml
-      parameters:
-        DISPLAY_NAME: 'Run E2E Tests (Custom)'
-        COMMAND: "make test-e2e-custom SELECTOR='${{ parameters.e2eTestsCustomSelector }}'"
-        DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
-        CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
-        AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
-        AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
-        LOCATION: ${{ parameters.LOCATION }}
-        API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
-        AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
-        TEST_APP_ID: "${{ parameters.TEST_APP_ID }}"
-        TEST_WORKSPACE_APP_ID: "${{ parameters.TEST_WORKSPACE_APP_ID }}"
-        TEST_WORKSPACE_APP_SECRET: "${{ parameters.TEST_WORKSPACE_APP_SECRET }}"
-        TEST_ACCOUNT_CLIENT_ID: "${{ parameters.TEST_ACCOUNT_CLIENT_ID }}"
-        TEST_ACCOUNT_CLIENT_SECRET: "${{ parameters.TEST_ACCOUNT_CLIENT_SECRET }}"
-        TRE_ID: ${{ parameters.TRE_ID }}
-        IS_API_SECURED: false
-        WORKSPACE_APP_SERVICE_PLAN_SKU: ${{ parameters.WORKSPACE_APP_SERVICE_PLAN_SKU }}
-        E2E_TESTS_NUMBER_PROCESSES: ${{ parameters.E2E_TESTS_NUMBER_PROCESSES }}
-        SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+      - publish: "./e2e_tests/pytest_e2e_custom.xml"
+        artifact: E2E Test (Smoke) Results
+        displayName: Upload Test Results
+        condition: succeededOrFailed()
 
-    - publish: "./e2e_tests/pytest_e2e_custom.xml"
-      artifact: E2E Test (Smoke) Results
-      displayName: Upload Test Results
-      condition: succeededOrFailed()
+  - job: block_vmss
+    displayName: Block VMSS
+    dependsOn: [deploy_shared_services]
+    condition: always()
+    pool:
+      name: Ubuntu2204-vmss
+    steps:
+      - checkout: self
+        clean: "true"
+        persistCredentials: "false"
+
+      - task: AzureCLI@2
+        displayName: Login to CI cache ACR
+        continueOnError: true
+        inputs:
+          azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
+          scriptType: "bash"
+          scriptLocation: "scriptPath"
+          scriptPath: "devops/scripts/allow-devops-vmss.sh"
+          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.VMSS_VNET }}" "${{ parameters.VMSS_SUBNET }}"'
