@@ -215,6 +215,7 @@ jobs:
         persistCredentials: "false"
 
       - task: AzureCLI@2
+        enabled: false
         displayName: Enable VMSS
         inputs:
           azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
@@ -818,6 +819,7 @@ jobs:
 
       - task: AzureCLI@2
         displayName: Block VMSS
+        enabled: false
         inputs:
           azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
           scriptType: "bash"
