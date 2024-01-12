@@ -196,7 +196,7 @@ jobs:
 - job: deploy_management
   displayName: Deploy management
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   steps:
   - bash: |
       echo "Inputs"
@@ -328,7 +328,7 @@ jobs:
   condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'core')) }})
   displayName: Build core images
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   strategy:
     matrix:
       build-and-push-api:
@@ -358,7 +358,7 @@ jobs:
   dependsOn: [deploy_management]
   condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   steps:
     - checkout: self
       clean: "true"
@@ -380,7 +380,7 @@ jobs:
   dependsOn: [start_tre, build_core_images]
   condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   steps:
     - checkout: self
       clean: "true"
@@ -436,7 +436,7 @@ jobs:
   condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles'), eq(parameters.deployStages, 'user-resource-bundles')) }})
   dependsOn: [deploy_management]
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   strategy:
     matrix:
       ${{ if or(eq(parameters.deployStages, 'workspace-bundles'), eq(parameters.deployStages, 'all')) }}:
@@ -474,7 +474,7 @@ jobs:
   condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }})
   dependsOn: [deploy_management]
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   strategy:
     matrix:
       ${{ each bundle in parameters.SHARED_BUNDLES }}:
@@ -505,7 +505,7 @@ jobs:
   condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }})
   dependsOn: [publish_shared_bundles, deploy_tre]
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   strategy:
     matrix:
       ${{ each bundle in parameters.SHARED_BUNDLES }}:
@@ -544,7 +544,7 @@ jobs:
   condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'workspace-bundles')) }})
   dependsOn: [publish_bundles, deploy_tre]
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   strategy:
     matrix:
       ${{ each bundle in parameters.BUNDLES }}:
@@ -583,7 +583,7 @@ jobs:
   condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'user-resource-bundles')) }})
   dependsOn: [register_bundles, publish_bundles, deploy_tre]
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   strategy:
     matrix:
       ${{ each bundle in parameters.USER_RESOURCE_BUNDLES }}:
@@ -624,7 +624,7 @@ jobs:
   condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'shared-bundles')) }})
   dependsOn: [register_shared_bundles, deploy_tre]
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   steps:
     - checkout: self
       clean: "true"
@@ -673,7 +673,7 @@ jobs:
   condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
   dependsOn: [deploy_tre]
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   steps:
     - checkout: self
       clean: "true"
@@ -702,7 +702,7 @@ jobs:
   dependsOn: [deploy_shared_services, register_bundles, deploy_ui]
   condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   timeoutInMinutes: "10"
   steps:
     - checkout: self
@@ -740,7 +740,7 @@ jobs:
   condition: and(succeeded(), ${{ and(ne(parameters.e2eTestsCustomSelector, ''), eq(parameters.deployStages, 'all')) }})
   dependsOn: [deploy_shared_services, register_bundles, register_user_resource_bundles]
   pool:
-    vmImage: ubuntu-latest
+    name: Ubuntu2204-vmss
   timeoutInMinutes: "300"
   steps:
     - checkout: self
