@@ -5,10 +5,7 @@ resource "azurerm_storage_account" "cyclecloud" {
   account_tier             = "Standard"
   account_replication_type = "GRS"
   tags                     = local.tre_shared_service_tags
-
-  network_rules {
-    default_action             = "Deny"
-  }
+  public_network_access_enabled = false
 
   lifecycle { ignore_changes = [tags] }
 }
