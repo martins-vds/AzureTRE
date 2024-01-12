@@ -17,9 +17,4 @@ resource "azurerm_private_endpoint" "mgmtblobpe" {
     is_manual_connection           = false
     subresource_names              = ["Blob"]
   }
-
-  # private endpoints in serial
-  depends_on = [
-    azurerm_private_endpoint.kvpe
-  ]
 }
