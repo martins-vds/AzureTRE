@@ -10,7 +10,7 @@ vmss_subnet=$5
 
 # Allow DevOps VMSS to access storage account
 
-az network vnet subnet update -g "$vmss_rg" --vnet-name "$vmss_vnet" --name "$vmss_subnet" --service-endpoints "Microsoft.Storage" "Microsoft.Storage.Global"
+az network vnet subnet update -g "$vmss_rg" --vnet-name "$vmss_vnet" --name "$vmss_subnet" --service-endpoints "Microsoft.Storage.Global"
 
 vmss_subnet_id=$(az network vnet subnet show -g "$vmss_rg" --vnet-name "$vmss_vnet" --name "$vmss_subnet" --query id -o tsv)
 
