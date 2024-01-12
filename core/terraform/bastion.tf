@@ -1,5 +1,5 @@
 resource "azurerm_public_ip" "bastion" {
-  count = var.enable_bastion ? 1 : 0
+  count               = var.enable_bastion ? 1 : 0
   name                = "pip-bas-${var.tre_id}"
   resource_group_name = azurerm_resource_group.core.name
   location            = azurerm_resource_group.core.location
@@ -11,10 +11,12 @@ resource "azurerm_public_ip" "bastion" {
 }
 
 resource "azurerm_bastion_host" "bastion" {
-  count = var.enable_bastion ? 1 : 0
-  name                = "bas-${var.tre_id}"
-  resource_group_name = azurerm_resource_group.core.name
-  location            = azurerm_resource_group.core.location
+  count                  = var.enable_bastion ? 1 : 0
+  name                   = "bas-${var.tre_id}"
+  resource_group_name    = azurerm_resource_group.core.name
+  location               = azurerm_resource_group.core.location
+  sku                    = "Standard"
+  shareable_link_enabled = true
 
   ip_configuration {
     name                 = "configuration"
