@@ -11,7 +11,8 @@ az group create --resource-group "$TF_VAR_mgmt_resource_group_name" --location "
 az storage account create --resource-group "$TF_VAR_mgmt_resource_group_name" \
   --name "$TF_VAR_mgmt_storage_account_name" --location "$LOCATION" \
   --allow-blob-public-access false \
-  --kind StorageV2 --sku Standard_LRS -o table
+  --kind StorageV2 --sku Standard_LRS -o table \
+  --public-network-access Disabled
 
 # Blob container
 # shellcheck disable=SC2154
