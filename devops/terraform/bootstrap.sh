@@ -7,12 +7,17 @@ set -o nounset
 echo -e "\n\e[34m»»» 🤖 \e[96mCreating resource group and storage account\e[0m..."
 # shellcheck disable=SC2154
 az group create --resource-group "$TF_VAR_mgmt_resource_group_name" --location "$LOCATION" -o table
+
 # shellcheck disable=SC2154
-az storage account create --resource-group "$TF_VAR_mgmt_resource_group_name" \
+stg_name_available=$(az storage account check-name --name "$TF_VAR_mgmt_storage_account_name" --query nameAvailable -o tsv)
+
+if [ "$stg_name_available" == "true" ]; then
+  az storage account create --resource-group "$TF_VAR_mgmt_resource_group_name" \
   --name "$TF_VAR_mgmt_storage_account_name" --location "$LOCATION" \
   --allow-blob-public-access false \
   --kind StorageV2 --sku Standard_LRS -o table \
   --public-network-access Disabled
+fi
 
 # Blob container
 # shellcheck disable=SC2154
@@ -31,7 +36,6 @@ terraform {
   }
 }
 BOOTSTRAP_BACKEND
-
 
 # Set up Terraform
 echo -e "\n\e[34m»»» ✨ \e[96mTerraform init\e[0m..."
