@@ -4,6 +4,7 @@ resource "azurerm_virtual_network" "core" {
   resource_group_name = var.resource_group_name
   address_space       = [var.core_address_space]
   tags                = local.tre_core_tags
+
   lifecycle { ignore_changes = [tags] }
 }
 
@@ -69,6 +70,11 @@ resource "azurerm_subnet" "resource_processor" {
   address_prefixes     = [local.resource_processor_subnet_address_prefix]
   # notice that private endpoints do not adhere to NSG rules
   private_endpoint_network_policies_enabled = false
+
+  provisioner "local-exec" {
+    command = "az storage account network-rule add -g ${var.mgmt_resource_group_name} --account-name ${var.mgmt_storage_account_name} --subnet ${self.id}"
+  }
+
   depends_on                                = [azurerm_subnet.shared]
 }
 
@@ -181,13 +187,6 @@ resource "azurerm_ip_group" "airlock_processor" {
   cidrs               = [local.airlock_processor_subnet_address_prefix]
   tags                = local.tre_core_tags
   lifecycle { ignore_changes = [tags] }
-}
-
-resource "azurerm_storage_account_network_rules" "core" {
-  storage_account_id = data.azurerm_storage_account.mgmt_stg.id
-
-  default_action             = "Deny"
-  virtual_network_subnet_ids = [azurerm_virtual_network.core.id]
 }
 
 module "terraform_azurerm_environment_configuration" {
