@@ -183,6 +183,13 @@ resource "azurerm_ip_group" "airlock_processor" {
   lifecycle { ignore_changes = [tags] }
 }
 
+resource "azurerm_storage_account_network_rules" "core" {
+  storage_account_id = data.azurerm_storage_account.mgmt_stg.id
+
+  default_action             = "Deny"
+  virtual_network_subnet_ids = [azurerm_virtual_network.core.id]
+}
+
 module "terraform_azurerm_environment_configuration" {
   source          = "git::https://github.com/microsoft/terraform-azurerm-environment-configuration.git?ref=0.2.0"
   arm_environment = var.arm_environment
