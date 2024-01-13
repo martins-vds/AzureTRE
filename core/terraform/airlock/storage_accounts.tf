@@ -8,6 +8,7 @@ resource "azurerm_storage_account" "sa_import_external" {
 
   # Don't allow anonymous access (unrelated to the 'public' networking rules)
   allow_nested_items_to_be_public = false
+  public_network_access_enabled   = false
 
   # Important! we rely on the fact that the blob craeted events are issued when the creation of the blobs are done.
   # This is true ONLY when Hierarchical Namespace is DISABLED
@@ -52,6 +53,7 @@ resource "azurerm_storage_account" "sa_export_approved" {
 
   # Don't allow anonymous access (unrelated to the 'public' networking rules)
   allow_nested_items_to_be_public = false
+  public_network_access_enabled   = false
 
   # Important! we rely on the fact that the blob craeted events are issued when the creation of the blobs are done.
   # This is true ONLY when Hierarchical Namespace is DISABLED
