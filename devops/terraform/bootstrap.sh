@@ -12,11 +12,16 @@ az group create --resource-group "$TF_VAR_mgmt_resource_group_name" --location "
 stg_name_available=$(az storage account check-name --name "$TF_VAR_mgmt_storage_account_name" --query nameAvailable -o tsv)
 
 if [ "$stg_name_available" == "true" ]; then
+  # shellcheck disable=SC2154
+  build_agents_subnet_id=$(az network vnet subnet show --resource-group "$TF_VAR_build_agents_resource_group_name" --vnet-name "$TF_VAR_build_agents_vnet_name" --name "$TF_VAR_build_agents_subnet_name" --query id -o tsv)
+
   az storage account create --resource-group "$TF_VAR_mgmt_resource_group_name" \
   --name "$TF_VAR_mgmt_storage_account_name" --location "$LOCATION" \
   --allow-blob-public-access false \
   --kind StorageV2 --sku Standard_LRS -o table \
-  --public-network-access Disabled
+  --public-network-access Enabled \
+  --default-action Deny \
+  --subnet "$build_agents_subnet_id"
 fi
 
 # Blob container

@@ -205,27 +205,8 @@ parameters:
     type: string
     default: ""
 jobs:
-  - job: enable_vmss
-    displayName: Enable VMSS
-    pool:
-      name: Ubuntu2204-vmss
-    steps:
-      - checkout: self
-        clean: "true"
-        persistCredentials: "false"
-
-      - task: AzureCLI@2
-        displayName: Enable VMSS
-        inputs:
-          azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
-          scriptType: "bash"
-          scriptLocation: "scriptPath"
-          scriptPath: "devops/scripts/allow-devops-vmss.sh"
-          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}" "${{ parameters.BUILD_AGENTS_VNET_NAME }}" "${{ parameters.BUILD_AGENTS_SUBNET_NAME }}"'
-
   - job: deploy_management
     displayName: Deploy management
-    dependsOn: [enable_vmss]
     pool:
       name: Ubuntu2204-vmss
     steps:
@@ -840,23 +821,3 @@ jobs:
         displayName: Upload Test Results
         condition: succeededOrFailed()
 
-  - job: block_vmss
-    displayName: Block VMSS
-    dependsOn: [deploy_shared_services]
-    condition: always()
-    pool:
-      name: Ubuntu2204-vmss
-    steps:
-      - checkout: self
-        clean: "true"
-        persistCredentials: "false"
-
-      - task: AzureCLI@2
-        displayName: Block VMSS
-        enabled: false
-        inputs:
-          azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
-          scriptType: "bash"
-          scriptLocation: "scriptPath"
-          scriptPath: "devops/scripts/block-devops-vmss.sh"
-          arguments: '"${{ parameters.MGMT_RESOURCE_GROUP_NAME }}" "${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}" "${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}" "${{ parameters.BUILD_AGENTS_VNET_NAME }}" "${{ parameters.BUILD_AGENTS_SUBNET_NAME }}"'
