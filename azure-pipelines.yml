@@ -4,7 +4,7 @@ trigger: none
 
 parameters:
   - name: deployStages
-    displayName: Deploy Stages
+    displayName: Deploy Components
     type: string
     default: 'all'
     values:
