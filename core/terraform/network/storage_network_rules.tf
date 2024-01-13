@@ -3,6 +3,4 @@ resource "azurerm_storage_account_network_rules" "network_rules" {
 
   default_action = "Deny"
   virtual_network_subnet_ids = [ azurerm_subnet.resource_processor.id ]
-
-  lifecycle { ignore_changes = [tags] }
 }
