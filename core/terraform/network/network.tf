@@ -71,6 +71,10 @@ resource "azurerm_subnet" "resource_processor" {
   # notice that private endpoints do not adhere to NSG rules
   private_endpoint_network_policies_enabled = false
 
+  service_endpoints = [
+    "Microsoft.Storage"
+  ]
+
   provisioner "local-exec" {
     command = "az storage account network-rule add -g ${var.mgmt_resource_group_name} --account-name ${var.mgmt_storage_account_name} --subnet ${self.id}"
   }
