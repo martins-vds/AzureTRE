@@ -387,7 +387,7 @@ jobs:
   - job: start_tre
     displayName: Start TRE
     dependsOn: [deploy_management]
-    condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
+    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'core')) }})
     pool:
       name: Ubuntu2204-vmss
     steps:
@@ -409,7 +409,7 @@ jobs:
   - job: deploy_tre
     displayName: Deploy TRE
     dependsOn: [start_tre, build_core_images]
-    condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
+    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'core')) }})
     pool:
       name: Ubuntu2204-vmss
     steps:
