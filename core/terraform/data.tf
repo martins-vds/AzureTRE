@@ -38,3 +38,8 @@ data "azurerm_subnet" "build_agents_subnet" {
   virtual_network_name = var.build_agents_vnet_name
   resource_group_name  = var.build_agents_resource_group_name
 }
+
+data "azurerm_storage_account" "mgmt_stg" {
+  name                = var.mgmt_storage_account_name
+  resource_group_name = var.mgmt_resource_group_name
+}
