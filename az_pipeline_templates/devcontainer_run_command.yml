@@ -106,6 +106,13 @@ parameters:
     default: ""
   - name: BUILD_AGENTS_SUBNET_NAME
     default: ""
+  - name: LOGGING_LEVEL
+    default: "INFO"
+    values:
+      - "DEBUG"
+      - "INFO"
+      - "WARN"
+      - "ERROR"
 steps:
   - task: AzureCLI@2
     displayName: '${{ parameters.DISPLAY_NAME }} - Check for missing secrets'
@@ -239,5 +246,6 @@ steps:
           -e TF_VAR_build_agents_resource_group_name="${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}" \
           -e TF_VAR_build_agents_vnet_name="${{ parameters.BUILD_AGENTS_VNET_NAME }}" \
           -e TF_VAR_build_agents_subnet_name="${{ parameters.BUILD_AGENTS_SUBNET_NAME }}" \
+          -e TF_VAR_logging_level="${{ parameters.LOGGING_LEVEL }}" \
           '${{ parameters.CI_CACHE_ACR_NAME }}$(ACR_DOMAIN_SUFFIX)/tredev:${{ parameters.DEVCONTAINER_TAG }}' \
         bash -c "${{ parameters.COMMAND }}"
