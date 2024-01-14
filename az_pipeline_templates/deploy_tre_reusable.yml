@@ -627,7 +627,7 @@ jobs:
 
   - job: register_user_resource_bundles
     displayName: Register user resource bundles
-    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'user-resource-bundles')) }})
+    condition: ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'user-resource-bundles')) }}
     dependsOn: [register_bundles, publish_bundles, deploy_tre]
     pool:
       name: Ubuntu2204-vmss
