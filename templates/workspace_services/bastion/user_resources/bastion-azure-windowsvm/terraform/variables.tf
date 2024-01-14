@@ -26,3 +26,7 @@ variable "image_gallery_id" {
   type    = string
   default = ""
 }
+variable "vm_users_object_id" {
+  type    = string
+  default = ""
+}

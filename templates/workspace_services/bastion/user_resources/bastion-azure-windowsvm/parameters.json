@@ -71,6 +71,12 @@
       }
     },
     {
+      "name": "vm_users_object_id",
+      "source":{
+        "env": "VM_USERS_OBJECT_ID"
+      }
+    },
+    {
       "name": "image_gallery_id",
       "source": {
         "env": "IMAGE_GALLERY_ID"

@@ -4,7 +4,7 @@
   "type": "object",
   "title": "Windows Virtual Machine",
   "description": "Windows virtual machine.",
-  "required": [],
+  "required": ["vm_users_object_id"],
   "authorizedRoles": [
     "WorkspaceOwner",
     "WorkspaceResearcher"
@@ -32,6 +32,13 @@
         "8 CPU | 32GB RAM",
         "16 CPU | 64GB RAM"
       ],
+      "updateable": true
+    },
+    "vm_users_object_id": {
+      "$id": "#/properties/vm_users_object_id",
+      "type": "string",
+      "title": "VM Users Object ID",
+      "description": "Object ID of the user(s) or group to be added to the VM",
       "updateable": true
     },
     "shared_storage_access": {

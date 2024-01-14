@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-bastion-windowsvm
-version: 0.0.2
+version: 0.0.3
 description: "An Azure TRE User Resource Template for Bastion (Windows 10)"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -115,6 +115,10 @@ parameters:
     default: "vm-shared-storage"
   - name: arm_environment
     type: string
+  - name: vm_users_object_id
+    type: string
+    description: "The object ID of the Azure AD group that should have access to the VM"
+    default: ""
 
 outputs:
   - name: ip
@@ -157,6 +161,7 @@ install:
         tre_resource_id: ${ bundle.parameters.id }
         image: ${ bundle.parameters.os_image }
         vm_size: ${ bundle.parameters.vm_size }
+        vm_users_object_id: ${ bundle.parameters.vm_users_object_id }
         shared_storage_access: ${ bundle.parameters.shared_storage_access }
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }
@@ -197,6 +202,7 @@ upgrade:
         tre_resource_id: ${ bundle.parameters.id }
         image: ${ bundle.parameters.os_image }
         vm_size: ${ bundle.parameters.vm_size }
+        vm_users_object_id: ${ bundle.parameters.vm_users_object_id }
         shared_storage_access: ${ bundle.parameters.shared_storage_access }
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }
@@ -230,6 +236,7 @@ uninstall:
         tre_resource_id: ${ bundle.parameters.id }
         image: ${ bundle.parameters.os_image }
         vm_size: ${ bundle.parameters.vm_size }
+        vm_users_object_id: ${ bundle.parameters.vm_users_object_id }
         shared_storage_access: ${ bundle.parameters.shared_storage_access }
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }

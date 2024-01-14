@@ -102,6 +102,24 @@ PROT
   lifecycle { ignore_changes = [tags] }
 }
 
+resource "azurerm_virtual_machine_extension" "aad_login" {
+  name = "${azurerm_windows_virtual_machine.windowsvm.name}-aad-login"
+  virtual_machine_id = azurerm_windows_virtual_machine.windowsvm.id
+  publisher = "Microsoft.Azure.ActiveDirectory"
+  type = "AADLoginForWindows"
+  type_handler_version = "2.1.0.0"
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_role_assignment" "vm_user_role_assignment" {
+  scope                = azurerm_windows_virtual_machine.windowsvm.id
+  role_definition_name = "Virtual Machine User Login"
+  principal_id         = var.vm_users_object_id
+
+  lifecycle { ignore_changes = [tags] }
+}
+
 resource "azurerm_key_vault_secret" "windowsvm_password" {
   name         = "${local.vm_name}-admin-credentials"
   value        = "${random_string.username.result}\n${random_password.password.result}"
