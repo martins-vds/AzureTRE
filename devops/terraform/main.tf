@@ -36,6 +36,8 @@ resource "azurerm_container_registry" "shared_acr" {
   sku                 = var.acr_sku
   admin_enabled       = true
 
+  network_rule_bypass_option = "AzureServices"
+
   lifecycle { ignore_changes = [tags] }
 }
 

@@ -25,3 +25,7 @@ variable "mgmt_resource_group_name" {
   type        = string
   description = "Shared management resource group"
 }
+variable "mgmt_acr_name" {
+  type = string
+  description = "value of the mgmt acr name"
+}

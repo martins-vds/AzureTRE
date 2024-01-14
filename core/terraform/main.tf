@@ -89,6 +89,7 @@ module "network" {
   enable_bastion            = var.enable_bastion
   mgmt_storage_account_name = var.mgmt_storage_account_name
   mgmt_resource_group_name  = var.mgmt_resource_group_name
+  mgmt_acr_name             = var.acr_name
 }
 
 module "appgateway" {
