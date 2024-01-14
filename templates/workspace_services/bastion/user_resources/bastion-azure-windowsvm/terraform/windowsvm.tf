@@ -116,8 +116,6 @@ resource "azurerm_role_assignment" "vm_user_role_assignment" {
   scope                = azurerm_windows_virtual_machine.windowsvm.id
   role_definition_name = "Virtual Machine User Login"
   principal_id         = var.vm_users_object_id
-
-  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_key_vault_secret" "windowsvm_password" {
