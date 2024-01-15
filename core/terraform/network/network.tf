@@ -9,7 +9,7 @@ resource "azurerm_virtual_network" "core" {
 }
 
 resource "azurerm_subnet" "bastion" {
-  count = var.enable_bastion ? 1 : 0
+  count                = var.enable_bastion ? 1 : 0
   name                 = "AzureBastionSubnet"
   virtual_network_name = azurerm_virtual_network.core.name
   resource_group_name  = var.resource_group_name
@@ -76,11 +76,19 @@ resource "azurerm_subnet" "resource_processor" {
     "Microsoft.ContainerRegistry"
   ]
 
+  depends_on = [azurerm_subnet.shared]
+}
+
+resource "terraform_data" "resource_processor_network_rule" {
   provisioner "local-exec" {
-    command = "az storage account network-rule add -g ${var.mgmt_resource_group_name} --account-name ${var.mgmt_storage_account_name} --subnet ${self.id}"
+    command = "az storage account network-rule add -g ${var.mgmt_resource_group_name} --account-name ${var.mgmt_storage_account_name} --subnet ${azurerm_subnet.resource_processor.id}"
   }
 
-  depends_on                                = [azurerm_subnet.shared]
+  triggers_replace = [
+    azurerm_subnet.resource_processor.id
+  ]
+
+  depends_on = [azurerm_subnet.resource_processor]
 }
 
 resource "azurerm_subnet" "airlock_processor" {
