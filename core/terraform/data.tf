@@ -32,9 +32,3 @@ data "azurerm_monitor_diagnostic_categories" "sb" {
     azurerm_servicebus_namespace.sb
   ]
 }
-
-data "azurerm_subnet" "build_agents_subnet" {
-  name                 = var.build_agents_subnet_name
-  virtual_network_name = var.build_agents_vnet_name
-  resource_group_name  = var.build_agents_resource_group_name
-}

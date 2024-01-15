@@ -10,7 +10,7 @@ resource "azurerm_storage_account" "stg" {
 
   network_rules {
     default_action = "Deny"
-    virtual_network_subnet_ids = [ data.azurerm_subnet.build_agents_subnet.id ]
+    virtual_network_subnet_ids = var.core_storage_allowed_subnet_ids
   }
 
   lifecycle { ignore_changes = [tags] }

@@ -202,20 +202,8 @@ variable "logging_level" {
   }
 }
 
-variable "build_agents_resource_group_name" {
-  type        = string
-  description = "The resource group name for the build agents"
-  default = ""
-}
-
-variable "build_agents_vnet_name" {
-  type        = string
-  description = "The vnet name for the build agents"
-  default = ""
-}
-
-variable "build_agents_subnet_name" {
-  type        = string
-  description = "The subnet name for the build agents"
-  default = ""
+variable "core_storage_allowed_subnet_ids" {
+  type        = list(string)
+  default     = []
+  description = "Network rule set for storage account"
 }

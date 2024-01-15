@@ -463,9 +463,7 @@ jobs:
           RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
           RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
-          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
-          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
+          CORE_STORAGE_ALLOWED_SUBNET_IDS: $(build_agent_network_config.build_agents_subnet_id)
           LOGGING_LEVEL: ${{ parameters.LOGGING_LEVEL }}
 
       - template: devcontainer_run_command.yml
