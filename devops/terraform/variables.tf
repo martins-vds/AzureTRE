@@ -19,6 +19,12 @@ variable "location" {
   description = "Location used for all resources"
 }
 
+variable "arm_environment" {
+  type        = string
+  description = "ARM environment to deploy to"
+
+}
+
 variable "acr_sku" {
   type        = string
   default     = "Premium"
