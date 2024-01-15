@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-bastion-linuxvm
-version: 0.0.12
+version: 0.0.13
 description: "An Azure TRE User Resource Template for Bastion (Linux)"
 dockerfile: Dockerfile.tmpl
 registry: azuretre

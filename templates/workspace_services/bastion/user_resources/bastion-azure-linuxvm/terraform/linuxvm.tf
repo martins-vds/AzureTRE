@@ -134,6 +134,26 @@ data "template_file" "apt_sources_config" {
   }
 }
 
+resource "azurerm_virtual_machine_extension" "oms_agent" {
+  name                 = "${azurerm_linux_virtual_machine.linuxvm.name}-oms-agent"
+  virtual_machine_id   = azurerm_linux_virtual_machine.linuxvm.id
+  publisher            = "Microsoft.EnterpriseCloud.Monitoring"
+  type                 = "OmsAgentForLinux"
+  type_handler_version = "1.4"
+
+  settings = <<SETTINGS
+    {
+      "workspaceId": "${data.azurerm_log_analytics_workspace.oms-workspace.workspace_id}"
+    }
+    SETTINGS
+
+  protected_settings = <<PROTECTED_SETTINGS
+    {
+        "workspaceKey": "${data.azurerm_log_analytics_workspace.oms-workspace.primary_shared_key}"
+    }
+    PROTECTED_SETTINGS
+}
+
 resource "azurerm_key_vault_secret" "linuxvm_password" {
   name         = local.vm_password_secret_name
   value        = "${random_string.username.result}\n${random_password.password.result}"
