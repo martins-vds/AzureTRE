@@ -207,3 +207,10 @@ variable "core_storage_allowed_subnet_ids" {
   default     = []
   description = "Network rule set for storage account"
 }
+
+variable "core_keyvault_allowed_subnet_ids" {
+  type        = list(string)
+  default     = []
+  description = "Network rule set for keyvault"
+
+}

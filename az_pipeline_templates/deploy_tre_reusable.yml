@@ -484,6 +484,7 @@ jobs:
           RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           CORE_STORAGE_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
+          CORE_KEYVAULT_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           LOGGING_LEVEL: ${{ parameters.LOGGING_LEVEL }}
 
       - template: devcontainer_run_command.yml

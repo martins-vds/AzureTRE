@@ -107,7 +107,9 @@ parameters:
   - name: MGMT_ACR_PRIVATE_ENDPOINT_SUBNET_ID
     default: ""
   - name: CORE_STORAGE_ALLOWED_SUBNET_IDS
-    default: ""
+    default: "'[]'"
+  - name: CORE_KEYVAULT_ALLOWED_SUBNET_IDS
+    default: "'[]'"
   - name: LOGGING_LEVEL
     default: "INFO"
     values:
@@ -250,5 +252,6 @@ steps:
           -e TF_VAR_mgmt_acr_allowed_networks=${{ parameters.MGMT_ACR_ALLOWED_NETWORKS }} \
           -e TF_VAR_mgmt_acr_private_endpoint_subnet_id=${{ parameters.MGMT_ACR_PRIVATE_ENDPOINT_SUBNET_ID }} \
           -e TF_VAR_core_storage_allowed_subnet_ids=${{ parameters.CORE_STORAGE_ALLOWED_SUBNET_IDS }} \
+          -e TF_VAR_core_keyvault_allowed_subnet_ids=${{ parameters.CORE_KEYVAULT_ALLOWED_SUBNET_IDS }} \
           '${{ parameters.CI_CACHE_ACR_NAME }}$(ACR_DOMAIN_SUFFIX)/tredev:${{ parameters.DEVCONTAINER_TAG }}' \
         bash -c "${{ parameters.COMMAND }}"

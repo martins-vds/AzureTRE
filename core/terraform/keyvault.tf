@@ -7,6 +7,12 @@ resource "azurerm_key_vault" "kv" {
   purge_protection_enabled = true
   tags                     = local.tre_core_tags
 
+  network_acls {
+    default_action = "Deny"
+    bypass         = "AzureServices"
+    virtual_network_subnet_ids = var.core_keyvault_allowed_subnet_ids
+  }
+
   lifecycle { ignore_changes = [access_policy, tags] }
 }
 
