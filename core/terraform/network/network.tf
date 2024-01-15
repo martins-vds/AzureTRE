@@ -84,10 +84,6 @@ resource "terraform_data" "resource_processor_network_rule" {
     command = "az storage account network-rule add -g ${var.mgmt_resource_group_name} --account-name ${var.mgmt_storage_account_name} --subnet ${azurerm_subnet.resource_processor.id}"
   }
 
-  triggers_replace = [
-    azurerm_subnet.resource_processor.id
-  ]
-
   depends_on = [azurerm_subnet.resource_processor]
 }
 
