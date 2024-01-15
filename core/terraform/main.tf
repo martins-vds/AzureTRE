@@ -172,7 +172,7 @@ module "resource_processor_vmss_porter" {
   arm_environment                                  = var.arm_environment
   logging_level                                    = var.logging_level
   rp_bundle_values                                 = var.rp_bundle_values
-  log_analytics_workspace_id                       = module.azure_monitor.log_analytics_workspace_id
+  log_analytics_workspace_id                       = module.azure_monitor.log_analytics_workspace_workspace_id
   log_analytics_workspace_key                      = module.azure_monitor.log_analytics_workspace_key
 
   depends_on = [
