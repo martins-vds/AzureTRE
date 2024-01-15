@@ -320,6 +320,9 @@ jobs:
     displayName: Deploy management
     pool:
       name: Ubuntu2204-vmss
+    variables:
+      pipeline_network_subnet_id: $[ dependencies.pipeline_network.outputs['config.subnet_id'] ]
+      pipeline_network_subnet_address_prefix: $[ dependencies.pipeline_network.outputs['config.subnet_address_prefix'] ]
     steps:
 
       - checkout: self
@@ -361,8 +364,8 @@ jobs:
           TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
           MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
           MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
-          MGMT_STORAGE_ALLOWED_SUBNET_IDS: $[ dependencies.pipeline_network.outputs['config.subnet_id'] ]
-          MGMT_ACR_ALLOWED_NETWORKS: $[ dependencies.pipeline_network.outputs['config.subnet_address_prefix'] ]
+          MGMT_STORAGE_ALLOWED_SUBNET_IDS: $(pipeline_network_subnet_id)
+          MGMT_ACR_ALLOWED_NETWORKS: $(pipeline_network_subnet_address_prefix)
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
       - task: AzureCLI@2
@@ -443,6 +446,8 @@ jobs:
     condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'core')) }})
     pool:
       name: Ubuntu2204-vmss
+    variables:
+      pipeline_network_subnet_address_prefix: $[ dependencies.pipeline_network.outputs['config.subnet_address_prefix'] ]
     steps:
       - checkout: self
         clean: "true"
@@ -480,7 +485,7 @@ jobs:
           RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
           RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-          CORE_STORAGE_ALLOWED_SUBNET_IDS: $[ dependencies.pipeline_network.outputs['config.subnet_id'] ]
+          CORE_STORAGE_ALLOWED_SUBNET_IDS: $(pipeline_network_subnet_address_prefix)
           LOGGING_LEVEL: ${{ parameters.LOGGING_LEVEL }}
 
       - template: devcontainer_run_command.yml
