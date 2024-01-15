@@ -43,6 +43,13 @@ variable "terraform_state_container_name" {
 variable "app_insights_connection_string" {
   type = string
 }
+variable "log_analytics_workspace_id" {
+  type = string
+}
+variable "log_analytics_workspace_key" {
+  type = string
+  sensitive = true
+}
 variable "key_vault_name" {
   type = string
 }

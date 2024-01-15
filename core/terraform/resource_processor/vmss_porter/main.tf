@@ -82,6 +82,27 @@ resource "azurerm_linux_virtual_machine_scale_set" "vm_linux" {
     )
   }
 
+  extension {
+    auto_upgrade_minor_version = true
+    automatic_upgrade_enabled = false
+    name = "OmsAgentForLinux"
+    publisher = "Microsoft.EnterpriseCloud.Monitoring"
+    type = "OmsAgentForLinux"
+    type_handler_version = "1.4"
+
+    settings = <<SETTINGS
+    {
+      "workspaceId": "${var.log_analytics_workspace_id}"
+    }
+    SETTINGS
+
+    protected_settings = <<PROTECTED_SETTINGS
+    {
+        "workspaceKey": "${var.log_analytics_workspace_key}"
+    }
+    PROTECTED_SETTINGS
+  }
+
   automatic_os_upgrade_policy {
     disable_automatic_rollback  = false
     enable_automatic_os_upgrade = true
