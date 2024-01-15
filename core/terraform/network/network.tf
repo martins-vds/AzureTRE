@@ -72,7 +72,8 @@ resource "azurerm_subnet" "resource_processor" {
   private_endpoint_network_policies_enabled = false
 
   service_endpoints = [
-    "Microsoft.Storage"
+    "Microsoft.Storage",
+    "Microsoft.ContainerRegistry"
   ]
 
   provisioner "local-exec" {

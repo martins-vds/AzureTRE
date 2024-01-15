@@ -309,8 +309,11 @@ jobs:
           build_agents_subnet_id=$(az network vnet subnet show --resource-group "$(BUILD_AGENTS_RESOURCE_GROUP_NAME)" --vnet-name "$(BUILD_AGENTS_VNET_NAME)" --name "$(BUILD_AGENTS_SUBNET_NAME)" --query id -o tsv)
           build_agents_subnet_address_prefix=$(az network vnet subnet show --resource-group "$(BUILD_AGENTS_RESOURCE_GROUP_NAME)" --vnet-name "$(BUILD_AGENTS_VNET_NAME)" --name "$(BUILD_AGENTS_SUBNET_NAME)" --query addressPrefix -o tsv)
 
-          build_agents_subnet_id=$(echo "[\"$build_agents_subnet_id\"]")
-          build_agents_subnet_address_prefix=$(echo "[\"$build_agents_subnet_address_prefix\"]")
+          build_agents_subnet_id=$(echo "'[\"$build_agents_subnet_id\"]'")
+          build_agents_subnet_address_prefix=$(echo "'[\"$build_agents_subnet_address_prefix\"]'")
+
+          echo $build_agents_subnet_id
+          echo $build_agents_subnet_address_prefix
 
           echo "##vso[task.setvariable variable=subnet_id;isOutput=true]$build_agents_subnet_id"
           echo "##vso[task.setvariable variable=subnet_address_prefix;isOutput=true]$build_agents_subnet_address_prefix"
