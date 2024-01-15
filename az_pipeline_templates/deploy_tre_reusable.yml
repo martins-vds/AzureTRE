@@ -214,18 +214,18 @@ parameters:
       - "WARN"
       - "ERROR"
 jobs:
-  - job: deploy_management
-    displayName: Deploy management
+  - job: validation
+    displayName: Validation
     pool:
       name: Ubuntu2204-vmss
     steps:
       - bash: |
-          echo "Inputs"
-          echo "======"
-          echo "prRef       : ${{ parameters.prRef }}"
-          echo "prRHeadSha  : ${{ parameters.prHeadSha }}"
-          echo "ciGitRef    : ${{ parameters.ciGitRef }}"
-          echo "environment : ${{ parameters.environmentName }}"
+            echo "Inputs"
+            echo "======"
+            echo "prRef       : ${{ parameters.prRef }}"
+            echo "prRHeadSha  : ${{ parameters.prHeadSha }}"
+            echo "ciGitRef    : ${{ parameters.ciGitRef }}"
+            echo "environment : ${{ parameters.environmentName }}"
       - bash: |
           if [ "${{ parameters.AAD_TENANT_ID }}" == '' ]; then
             echo "Missing secret: AAD_TENANT_ID" && exit 1
@@ -290,6 +290,38 @@ jobs:
           if [ "${{ parameters.BUILD_AGENTS_SUBNET_NAME }}" == '' ]; then
             echo "Missing variable: BUILD_AGENTS_SUBNET_NAME" && exit 1
           fi
+
+  - job: pipeline_network
+    displayName: Configure Pipeline Agent Network
+    dependsOn: [validation]
+    pool:
+      name: 'Ubuntu2204-vmss'
+    steps:
+    - task: AzureCLI@2
+      name: config
+      displayName: Fetch Pipeline Agent's Network Configuration
+      continueOnError: true
+      inputs:
+        azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
+        scriptType: "bash"
+        scriptLocation: "inlineScript"
+        inlineScript: |
+          build_agents_subnet_id=$(az network vnet subnet show --resource-group "$(BUILD_AGENTS_RESOURCE_GROUP_NAME)" --vnet-name "$(BUILD_AGENTS_VNET_NAME)" --name "$(BUILD_AGENTS_SUBNET_NAME)" --query id -o tsv)
+          build_agents_subnet_address_prefix=$(az network vnet subnet show --resource-group "$(BUILD_AGENTS_RESOURCE_GROUP_NAME)" --vnet-name "$(BUILD_AGENTS_VNET_NAME)" --name "$(BUILD_AGENTS_SUBNET_NAME)" --query addressPrefix -o tsv)
+
+          build_agents_subnet_id=$(echo "[\"$build_agents_subnet_id\"]")
+          build_agents_subnet_address_prefix=$(echo "[\"$build_agents_subnet_address_prefix\"]")
+
+          echo "##vso[task.setvariable variable=subnet_id;isOutput=true]$build_agents_subnet_id"
+          echo "##vso[task.setvariable variable=subnet_address_prefix;isOutput=true]$build_agents_subnet_address_prefix"
+
+  - job: deploy_management
+    dependsOn: [pipeline_network]
+    displayName: Deploy management
+    pool:
+      name: Ubuntu2204-vmss
+    steps:
+
       - checkout: self
         clean: "true"
         persistCredentials: "false"
@@ -315,21 +347,6 @@ jobs:
           scriptPath: "devops/scripts/build_devcontainer.sh"
           arguments: '"${{ parameters.CI_CACHE_ACR_NAME }}" "$(ci_cache_cr_login.outcome)" "${{ parameters.DEVCONTAINER_TAG }}"'
 
-      - task: AzureCLI@2
-        name: build_agent_network_config
-        displayName: Fetch Pipeline Agent's Network Configuration
-        continueOnError: true
-        inputs:
-          azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
-          scriptType: "bash"
-          scriptLocation: "inlineScript"
-          inlineScript: |
-            build_agents_subnet_id=$(az network vnet subnet show --resource-group "${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}" --vnet-name "${{ parameters.BUILD_AGENTS_VNET_NAME }}" --name "${{ parameters.BUILD_AGENTS_SUBNET_NAME }}" --query id -o tsv)
-            build_agents_subnet_address_prefix=$(az network vnet subnet show --resource-group "${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}" --vnet-name "${{ parameters.BUILD_AGENTS_VNET_NAME }}" --name "${{ parameters.BUILD_AGENTS_SUBNET_NAME }}" --query addressPrefix -o tsv)
-
-            echo "##vso[task.setvariable variable=build_agents_subnet_id;isOutput=true]$build_agents_subnet_id"
-            echo "##vso[task.setvariable variable=build_agents_subnet_address_prefix;isOutput=true]$build_agents_subnet_address_prefix"
-
       - template: devcontainer_run_command.yml
         parameters:
           DISPLAY_NAME: "Bootstrap management infrastructure"
@@ -344,8 +361,8 @@ jobs:
           TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
           MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
           MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
-          MGMT_STORAGE_ALLOWED_SUBNET_IDS: $(build_agent_network_config.build_agents_subnet_id)
-          MGMT_ACR_ALLOWED_NETWORKS: $(build_agent_network_config.build_agents_subnet_address_prefix)
+          MGMT_STORAGE_ALLOWED_SUBNET_IDS: $[ dependencies.pipeline_network.outputs['config.subnet_id'] ]
+          MGMT_ACR_ALLOWED_NETWORKS: $[ dependencies.pipeline_network.outputs['config.subnet_address_prefix'] ]
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
       - task: AzureCLI@2
@@ -422,7 +439,7 @@ jobs:
 
   - job: deploy_tre
     displayName: Deploy TRE
-    dependsOn: [start_tre, build_core_images]
+    dependsOn: [start_tre, build_core_images, pipeline_network]
     condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'core')) }})
     pool:
       name: Ubuntu2204-vmss
@@ -463,7 +480,7 @@ jobs:
           RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
           RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-          CORE_STORAGE_ALLOWED_SUBNET_IDS: $(build_agent_network_config.build_agents_subnet_id)
+          CORE_STORAGE_ALLOWED_SUBNET_IDS: $[ dependencies.pipeline_network.outputs['config.subnet_id'] ]
           LOGGING_LEVEL: ${{ parameters.LOGGING_LEVEL }}
 
       - template: devcontainer_run_command.yml
