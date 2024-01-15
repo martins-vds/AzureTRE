@@ -312,9 +312,6 @@ jobs:
           build_agents_subnet_id=$(echo "'[\"$build_agents_subnet_id\"]'")
           build_agents_subnet_address_prefix=$(echo "'[\"$build_agents_subnet_address_prefix\"]'")
 
-          echo $build_agents_subnet_id
-          echo $build_agents_subnet_address_prefix
-
           echo "##vso[task.setvariable variable=subnet_id;isOutput=true]$build_agents_subnet_id"
           echo "##vso[task.setvariable variable=subnet_address_prefix;isOutput=true]$build_agents_subnet_address_prefix"
 
@@ -368,7 +365,7 @@ jobs:
           MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
           MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
           MGMT_STORAGE_ALLOWED_SUBNET_IDS: $(pipeline_network_subnet_id)
-          MGMT_ACR_ALLOWED_NETWORKS: $(pipeline_network_subnet_address_prefix)
+          MGMT_ACR_PRIVATE_ENDPOINT_SUBNET_ID: $(pipeline_network_subnet_id)
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
       - task: AzureCLI@2

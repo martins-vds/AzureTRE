@@ -30,6 +30,12 @@ variable "acr_name" {
   description = "Name of ACR"
 }
 
+variable "mgmt_acr_private_endpoint_subnet_id" {
+  type        = string
+  default     = ""
+  description = "Subnet ID for ACR private endpoint"
+}
+
 variable "mgmt_acr_allowed_networks" {
   type        = list(string)
   default     = []
