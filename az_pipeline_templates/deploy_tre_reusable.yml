@@ -515,9 +515,6 @@ jobs:
           CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
           ACR_NAME: ${{ parameters.ACR_NAME }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
-          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
-          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: publish_shared_bundles
     displayName: Publish shared bundles
