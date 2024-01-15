@@ -546,9 +546,6 @@ jobs:
           CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
           ACR_NAME: ${{ parameters.ACR_NAME }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
-          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
-          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: register_shared_bundles
     displayName: Register shared bundles
@@ -588,9 +585,6 @@ jobs:
           LOCATION: ${{ parameters.LOCATION }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           BUNDLE_TYPE: $(BUNDLE_TYPE)
-          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
-          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
-          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: register_bundles
     displayName: Register bundles
@@ -630,9 +624,6 @@ jobs:
           LOCATION: ${{ parameters.LOCATION }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           BUNDLE_TYPE: $(BUNDLE_TYPE)
-          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
-          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
-          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: register_user_resource_bundles
     displayName: Register user resource bundles
@@ -674,9 +665,6 @@ jobs:
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           BUNDLE_TYPE: $(BUNDLE_TYPE)
           WORKSPACE_SERVICE_NAME: $(WORKSPACE_SERVICE_NAME)
-          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
-          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
-          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: deploy_shared_services
     displayName: Deploy shared services
@@ -706,9 +694,6 @@ jobs:
               TRE_ID: ${{ parameters.TRE_ID }}
               LOCATION: ${{ parameters.LOCATION }}
               SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-              BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
-              BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
-              BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
       - template: devcontainer_run_command.yml
         parameters:
@@ -729,9 +714,6 @@ jobs:
           MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
           MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
-          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
-          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
   - job: deploy_ui
     displayName: Deploy UI
