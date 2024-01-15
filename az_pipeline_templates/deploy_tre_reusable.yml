@@ -445,6 +445,7 @@ jobs:
       name: Ubuntu2204-vmss
     variables:
       pipeline_network_subnet_address_prefix: $[ dependencies.pipeline_network.outputs['config.subnet_address_prefix'] ]
+      pipeline_network_subnet_id: $[ dependencies.pipeline_network.outputs['config.subnet_id'] ]
     steps:
       - checkout: self
         clean: "true"
@@ -482,7 +483,7 @@ jobs:
           RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
           RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-          CORE_STORAGE_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_address_prefix)\"]'"
+          CORE_STORAGE_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           LOGGING_LEVEL: ${{ parameters.LOGGING_LEVEL }}
 
       - template: devcontainer_run_command.yml
