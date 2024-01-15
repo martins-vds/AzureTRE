@@ -26,7 +26,7 @@ resource "azurerm_storage_account" "state_storage" {
   allow_nested_items_to_be_public = false
 
   network_rules {
-    default_action = "Deny"
+    default_action             = "Deny"
     virtual_network_subnet_ids = var.mgmt_storage_allowed_subnet_ids
   }
 
@@ -43,7 +43,10 @@ resource "azurerm_container_registry" "shared_acr" {
 
   network_rule_bypass_option = "AzureServices"
 
-  network_rule_set = tolist(var.mgmt_acr_allowed_networks)
+  network_rule_set = {
+    default_action = "Deny"
+    ip_rule        = [for ip in var.mgmt_acr_allowed_networks : { action = "Allow", ip_range = ip }]
+  }
 
   lifecycle { ignore_changes = [tags] }
 }
