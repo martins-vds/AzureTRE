@@ -102,6 +102,28 @@ PROT
   lifecycle { ignore_changes = [tags] }
 }
 
+resource "azurerm_virtual_machine_extension" "oms_agent" {
+  name                 = "${azurerm_windows_virtual_machine.windowsvm.name}-oms-agent"
+  virtual_machine_id   = azurerm_windows_virtual_machine.windowsvm.id
+  publisher            = "Microsoft.EnterpriseCloud.Monitoring"
+  type                 = "OmsAgentForWindows"
+  type_handler_version = "1.0"
+  tags                 = local.tre_user_resources_tags
+
+  settings = <<SETTINGS
+  {
+    "workspaceId": "${data.azurerm_log_analytics_workspace.oms-workspace.workspace_id}"
+  }
+  SETTINGS
+
+  protected_settings = <<PROTECTED_SETTINGS
+  {
+      "workspaceKey": "${data.azurerm_log_analytics_workspace.oms-workspace.primary_shared_key}"
+  }
+  PROTECTED_SETTINGS
+
+}
+
 resource "azurerm_virtual_machine_extension" "aad_login" {
   name = "${azurerm_windows_virtual_machine.windowsvm.name}-aad-login"
   virtual_machine_id = azurerm_windows_virtual_machine.windowsvm.id

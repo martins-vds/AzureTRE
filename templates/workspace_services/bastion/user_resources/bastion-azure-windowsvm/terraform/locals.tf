@@ -15,6 +15,7 @@ locals {
     tre_user_resource_id     = var.tre_resource_id
   }
   nexus_proxy_url = "https://nexus-${data.azurerm_public_ip.app_gateway_ip.fqdn}"
+  law_name = "log-${var.tre_id}"
 
   # Load VM SKU/image details from porter.yaml
   porter_yaml   = yamldecode(file("${path.module}/../porter.yaml"))

@@ -37,3 +37,8 @@ data "azurerm_storage_share" "shared_storage" {
   name                 = var.shared_storage_name
   storage_account_name = data.azurerm_storage_account.stg.name
 }
+
+data "azurerm_log_analytics_workspace" "oms-workspace" {
+  name = local.law_name
+  resource_group_name = data.azurerm_resource_group.core.name
+}
