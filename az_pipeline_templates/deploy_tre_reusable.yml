@@ -315,9 +315,24 @@ jobs:
           scriptPath: "devops/scripts/build_devcontainer.sh"
           arguments: '"${{ parameters.CI_CACHE_ACR_NAME }}" "$(ci_cache_cr_login.outcome)" "${{ parameters.DEVCONTAINER_TAG }}"'
 
+      - task: AzureCLI@2
+        name: build_agent_network_config
+        displayName: Fetch Pipeline Agent's Network Configuration
+        continueOnError: true
+        inputs:
+          azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
+          scriptType: "bash"
+          scriptLocation: "inlineScript"
+          inlineScript: |
+            build_agents_subnet_id=$(az network vnet subnet show --resource-group "${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}" --vnet-name "${{ parameters.BUILD_AGENTS_VNET_NAME }}" --name "${{ parameters.BUILD_AGENTS_SUBNET_NAME }}" --query id -o tsv)
+            build_agents_subnet_address_prefix=$(az network vnet subnet show --resource-group "${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}" --vnet-name "${{ parameters.BUILD_AGENTS_VNET_NAME }}" --name "${{ parameters.BUILD_AGENTS_SUBNET_NAME }}" --query addressPrefix -o tsv)
+
+            echo "##vso[task.setvariable variable=build_agents_subnet_id;isOutput=true]$build_agents_subnet_id"
+            echo "##vso[task.setvariable variable=build_agents_subnet_address_prefix;isOutput=true]$build_agents_subnet_address_prefix"
+
       - template: devcontainer_run_command.yml
         parameters:
-          DISPLAY_NAME: "Deploy management"
+          DISPLAY_NAME: "Bootstrap management infrastructure"
           COMMAND: "make bootstrap mgmt-deploy"
           DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
           CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
@@ -329,10 +344,9 @@ jobs:
           TERRAFORM_STATE_CONTAINER_NAME: ${{ parameters.TERRAFORM_STATE_CONTAINER_NAME }}
           MGMT_RESOURCE_GROUP_NAME: ${{ parameters.MGMT_RESOURCE_GROUP_NAME }}
           MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
+          MGMT_STORAGE_ALLOWED_SUBNET_IDS: $(build_agent_network_config.build_agents_subnet_id)
+          MGMT_ACR_ALLOWED_NETWORKS: $(build_agent_network_config.build_agents_subnet_address_prefix)
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
-          BUILD_AGENTS_RESOURCE_GROUP_NAME: ${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}
-          BUILD_AGENTS_VNET_NAME: ${{ parameters.BUILD_AGENTS_VNET_NAME }}
-          BUILD_AGENTS_SUBNET_NAME: ${{ parameters.BUILD_AGENTS_SUBNET_NAME }}
 
       - task: AzureCLI@2
         displayName: ACR Login

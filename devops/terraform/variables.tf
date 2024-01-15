@@ -8,6 +8,12 @@ variable "mgmt_resource_group_name" {
   description = "Shared management resource group"
 }
 
+variable "mgmt_storage_allowed_subnet_ids" {
+  type        = list(string)
+  default     = []
+  description = "Network rule set for storage account"
+}
+
 variable "location" {
   type        = string
   description = "Location used for all resources"
@@ -22,4 +28,10 @@ variable "acr_sku" {
 variable "acr_name" {
   type        = string
   description = "Name of ACR"
+}
+
+variable "mgmt_acr_allowed_networks" {
+  type        = list(string)
+  default     = []
+  description = "Network rule set for ACR"
 }

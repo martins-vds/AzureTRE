@@ -25,6 +25,11 @@ resource "azurerm_storage_account" "state_storage" {
   account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
 
+  network_rules {
+    default_action = "Deny"
+    virtual_network_subnet_ids = var.mgmt_storage_allowed_subnet_ids
+  }
+
   lifecycle { ignore_changes = [tags] }
 }
 
@@ -37,6 +42,8 @@ resource "azurerm_container_registry" "shared_acr" {
   admin_enabled       = true
 
   network_rule_bypass_option = "AzureServices"
+
+  network_rule_set = tolist(var.mgmt_acr_allowed_networks)
 
   lifecycle { ignore_changes = [tags] }
 }

@@ -100,11 +100,9 @@ parameters:
     default: "{}"
   - name: SUBSCRIPTION_ID
     default: ""
-  - name: BUILD_AGENTS_RESOURCE_GROUP_NAME
+  - name: MGMT_STORAGE_ALLOWED_SUBNET_IDS
     default: ""
-  - name: BUILD_AGENTS_VNET_NAME
-    default: ""
-  - name: BUILD_AGENTS_SUBNET_NAME
+  - name: MGMT_ACR_ALLOWED_NETWORKS
     default: ""
   - name: LOGGING_LEVEL
     default: "INFO"
@@ -243,9 +241,8 @@ steps:
           -e TF_VAR_rp_bundle_values='${{ parameters.RP_BUNDLE_VALUES }}' \
           -e TF_VAR_resource_processor_number_processes_per_instance="${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}" \
           -e E2E_TESTS_NUMBER_PROCESSES="${{ parameters.E2E_TESTS_NUMBER_PROCESSES }}" \
-          -e TF_VAR_build_agents_resource_group_name="${{ parameters.BUILD_AGENTS_RESOURCE_GROUP_NAME }}" \
-          -e TF_VAR_build_agents_vnet_name="${{ parameters.BUILD_AGENTS_VNET_NAME }}" \
-          -e TF_VAR_build_agents_subnet_name="${{ parameters.BUILD_AGENTS_SUBNET_NAME }}" \
           -e TF_VAR_logging_level="${{ parameters.LOGGING_LEVEL }}" \
+          -e TF_VAR_mgmt_storage_allowed_subnet_ids=${{ parameters.MGMT_STORAGE_ALLOWED_SUBNET_IDS }} \
+          -e TF_VAR_mgmt_acr_allowed_networks=${{ parameters.MGMT_ACR_ALLOWED_NETWORKS }} \
           '${{ parameters.CI_CACHE_ACR_NAME }}$(ACR_DOMAIN_SUFFIX)/tredev:${{ parameters.DEVCONTAINER_TAG }}' \
         bash -c "${{ parameters.COMMAND }}"
