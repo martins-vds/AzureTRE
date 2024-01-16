@@ -4,7 +4,7 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = ">=3.86.0"
-     }
+    }
     random = {
       source  = "hashicorp/random"
       version = ">= 3.0"
@@ -84,15 +84,16 @@ resource "azurerm_linux_virtual_machine_scale_set" "vm_linux" {
 
   extension {
     auto_upgrade_minor_version = true
-    automatic_upgrade_enabled = false
-    name = "OmsAgentForLinux"
-    publisher = "Microsoft.EnterpriseCloud.Monitoring"
-    type = "OmsAgentForLinux"
-    type_handler_version = "1.4"
+    automatic_upgrade_enabled  = false
+    name                       = "OmsAgentForLinux"
+    publisher                  = "Microsoft.EnterpriseCloud.Monitoring"
+    type                       = "OmsAgentForLinux"
+    type_handler_version       = "1.17"
 
     settings = <<SETTINGS
     {
-      "workspaceId": "${var.log_analytics_workspace_id}"
+      "workspaceId": "${var.log_analytics_workspace_id}",
+      "skipDockerProviderInstall": true
     }
     SETTINGS
 

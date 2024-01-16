@@ -136,15 +136,17 @@ data "template_file" "apt_sources_config" {
 }
 
 resource "azurerm_virtual_machine_extension" "oms_agent" {
-  name                 = "${azurerm_linux_virtual_machine.linuxvm.name}-oms-agent"
-  virtual_machine_id   = azurerm_linux_virtual_machine.linuxvm.id
-  publisher            = "Microsoft.EnterpriseCloud.Monitoring"
-  type                 = "OmsAgentForLinux"
-  type_handler_version = "1.4"
+  name                       = "${azurerm_linux_virtual_machine.linuxvm.name}-oms-agent"
+  virtual_machine_id         = azurerm_linux_virtual_machine.linuxvm.id
+  auto_upgrade_minor_version = true
+  publisher                  = "Microsoft.EnterpriseCloud.Monitoring"
+  type                       = "OmsAgentForLinux"
+  type_handler_version       = "1.17"
 
   settings = <<SETTINGS
     {
-      "workspaceId": "${data.azurerm_log_analytics_workspace.oms-workspace.workspace_id}"
+      "workspaceId": "${data.azurerm_log_analytics_workspace.oms-workspace.workspace_id}",
+      "skipDockerProviderInstall": true
     }
     SETTINGS
 
