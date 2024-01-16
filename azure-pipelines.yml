@@ -54,7 +54,7 @@ variables:
 jobs:
   - template: az_pipeline_templates/deploy_tre_reusable.yml
     parameters:
-      agentPool: $(BUILD_AGENTS_POOL)
+      agentPool: $(BUILD_AGENTS_POOL_NAME)
       deployStages: ${{ parameters.deployStages }}
       ciGitRef: $(Build.SourceBranch)
       environmentName: ${{ parameters.environment }}
