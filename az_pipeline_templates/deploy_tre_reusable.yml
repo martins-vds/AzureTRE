@@ -367,6 +367,7 @@ jobs:
           MGMT_STORAGE_ACCOUNT_NAME: ${{ parameters.MGMT_STORAGE_ACCOUNT_NAME }}
           MGMT_STORAGE_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           MGMT_ACR_PRIVATE_ENDPOINT_SUBNET_ID: $(pipeline_network_subnet_id)
+          BOOTSTRAP_STORAGE_ALLOWED_SUBNET_IDS: $(pipeline_network_subnet_id)
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
       - task: AzureCLI@2

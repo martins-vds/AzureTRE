@@ -19,7 +19,7 @@ if [ "$stg_name_available" == "true" ]; then
   --kind StorageV2 --sku Standard_LRS -o table \
   --public-network-access Enabled \
   --default-action Deny \
-  --subnet "$TF_VAR_mgmt_storage_allowed_subnet_ids"
+  --subnet "$BOOTSTRAP_STORAGE_ALLOWED_SUBNET_IDS"
 fi
 
 # Blob container
