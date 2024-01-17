@@ -122,9 +122,6 @@ parameters:
   - name: USE_EXISTING_PRIVATE_DNS_ZONE
     default: "false"
     type: string
-    values:
-      - "true"
-      - "false"
   - name: PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME
     default: ""
 steps:
