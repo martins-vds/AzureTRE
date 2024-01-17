@@ -217,6 +217,14 @@ parameters:
       - "INFO"
       - "WARN"
       - "ERROR"
+  - name: USE_EXISTING_PRIVATE_DNS_ZONE
+    default: "false"
+    type: string
+    values:
+      - "true"
+      - "false"
+  - name: PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME
+    default: ""
 jobs:
   - job: validation
     displayName: Validation
@@ -368,6 +376,8 @@ jobs:
           MGMT_STORAGE_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           MGMT_ACR_PRIVATE_ENDPOINT_SUBNET_ID: $(pipeline_network_subnet_id)
           BOOTSTRAP_STORAGE_ALLOWED_SUBNET_IDS: $(pipeline_network_subnet_id)
+          USE_EXISTING_PRIVATE_DNS_ZONE: ${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }}
+          PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
 
       - task: AzureCLI@2

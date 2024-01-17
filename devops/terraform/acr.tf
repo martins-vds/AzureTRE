@@ -38,6 +38,7 @@ EOF
 }
 
 resource "azurerm_private_dns_zone" "azurecr" {
+  count               = var.use_existing_private_dns_zone == true ? 0 : 1
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.azurecr.io"]
   resource_group_name = azurerm_resource_group.mgmt.name
   tags                = azurerm_resource_group.mgmt.tags
@@ -46,8 +47,8 @@ resource "azurerm_private_dns_zone" "azurecr" {
 
 resource "azurerm_private_dns_zone_virtual_network_link" "acrlink" {
   name                  = "acrmgmtlink"
-  resource_group_name   = azurerm_resource_group.mgmt.name
-  private_dns_zone_name = azurerm_private_dns_zone.azurecr.name
+  resource_group_name   = var.use_existing_private_dns_zone == true ? data.azurerm_private_dns_zone.azurecr.resource_group_name : azurerm_private_dns_zone.azurecr[0].resource_group_name
+  private_dns_zone_name = module.terraform_azurerm_environment_configuration.private_links["privatelink.azurecr.io"]
   virtual_network_id    = regex("(?P<virtual_network_id>.*)\\/subnets\\/(?P<subnet>.*)", var.mgmt_acr_private_endpoint_subnet_id).virtual_network_id
   tags                  = azurerm_resource_group.mgmt.tags
   lifecycle { ignore_changes = [tags] }
@@ -63,7 +64,7 @@ resource "azurerm_private_endpoint" "mgmt_acr_pe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group-mgmtacr"
-    private_dns_zone_ids = [azurerm_private_dns_zone.azurecr.id]
+    private_dns_zone_ids = [var.use_existing_private_dns_zone == true ? data.azurerm_private_dns_zone.azurecr.id : azurerm_private_dns_zone.azurecr[0].id]
   }
 
   private_service_connection {

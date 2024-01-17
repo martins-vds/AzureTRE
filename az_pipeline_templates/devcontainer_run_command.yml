@@ -119,6 +119,14 @@ parameters:
       - "INFO"
       - "WARN"
       - "ERROR"
+  - name: USE_EXISTING_PRIVATE_DNS_ZONE
+    default: "false"
+    type: string
+    values:
+      - "true"
+      - "false"
+  - name: PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME
+    default: ""
 steps:
   - task: AzureCLI@2
     displayName: '${{ parameters.DISPLAY_NAME }} - Check for missing secrets'
@@ -256,5 +264,7 @@ steps:
           -e TF_VAR_mgmt_acr_private_endpoint_subnet_id=${{ parameters.MGMT_ACR_PRIVATE_ENDPOINT_SUBNET_ID }} \
           -e TF_VAR_core_storage_allowed_subnet_ids=${{ parameters.CORE_STORAGE_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_core_keyvault_allowed_subnet_ids=${{ parameters.CORE_KEYVAULT_ALLOWED_SUBNET_IDS }} \
+          -e TF_VAR_use_existing_private_dns_zone=${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }} \
+          -e TF_VAR_private_dns_zone_resource_group_name=${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }} \
           '${{ parameters.CI_CACHE_ACR_NAME }}$(ACR_DOMAIN_SUFFIX)/tredev:${{ parameters.DEVCONTAINER_TAG }}' \
         bash -c "${{ parameters.COMMAND }}"
