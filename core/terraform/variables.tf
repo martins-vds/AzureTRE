@@ -214,3 +214,20 @@ variable "core_keyvault_allowed_subnet_ids" {
   description = "Network rule set for keyvault"
 
 }
+
+variable "use_existing_private_dns_zone" {
+  type        = bool
+  default     = false
+  description = "Use existing private DNS zone for ACR"
+}
+
+variable "private_dns_zone_resource_group_name" {
+  type        = string
+  default     = ""
+  description = "Resource group of private DNS zone for ACR"
+
+  validation {
+    condition     = var.use_existing_private_dns_zone == true && var.private_dns_zone_resource_group_name == ""
+    error_message = "private_dns_zone_resource_group_name must be specified when use_existing_private_dns_zone is true"
+  }
+}

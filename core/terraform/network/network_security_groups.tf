@@ -207,3 +207,15 @@ resource "azurerm_subnet_network_security_group_association" "airlock_notificati
   network_security_group_id = azurerm_network_security_group.default_rules.id
   depends_on                = [azurerm_subnet_network_security_group_association.airlock_events]
 }
+
+resource "azurerm_subnet_network_security_group_association" "firewall" {
+  subnet_id                 = azurerm_subnet.azure_firewall.id
+  network_security_group_id = azurerm_network_security_group.default_rules.id
+  depends_on                = [azurerm_subnet_network_security_group_association.airlock_notification]
+}
+
+resource "azurerm_subnet_network_security_group_association" "firewall_management" {
+  subnet_id                 = azurerm_subnet.firewall_management.id
+  network_security_group_id = azurerm_network_security_group.default_rules.id
+  depends_on                = [azurerm_subnet_network_security_group_association.firewall]
+}
