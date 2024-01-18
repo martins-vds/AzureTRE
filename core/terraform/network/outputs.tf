@@ -79,3 +79,11 @@ output "queue_core_dns_zone_id" {
 output "table_core_dns_zone_id" {
   value = module.dns_zones.table.id
 }
+
+output "servicebus_core_dns_zone_id" {
+  value = module.dns_zones.servicebus.id
+}
+
+output "cosmos_core_dns_zone_id" {
+  value = module.dns_zones.cosmos.id
+}

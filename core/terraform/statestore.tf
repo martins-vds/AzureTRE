@@ -59,17 +59,10 @@ moved {
   to   = azurerm_management_lock.tre_db
 }
 
-resource "azurerm_private_dns_zone" "cosmos" {
-  name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.documents.azure.com"]
-  resource_group_name = azurerm_resource_group.core.name
-  tags                = local.tre_core_tags
-  lifecycle { ignore_changes = [tags] }
-}
-
 resource "azurerm_private_dns_zone_virtual_network_link" "cosmos_documents_dns_link" {
   name                  = "cosmos_documents_dns_link"
   resource_group_name   = azurerm_resource_group.core.name
-  private_dns_zone_name = azurerm_private_dns_zone.cosmos.name
+  private_dns_zone_name = module.network.cosmos_core_dns_zone_id
   virtual_network_id    = module.network.core_vnet_id
   tags                  = local.tre_core_tags
   lifecycle { ignore_changes = [tags] }
@@ -85,7 +78,7 @@ resource "azurerm_private_endpoint" "sspe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group"
-    private_dns_zone_ids = [azurerm_private_dns_zone.cosmos.id]
+    private_dns_zone_ids = [module.network.cosmos_core_dns_zone_id]
   }
 
   private_service_connection {
