@@ -8,7 +8,7 @@ resource "azurerm_private_endpoint" "mgmtblobpe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group-blobmgmt"
-    private_dns_zone_ids = [azurerm_private_dns_zone.blobcore.id]
+    private_dns_zone_ids = [module.dns_zones.blobcore.id]
   }
 
   private_service_connection {
@@ -29,7 +29,7 @@ resource "azurerm_private_endpoint" "mgmt_acr_pe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group-mgmtacr"
-    private_dns_zone_ids = [azurerm_private_dns_zone.azurecr.id]
+    private_dns_zone_ids = [module.dns_zones.azurecr.id]
   }
 
   private_service_connection {

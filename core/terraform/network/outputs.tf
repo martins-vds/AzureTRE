@@ -41,41 +41,41 @@ output "resource_processor_subnet_id" {
 # DNS Zones
 
 output "azure_monitor_dns_zone_id" {
-  value = azurerm_private_dns_zone.azure_monitor.id
+  value = module.dns_zones.azure_monitor.id
 }
 
 output "azure_monitor_oms_opinsights_dns_zone_id" {
-  value = azurerm_private_dns_zone.azure_monitor_oms_opinsights.id
+  value = module.dns_zones.azure_monitor_oms_opinsights.id
 }
 
 output "azure_monitor_ods_opinsights_dns_zone_id" {
-  value = azurerm_private_dns_zone.azure_monitor_ods_opinsights.id
+  value = module.dns_zones.azure_monitor_ods_opinsights.id
 }
 
 output "azure_monitor_agentsvc_dns_zone_id" {
-  value = azurerm_private_dns_zone.azure_monitor_agentsvc.id
+  value = module.dns_zones.azure_monitor_agentsvc.id
 }
 
 output "blob_core_dns_zone_id" {
-  value = azurerm_private_dns_zone.blobcore.id
+  value = module.dns_zones.blobcore.id
 }
 
 output "azurewebsites_dns_zone_id" {
-  value = azurerm_private_dns_zone.azurewebsites.id
+  value = module.dns_zones.azurewebsites.id
 }
 
 output "static_web_dns_zone_id" {
-  value = azurerm_private_dns_zone.static_web.id
+  value = module.dns_zones.static_web.id
 }
 
 output "file_core_dns_zone_id" {
-  value = azurerm_private_dns_zone.filecore.id
+  value = module.dns_zones.filecore.id
 }
 
 output "queue_core_dns_zone_id" {
-  value = azurerm_private_dns_zone.private_dns_zones["privatelink.queue.core.windows.net"].id
+  value = module.dns_zones.queue.id
 }
 
 output "table_core_dns_zone_id" {
-  value = azurerm_private_dns_zone.private_dns_zones["privatelink.table.core.windows.net"].id
+  value = module.dns_zones.table.id
 }

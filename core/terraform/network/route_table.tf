@@ -1,7 +1,7 @@
 resource "azurerm_route_table" "rt" {
   name                          = "rt-${var.tre_id}"
   resource_group_name           = var.resource_group_name
-  location                      = data.azurerm_resource_group.rg.location
+  location                      = var.location
   disable_bgp_route_propagation = false
   tags                          = local.tre_core_tags
 

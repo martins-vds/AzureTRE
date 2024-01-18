@@ -13,4 +13,5 @@ module "dns_zones" {
   create_dns_zones    = var.use_existing_private_dns_zone ? false : true
   resource_group_name = var.resource_group_name
   tre_id              = var.tre_id
+  arm_environment     = var.arm_environment
 }

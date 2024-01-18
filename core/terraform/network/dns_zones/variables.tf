@@ -8,3 +8,6 @@ variable "create_dns_zones" {
   type    = bool
   default = true
 }
+variable "arm_environment" {
+  type = string
+}
