@@ -88,3 +88,10 @@ output "queue" {
     id   = var.create_dns_zones ? one(azurerm_private_dns_zone.queue[*].id) : one(data.azurerm_private_dns_zone.queue[*].id)
   }
 }
+
+output "servicebus" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.servicebus[*].name) : one(data.azurerm_private_dns_zone.servicebus[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.servicebus[*].id) : one(data.azurerm_private_dns_zone.servicebus[*].id)
+  }
+}

@@ -75,3 +75,9 @@ data "azurerm_private_dns_zone" "queue" {
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.queue.core.windows.net"]
   resource_group_name = var.resource_group_name
 }
+
+data "azurerm_private_dns_zone" "servicebus" {
+  count = var.create_dns_zones == false ? 1 : 0
+  name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.servicebus.windows.net"]
+  resource_group_name = var.resource_group_name
+}

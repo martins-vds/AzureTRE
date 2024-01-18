@@ -115,3 +115,11 @@ resource "azurerm_private_dns_zone" "queue" {
 
   lifecycle { ignore_changes = [tags] }
 }
+
+resource "azurerm_private_dns_zone" "servicebus" {
+  count = var.create_dns_zones == true ? 1 : 0
+  name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.servicebus.windows.net"]
+  resource_group_name = var.resource_group_name
+  tags                = local.tre_core_tags
+  lifecycle { ignore_changes = [tags] }
+}
