@@ -37,15 +37,6 @@ resource "azurerm_key_vault_access_policy" "managed_identity" {
   certificate_permissions = ["Get", "List", ]
 }
 
-data "azurerm_private_dns_zone" "vaultcore" {
-  name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.vaultcore.azure.net"]
-  resource_group_name = azurerm_resource_group.core.name
-
-  depends_on = [
-    module.network,
-  ]
-}
-
 resource "azurerm_private_endpoint" "kvpe" {
   name                = "pe-kv-${var.tre_id}"
   location            = azurerm_resource_group.core.location
