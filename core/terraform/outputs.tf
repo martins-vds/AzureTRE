@@ -11,15 +11,15 @@ output "log_analytics_name" {
 }
 
 output "azure_tre_fqdn" {
-  value = module.appgateway.app_gateway_fqdn
+  value = one(module.appgateway[*].app_gateway_fqdn)
 }
 
 output "app_gateway_name" {
-  value = module.appgateway.app_gateway_name
+  value = one(module.appgateway[*].app_gateway_name)
 }
 
 output "static_web_storage" {
-  value = module.appgateway.static_web_storage
+  value = one(module.appgateway[*].static_web_storage)
 }
 
 output "keyvault_name" {
