@@ -54,6 +54,8 @@ provider "azurerm" {
   subscription_id = var.secondary_arm_subscription_id
   tenant_id       = var.secondary_arm_tenant_id
 
+  skip_provider_registration = true
+
   features {
     key_vault {
       # Don't purge on destroy (this would fail due to purge protection being enabled on keyvault)

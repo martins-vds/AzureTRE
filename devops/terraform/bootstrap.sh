@@ -51,6 +51,7 @@ if ! terraform state show azurerm_resource_group.mgmt > /dev/null; then
   terraform import azurerm_resource_group.mgmt "/subscriptions/$ARM_SUBSCRIPTION_ID/resourceGroups/$TF_VAR_mgmt_resource_group_name"
 fi
 
+terraform state rm azurerm_storage_account.state_storage
 terraform import azurerm_storage_account.state_storage "/subscriptions/$ARM_SUBSCRIPTION_ID/resourceGroups/$TF_VAR_mgmt_resource_group_name/providers/Microsoft.Storage/storageAccounts/$TF_VAR_mgmt_storage_account_name"
 
 echo "State updated successfully!"
