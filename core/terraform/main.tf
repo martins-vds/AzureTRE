@@ -95,6 +95,7 @@ module "network" {
 }
 
 module "appgateway" {
+  count = var.deploy_app_gateway ? 1 : 0
   source                     = "./appgateway"
   tre_id                     = var.tre_id
   location                   = var.location

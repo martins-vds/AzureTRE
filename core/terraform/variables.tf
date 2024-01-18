@@ -226,3 +226,9 @@ variable "private_dns_zone_resource_group_name" {
   default     = ""
   description = "Resource group of private DNS zone for ACR"
 }
+
+variable "deploy_app_gateway" {
+  type        = bool
+  default     = true
+  description = "Deploy app gateway"
+}

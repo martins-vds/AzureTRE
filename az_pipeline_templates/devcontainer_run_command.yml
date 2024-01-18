@@ -124,6 +124,9 @@ parameters:
     type: string
   - name: PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME
     default: ""
+  - name: DEPLOY_APP_GATEWAY
+    default: "false"
+    type: string
 steps:
   - task: AzureCLI@2
     displayName: '${{ parameters.DISPLAY_NAME }} - Check for missing secrets'
@@ -263,5 +266,6 @@ steps:
           -e TF_VAR_core_keyvault_allowed_subnet_ids=${{ parameters.CORE_KEYVAULT_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_use_existing_private_dns_zone=${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }} \
           -e TF_VAR_private_dns_zone_resource_group_name=${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }} \
+          -e TF_VAR_deploy_app_gateway=${{ parameters.DEPLOY_APP_GATEWAY }} \
           '${{ parameters.CI_CACHE_ACR_NAME }}$(ACR_DOMAIN_SUFFIX)/tredev:${{ parameters.DEVCONTAINER_TAG }}' \
         bash -c "${{ parameters.COMMAND }}"

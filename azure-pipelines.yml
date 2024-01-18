@@ -44,10 +44,13 @@ parameters:
     type: boolean
     default: 'false'
   - name: enableBastion
-    displayName: Enable Bastion Host
+    displayName: Deploy Bastion Host
     type: boolean
     default: 'false'
-
+  - name: deployAppGateway
+    displayName: Deploy Application Gateway
+    type: boolean
+    default: 'false'
 variables:
     - group: '${{ parameters.environment }}'
 
@@ -102,6 +105,8 @@ jobs:
       BUILD_AGENTS_SUBNET_NAME: $(BUILD_AGENTS_SUBNET_NAME)
       USE_EXISTING_PRIVATE_DNS_ZONE: "$(USE_EXISTING_PRIVATE_DNS_ZONE)"
       PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: $(PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME)
+      ${{ if eq(parameters.deployAppGateway, 'true') }}:
+        DEPLOY_APP_GATEWAY: 'true'
       BUNDLES:
         - BUNDLE_TYPE: "workspace"
           BUNDLE_DIR: "./templates/workspaces/base"
