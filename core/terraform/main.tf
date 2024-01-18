@@ -117,7 +117,7 @@ module "network" {
   private_dns_zone_resource_group_name = var.private_dns_zone_resource_group_name
 
   providers = {
-    azurerm.primary = azurerm
+    azurerm.primary   = azurerm
     azurerm.secondary = azurerm.secondary
   }
 }
@@ -166,9 +166,9 @@ module "airlock_resources" {
   file_core_dns_zone_id                 = module.network.file_core_dns_zone_id
   queue_core_dns_zone_id                = module.network.queue_core_dns_zone_id
   table_core_dns_zone_id                = module.network.table_core_dns_zone_id
-
-  enable_local_debugging = var.enable_local_debugging
-  myip                   = local.myip
+  eventgrid_core_dns_zone_id            = module.network.eventgrid_core_dns_zone_id
+  enable_local_debugging                = var.enable_local_debugging
+  myip                                  = local.myip
 
   depends_on = [
     azurerm_servicebus_namespace.sb,

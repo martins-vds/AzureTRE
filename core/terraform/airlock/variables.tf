@@ -91,3 +91,6 @@ variable "queue_core_dns_zone_id" {
 variable "table_core_dns_zone_id" {
   type = string
 }
+variable "eventgrid_core_dns_zone_id" {
+  type = string
+}

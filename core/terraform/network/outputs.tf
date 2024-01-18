@@ -151,3 +151,7 @@ output "azuredatabricks_core_dns_zone_id" {
 output "vaultcore_core_dns_zone_id" {
   value = module.dns_zones.vaultcore.id
 }
+
+output "eventgrid_core_dns_zone_id" {
+  value = module.dns_zones.eventgrid.id
+}
