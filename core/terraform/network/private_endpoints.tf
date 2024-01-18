@@ -17,6 +17,11 @@ resource "azurerm_private_endpoint" "mgmtblobpe" {
     is_manual_connection           = false
     subresource_names              = ["Blob"]
   }
+
+  depends_on = [
+    azurerm_virtual_network.core,
+    azurerm_subnet.shared
+  ]
 }
 
 resource "azurerm_private_endpoint" "mgmt_acr_pe" {

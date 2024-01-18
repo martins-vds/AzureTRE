@@ -1,7 +1,7 @@
 # Network security group for Azure Bastion subnet
 # See https://docs.microsoft.com/azure/bastion/bastion-nsg
 resource "azurerm_network_security_group" "bastion" {
-  count = var.enable_bastion ? 1 : 0
+  count               = var.enable_bastion ? 1 : 0
   name                = "nsg-bastion-subnet"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -152,7 +152,7 @@ resource "azurerm_network_security_group" "app_gw" {
 resource "azurerm_subnet_network_security_group_association" "app_gw" {
   subnet_id                 = azurerm_subnet.app_gw.id
   network_security_group_id = azurerm_network_security_group.app_gw.id
-  depends_on                =  [azurerm_subnet_network_security_group_association.bastion]
+  depends_on                = [azurerm_subnet_network_security_group_association.bastion]
 }
 
 # Network security group with only default security rules
@@ -169,53 +169,47 @@ resource "azurerm_network_security_group" "default_rules" {
 resource "azurerm_subnet_network_security_group_association" "shared" {
   subnet_id                 = azurerm_subnet.shared.id
   network_security_group_id = azurerm_network_security_group.default_rules.id
-  depends_on                = [azurerm_subnet_network_security_group_association.app_gw]
+  depends_on                = [azurerm_subnet_network_security_group_association.app_gw, azurerm_subnet.shared]
 }
 
 resource "azurerm_subnet_network_security_group_association" "web_app" {
   subnet_id                 = azurerm_subnet.web_app.id
   network_security_group_id = azurerm_network_security_group.default_rules.id
-  depends_on                = [azurerm_subnet_network_security_group_association.shared]
+  depends_on                = [azurerm_subnet_network_security_group_association.shared, azurerm_subnet.web_app]
 }
 
 resource "azurerm_subnet_network_security_group_association" "resource_processor" {
   subnet_id                 = azurerm_subnet.resource_processor.id
   network_security_group_id = azurerm_network_security_group.default_rules.id
-  depends_on                = [azurerm_subnet_network_security_group_association.web_app]
+  depends_on                = [azurerm_subnet_network_security_group_association.web_app,azurerm_subnet.resource_processor]
 }
 
 resource "azurerm_subnet_network_security_group_association" "airlock_processor" {
   subnet_id                 = azurerm_subnet.airlock_processor.id
   network_security_group_id = azurerm_network_security_group.default_rules.id
-  depends_on                = [azurerm_subnet_network_security_group_association.resource_processor]
+  depends_on                = [azurerm_subnet_network_security_group_association.resource_processor, azurerm_subnet.airlock_processor]
 }
 
 resource "azurerm_subnet_network_security_group_association" "airlock_storage" {
   subnet_id                 = azurerm_subnet.airlock_storage.id
   network_security_group_id = azurerm_network_security_group.default_rules.id
-  depends_on                = [azurerm_subnet_network_security_group_association.airlock_processor]
+  depends_on                = [azurerm_subnet_network_security_group_association.airlock_processor, azurerm_subnet.airlock_storage]
 }
 
 resource "azurerm_subnet_network_security_group_association" "airlock_events" {
   subnet_id                 = azurerm_subnet.airlock_events.id
   network_security_group_id = azurerm_network_security_group.default_rules.id
-  depends_on                = [azurerm_subnet_network_security_group_association.airlock_storage]
+  depends_on                = [azurerm_subnet_network_security_group_association.airlock_storage, azurerm_subnet.airlock_events]
 }
 
 resource "azurerm_subnet_network_security_group_association" "airlock_notification" {
   subnet_id                 = azurerm_subnet.airlock_notification.id
   network_security_group_id = azurerm_network_security_group.default_rules.id
-  depends_on                = [azurerm_subnet_network_security_group_association.airlock_events]
-}
-
-resource "azurerm_subnet_network_security_group_association" "firewall" {
-  subnet_id                 = azurerm_subnet.azure_firewall.id
-  network_security_group_id = azurerm_network_security_group.default_rules.id
-  depends_on                = [azurerm_subnet_network_security_group_association.airlock_notification]
+  depends_on                = [azurerm_subnet_network_security_group_association.airlock_events, azurerm_subnet.airlock_notification]
 }
 
 resource "azurerm_subnet_network_security_group_association" "firewall_management" {
   subnet_id                 = azurerm_subnet.firewall_management.id
   network_security_group_id = azurerm_network_security_group.default_rules.id
-  depends_on                = [azurerm_subnet_network_security_group_association.firewall]
+  depends_on                = [azurerm_subnet_network_security_group_association.airlock_notification, azurerm_subnet.firewall_management]
 }

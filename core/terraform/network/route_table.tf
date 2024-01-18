@@ -5,6 +5,12 @@ resource "azurerm_route_table" "rt" {
   disable_bgp_route_propagation = false
   tags                          = local.tre_core_tags
 
+  route {
+    name           = "default"
+    address_prefix = "0.0.0.0/0"
+    next_hop_type  = "Internet"
+  }
+
   lifecycle { ignore_changes = [tags] }
 }
 
