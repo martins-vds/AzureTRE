@@ -6,7 +6,8 @@
 
 # Once the deployment of the app gateway is complete, we can proceed to include the required DNS zone for Nexus, which is dependent on the FQDN of the app gateway.
 resource "azurerm_private_dns_zone" "nexus" {
-  name                = "nexus-${module.appgateway.app_gateway_fqdn}"
+  count = var.deploy_app_gateway ? 1 : 0
+  name                = "nexus-${one(module.appgateway[*].app_gateway_fqdn)}"
   resource_group_name = azurerm_resource_group.core.name
   tags                = local.tre_core_tags
 
