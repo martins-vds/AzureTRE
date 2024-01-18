@@ -149,7 +149,7 @@ resource "azurerm_private_dns_zone" "cosmos" {
 
 resource "azurerm_private_dns_zone" "mongo" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.mongo.cosmos.azure.com"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -158,7 +158,7 @@ resource "azurerm_private_dns_zone" "mongo" {
 
 resource "azurerm_private_dns_zone" "purview" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.purview.azure.com"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -167,7 +167,7 @@ resource "azurerm_private_dns_zone" "purview" {
 
 resource "azurerm_private_dns_zone" "purviewstudio" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.purviewstudio.azure.com"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -176,7 +176,7 @@ resource "azurerm_private_dns_zone" "purviewstudio" {
 
 resource "azurerm_private_dns_zone" "sql" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.sql.azuresynapse.net"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -185,7 +185,7 @@ resource "azurerm_private_dns_zone" "sql" {
 
 resource "azurerm_private_dns_zone" "dev" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.dev.azuresynapse.net"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -194,7 +194,7 @@ resource "azurerm_private_dns_zone" "dev" {
 
 resource "azurerm_private_dns_zone" "azuresynapse" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.azuresynapse.net"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -203,7 +203,7 @@ resource "azurerm_private_dns_zone" "azuresynapse" {
 
 resource "azurerm_private_dns_zone" "dfs" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.dfs.core.windows.net"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -212,7 +212,7 @@ resource "azurerm_private_dns_zone" "dfs" {
 
 resource "azurerm_private_dns_zone" "azurehealthcareapis" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.azurehealthcareapis.com"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -221,7 +221,7 @@ resource "azurerm_private_dns_zone" "azurehealthcareapis" {
 
 resource "azurerm_private_dns_zone" "dicom" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.dicom.azurehealthcareapis.com"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -230,7 +230,7 @@ resource "azurerm_private_dns_zone" "dicom" {
 
 resource "azurerm_private_dns_zone" "api" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.api.azureml.ms"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -239,7 +239,7 @@ resource "azurerm_private_dns_zone" "api" {
 
 resource "azurerm_private_dns_zone" "cert" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.cert.api.azureml.ms"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -248,7 +248,7 @@ resource "azurerm_private_dns_zone" "cert" {
 
 resource "azurerm_private_dns_zone" "notebooks" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.notebooks.azure.net"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -257,7 +257,7 @@ resource "azurerm_private_dns_zone" "notebooks" {
 
 resource "azurerm_private_dns_zone" "postgres" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.postgres.database.azure.com"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -266,7 +266,7 @@ resource "azurerm_private_dns_zone" "postgres" {
 
 resource "azurerm_private_dns_zone" "mysql" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.mysql.database.azure.com"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
@@ -275,7 +275,7 @@ resource "azurerm_private_dns_zone" "mysql" {
 
 resource "azurerm_private_dns_zone" "azuredatabricks" {
   provider            = azurerm.primary
-  count               = var.create_dns_zones == false ? 1 : 0
+  count               = var.create_dns_zones == true ? 1 : 0
   name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.azuredatabricks.net"]
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
