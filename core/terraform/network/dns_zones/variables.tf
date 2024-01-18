@@ -11,3 +11,11 @@ variable "create_dns_zones" {
 variable "arm_environment" {
   type = string
 }
+variable "provider" {
+  type = string
+
+  validation {
+    condition     = contains(["primary", "secondary"], var.provider)
+    error_message = "provider must be either primary or secondary"
+  }
+}

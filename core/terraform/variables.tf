@@ -215,6 +215,12 @@ variable "core_keyvault_allowed_subnet_ids" {
 
 }
 
+variable "deploy_app_gateway" {
+  type        = bool
+  default     = true
+  description = "Deploy app gateway"
+}
+
 variable "use_existing_private_dns_zone" {
   type        = bool
   default     = false
@@ -227,8 +233,38 @@ variable "private_dns_zone_resource_group_name" {
   description = "Resource group of private DNS zone for ACR"
 }
 
-variable "deploy_app_gateway" {
-  type        = bool
-  default     = true
-  description = "Deploy app gateway"
+variable "private_dns_zone_azure_credentials"{
+  type        = string
+  default     = "secondary"
+  description = "Azure credentials for private DNS zone for ACR"
+
+  validation {
+    condition = contains(["primary", "secondary"], var.private_dns_zone_azure_credentials)
+    error_message = "private_dns_zone_azure_credentials must be either primary or secondary"
+  }
+}
+
+variable "secondary_arm_tenant_id" {
+  type        = string
+  default     = ""
+  description = "Secondary ARM tenant ID"
+}
+
+variable "secondary_arm_subscription_id" {
+  type        = string
+  default     = ""
+  description = "Secondary ARM subscription ID"
+}
+
+variable "secondary_arm_client_id" {
+  type        = string
+  default     = ""
+  description = "Secondary ARM client ID"
+}
+
+variable "secondary_arm_client_secret" {
+  type        = string
+  default     = ""
+  description = "Secondary ARM client secret"
+  sensitive = true
 }

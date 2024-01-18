@@ -230,6 +230,12 @@ parameters:
     type: string
   - name: PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME
     default: ""
+  - name: PRIVATE_DNS_ZONE_AZURE_CREDENTIALS
+    default: "secondary"
+    type: string
+    values:
+      - "primary"
+      - "secondary"
   - name: DEPLOY_APP_GATEWAY
     displayName: Deploy App Gateway
     type: string
@@ -388,6 +394,7 @@ jobs:
           BOOTSTRAP_STORAGE_ALLOWED_SUBNET_IDS: $(pipeline_network_subnet_id)
           USE_EXISTING_PRIVATE_DNS_ZONE: ${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }}
           PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }}
+          PRIVATE_DNS_ZONE_AZURE_CREDENTIALS: ${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           SECONDARY_SUBSCRIPTION_ID: ${{ parameters.SECONDARY_SUBSCRIPTION_ID }}
 
@@ -515,6 +522,7 @@ jobs:
           CORE_KEYVAULT_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           USE_EXISTING_PRIVATE_DNS_ZONE: ${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }}
           PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }}
+          PRIVATE_DNS_ZONE_AZURE_CREDENTIALS: ${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }}
           DEPLOY_APP_GATEWAY: ${{ parameters.DEPLOY_APP_GATEWAY }}
           LOGGING_LEVEL: ${{ parameters.LOGGING_LEVEL }}
 

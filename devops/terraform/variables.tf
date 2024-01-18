@@ -60,6 +60,17 @@ variable "private_dns_zone_resource_group_name" {
   description = "Resource group of private DNS zone for ACR"
 }
 
+variable "private_dns_zone_azure_credentials"{
+  type        = string
+  default     = "secondary"
+  description = "Azure credentials for private DNS zone for ACR"
+
+  validation {
+    condition = contains(["primary", "secondary"], var.private_dns_zone_azure_credentials)
+    error_message = "private_dns_zone_azure_credentials must be either primary or secondary"
+  }
+}
+
 variable "secondary_arm_tenant_id" {
   type        = string
   default     = ""
@@ -84,3 +95,4 @@ variable "secondary_arm_client_secret" {
   description = "Secondary ARM client secret"
   sensitive = true
 }
+
