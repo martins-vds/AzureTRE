@@ -55,7 +55,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "acrlink" {
 }
 
 resource "azurerm_private_endpoint" "mgmt_acr_pe" {
-  name                = "pe-mgmt-acr"
+  name                = "pe-mgmt-acr-devops-agents"
   location            = azurerm_container_registry.shared_acr.location
   resource_group_name = azurerm_container_registry.shared_acr.resource_group_name
   subnet_id           = var.mgmt_acr_private_endpoint_subnet_id
