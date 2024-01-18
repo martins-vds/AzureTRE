@@ -186,9 +186,14 @@ steps:
     inputs:
       targetType: 'inline'
       script: |
-        source devops/scripts/construct_tre_url.sh
-        tre_url=$(construct_tre_url "${{ parameters.TRE_ID }}" "${{ parameters.LOCATION }}" "${{ parameters.AZURE_ENVIRONMENT }}")
-        echo "##vso[task.setvariable variable=TRE_URL;]$tre_url"
+        if [ "${{ parameters.DEPLOY_APP_GATEWAY }}" == "false" ]; then
+          tre_url="https://api-${{ parameters.TRE_ID }}.azurewebsites.net"
+          echo "##vso[task.setvariable variable=TRE_URL;]$tre_url"
+        else
+          source devops/scripts/construct_tre_url.sh
+          tre_url=$(construct_tre_url "${{ parameters.TRE_ID }}" "${{ parameters.LOCATION }}" "${{ parameters.AZURE_ENVIRONMENT }}")
+          echo "##vso[task.setvariable variable=TRE_URL;]$tre_url"
+        fi
         echo "Set TRE_URL to $tre_url"
 
   - task: Bash@3
