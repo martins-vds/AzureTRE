@@ -14,5 +14,4 @@ module "dns_zones" {
   resource_group_name = var.private_dns_zone_resource_group_name
   tre_id              = var.tre_id
   arm_environment     = var.arm_environment
-  provider            = var.private_dns_zone_azure_credentials
 }
