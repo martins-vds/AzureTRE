@@ -124,3 +124,33 @@ resource "azurerm_private_dns_zone_virtual_network_link" "queuelink" {
 
   lifecycle { ignore_changes = [tags] }
 }
+
+resource "azurerm_private_dns_zone_virtual_network_link" "mysqllink" {
+  name                  = "mysql-link"
+  resource_group_name   = var.private_dns_zone_resource_group_name
+  private_dns_zone_name = module.dns_zones.mysql.name
+  virtual_network_id    = azurerm_virtual_network.core.id
+  registration_enabled  = false
+  tags                  = local.tre_core_tags
+  lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "servicebuslink" {
+  name                  = "servicebus-link"
+  resource_group_name   = var.private_dns_zone_resource_group_name
+  private_dns_zone_name = module.dns_zones.servicebus.name
+  virtual_network_id    = azurerm_virtual_network.core.id
+  tags                  = local.tre_core_tags
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "cosmoslink" {
+  name                  = "cosmos-link"
+  resource_group_name   = var.private_dns_zone_resource_group_name
+  private_dns_zone_name = module.dns_zones.cosmos.name
+  virtual_network_id    = azurerm_virtual_network.core.id
+  tags                  = local.tre_core_tags
+
+  lifecycle { ignore_changes = [tags] }
+}

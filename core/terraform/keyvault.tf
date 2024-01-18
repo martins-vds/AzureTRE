@@ -57,7 +57,7 @@ resource "azurerm_private_endpoint" "kvpe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group"
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.vaultcore.id]
+    private_dns_zone_ids = [module.network.vaultcore_core_dns_zone_id]
   }
 
   private_service_connection {

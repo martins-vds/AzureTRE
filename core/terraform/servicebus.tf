@@ -29,16 +29,6 @@ resource "azurerm_servicebus_queue" "service_bus_deployment_status_update_queue"
   requires_session    = true
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "servicebuslink" {
-  name                  = "servicebuslink"
-  resource_group_name   = azurerm_resource_group.core.name
-  private_dns_zone_name = module.network.servicebus_core_dns_zone_id
-  virtual_network_id    = module.network.core_vnet_id
-  tags                  = local.tre_core_tags
-
-  lifecycle { ignore_changes = [tags] }
-}
-
 resource "azurerm_private_endpoint" "sbpe" {
   name                = "pe-${azurerm_servicebus_namespace.sb.name}"
   location            = azurerm_resource_group.core.location

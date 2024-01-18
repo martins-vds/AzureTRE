@@ -87,3 +87,67 @@ output "servicebus_core_dns_zone_id" {
 output "cosmos_core_dns_zone_id" {
   value = module.dns_zones.cosmos.id
 }
+
+output "mongo_core_dns_zone_id" {
+  value = module.dns_zones.mongo.id
+}
+
+output "purview_core_dns_zone_id" {
+  value = module.dns_zones.purview.id
+}
+
+output "purviewstudio_core_dns_zone_id" {
+  value = module.dns_zones.purviewstudio.id
+}
+
+output "sql_core_dns_zone_id" {
+  value = module.dns_zones.sql.id
+}
+
+output "dev_core_dns_zone_id" {
+  value = module.dns_zones.dev.id
+}
+
+output "azuresynapse_core_dns_zone_id" {
+  value = module.dns_zones.azuresynapse.id
+}
+
+output "dfs_core_dns_zone_id" {
+  value = module.dns_zones.dfs.id
+}
+
+output "azurehealthcareapis_core_dns_zone_id" {
+  value = module.dns_zones.azurehealthcareapis.id
+}
+
+output "dicom_core_dns_zone_id" {
+  value = module.dns_zones.dicom.id
+}
+
+output "api_core_dns_zone_id" {
+  value = module.dns_zones.api.id
+}
+
+output "cert_core_dns_zone_id" {
+  value = module.dns_zones.cert.id
+}
+
+output "notebooks_core_dns_zone_id" {
+  value = module.dns_zones.notebooks.id
+}
+
+output "postgres_core_dns_zone_id" {
+  value = module.dns_zones.postgres.id
+}
+
+output "mysql_core_dns_zone_id" {
+  value = module.dns_zones.mysql.id
+}
+
+output "azuredatabricks_core_dns_zone_id" {
+  value = module.dns_zones.azuredatabricks.id
+}
+
+output "vaultcore_core_dns_zone_id" {
+  value = module.dns_zones.vaultcore.id
+}

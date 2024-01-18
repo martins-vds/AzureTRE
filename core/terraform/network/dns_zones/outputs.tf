@@ -102,3 +102,108 @@ output "cosmos" {
     id   = var.create_dns_zones ? one(azurerm_private_dns_zone.cosmos[*].id) : one(data.azurerm_private_dns_zone.cosmos[*].id)
   }
 }
+
+output "mongo" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.mongo[*].name) : one(data.azurerm_private_dns_zone.mongo[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.mongo[*].id) : one(data.azurerm_private_dns_zone.mongo[*].id)
+  }
+}
+
+output "purview" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.purview[*].name) : one(data.azurerm_private_dns_zone.purview[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.purview[*].id) : one(data.azurerm_private_dns_zone.purview[*].id)
+  }
+}
+
+output "purviewstudio" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.purviewstudio[*].name) : one(data.azurerm_private_dns_zone.purviewstudio[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.purviewstudio[*].id) : one(data.azurerm_private_dns_zone.purviewstudio[*].id)
+  }
+}
+
+output "sql" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.sql[*].name) : one(data.azurerm_private_dns_zone.sql[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.sql[*].id) : one(data.azurerm_private_dns_zone.sql[*].id)
+  }
+}
+
+output "dev" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.dev[*].name) : one(data.azurerm_private_dns_zone.dev[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.dev[*].id) : one(data.azurerm_private_dns_zone.dev[*].id)
+  }
+}
+
+output "azuresynapse" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.azuresynapse[*].name) : one(data.azurerm_private_dns_zone.azuresynapse[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.azuresynapse[*].id) : one(data.azurerm_private_dns_zone.azuresynapse[*].id)
+  }
+}
+
+output "dfs" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.dfs[*].name) : one(data.azurerm_private_dns_zone.dfs[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.dfs[*].id) : one(data.azurerm_private_dns_zone.dfs[*].id)
+  }
+}
+
+output "azurehealthcareapis" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.azurehealthcareapis[*].name) : one(data.azurerm_private_dns_zone.azurehealthcareapis[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.azurehealthcareapis[*].id) : one(data.azurerm_private_dns_zone.azurehealthcareapis[*].id)
+  }
+}
+
+output "dicom" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.dicom[*].name) : one(data.azurerm_private_dns_zone.dicom[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.dicom[*].id) : one(data.azurerm_private_dns_zone.dicom[*].id)
+  }
+}
+
+output "api" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.api[*].name) : one(data.azurerm_private_dns_zone.api[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.api[*].id) : one(data.azurerm_private_dns_zone.api[*].id)
+  }
+}
+
+output "cert" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.cert[*].name) : one(data.azurerm_private_dns_zone.cert[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.cert[*].id) : one(data.azurerm_private_dns_zone.cert[*].id)
+  }
+}
+
+output "notebooks" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.notebooks[*].name) : one(data.azurerm_private_dns_zone.notebooks[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.notebooks[*].id) : one(data.azurerm_private_dns_zone.notebooks[*].id)
+  }
+}
+
+output "postgres" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.postgres[*].name) : one(data.azurerm_private_dns_zone.postgres[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.postgres[*].id) : one(data.azurerm_private_dns_zone.postgres[*].id)
+  }
+}
+
+output "mysql" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.mysql[*].name) : one(data.azurerm_private_dns_zone.mysql[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.mysql[*].id) : one(data.azurerm_private_dns_zone.mysql[*].id)
+  }
+}
+
+output "azuredatabricks" {
+  value = {
+    name = var.create_dns_zones ? one(azurerm_private_dns_zone.azuredatabricks[*].name) : one(data.azurerm_private_dns_zone.azuredatabricks[*].name)
+    id   = var.create_dns_zones ? one(azurerm_private_dns_zone.azuredatabricks[*].id) : one(data.azurerm_private_dns_zone.azuredatabricks[*].id)
+  }
+}

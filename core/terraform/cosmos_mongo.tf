@@ -54,17 +54,10 @@ resource "azurerm_management_lock" "mongo" {
   notes      = "Locked to prevent accidental deletion"
 }
 
-resource "azurerm_private_dns_zone" "mongo" {
-  name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.mongo.cosmos.azure.com"]
-  resource_group_name = azurerm_resource_group.core.name
-  tags                = local.tre_core_tags
-  lifecycle { ignore_changes = [tags] }
-}
-
 resource "azurerm_private_dns_zone_virtual_network_link" "mongo" {
   name                  = "cosmos_mongo_dns_link"
   resource_group_name   = azurerm_resource_group.core.name
-  private_dns_zone_name = azurerm_private_dns_zone.mongo.name
+  private_dns_zone_name = module.terraform_azurerm_environment_configuration.private_links["privatelink.mongo.cosmos.azure.com"]
   virtual_network_id    = module.network.core_vnet_id
   tags                  = local.tre_core_tags
   lifecycle { ignore_changes = [tags] }
@@ -80,7 +73,7 @@ resource "azurerm_private_endpoint" "mongo" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group"
-    private_dns_zone_ids = [azurerm_private_dns_zone.mongo.id]
+    private_dns_zone_ids = [module.network.mongo_core_dns_zone_id]
   }
 
   private_service_connection {

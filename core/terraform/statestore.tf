@@ -59,15 +59,6 @@ moved {
   to   = azurerm_management_lock.tre_db
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "cosmos_documents_dns_link" {
-  name                  = "cosmos_documents_dns_link"
-  resource_group_name   = azurerm_resource_group.core.name
-  private_dns_zone_name = module.network.cosmos_core_dns_zone_id
-  virtual_network_id    = module.network.core_vnet_id
-  tags                  = local.tre_core_tags
-  lifecycle { ignore_changes = [tags] }
-}
-
 resource "azurerm_private_endpoint" "sspe" {
   name                = "pe-ss-${var.tre_id}"
   location            = azurerm_resource_group.core.location
