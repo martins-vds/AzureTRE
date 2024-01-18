@@ -2,6 +2,16 @@ provider "azurerm" {
   features {}
 }
 
+provider "azurerm" {
+  alias           = "secondary"
+  client_id       = var.secondary_arm_client_id
+  client_secret   = var.secondary_arm_client_secret
+  subscription_id = var.secondary_arm_subscription_id
+  tenant_id       = var.secondary_arm_tenant_id
+
+  features {}
+}
+
 # Resource group for TRE core management
 resource "azurerm_resource_group" "mgmt" {
   name     = var.mgmt_resource_group_name

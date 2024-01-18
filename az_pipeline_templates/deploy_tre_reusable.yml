@@ -42,6 +42,10 @@ parameters:
     displayName: Azure credentials
     type: string
     default: ""
+  - name: SECONDARY_AZURE_CREDENTIALS
+    displayName: Azure credentials
+    type: string
+    default: ""
   - name: API_CLIENT_ID
     displayName: API client ID
     type: string
@@ -133,6 +137,10 @@ parameters:
   - name: SUBSCRIPTION_ID
     displayName: Subscription ID
     type: string
+    default: ""
+  - name: SECONDARY_SUBSCRIPTION_ID
+    type: string
+    displayName: Secondary subscription ID
     default: ""
   - name: RP_BUNDLE_VALUES
     displayName: RP bundle values
