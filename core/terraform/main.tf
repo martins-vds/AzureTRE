@@ -117,7 +117,7 @@ module "network" {
   private_dns_zone_resource_group_name = var.private_dns_zone_resource_group_name
 
   providers = {
-    azurerm.primary = azurerm.primary
+    azurerm.primary = azurerm
     azurerm.secondary = azurerm.secondary
   }
 }
