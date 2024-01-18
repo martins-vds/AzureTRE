@@ -375,6 +375,7 @@ jobs:
           DEVCONTAINER_TAG: ${{ parameters.DEVCONTAINER_TAG }}
           CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
           AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
+          SECONDARY_AZURE_CREDENTIALS: ${{ parameters.SECONDARY_AZURE_CREDENTIALS }}
           AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
           TRE_ID: ${{ parameters.TRE_ID }}
           LOCATION: ${{ parameters.LOCATION }}
@@ -388,6 +389,7 @@ jobs:
           USE_EXISTING_PRIVATE_DNS_ZONE: ${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }}
           PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          SECONDARY_SUBSCRIPTION_ID: ${{ parameters.SECONDARY_SUBSCRIPTION_ID }}
 
       - task: AzureCLI@2
         displayName: ACR Login
@@ -483,6 +485,7 @@ jobs:
           CI_CACHE_ACR_NAME: ${{ parameters.CI_CACHE_ACR_NAME}}
           AZURE_CREDENTIALS: ${{ parameters.AZURE_CREDENTIALS }}
           AZURE_ENVIRONMENT: ${{ parameters.AZURE_ENVIRONMENT }}
+          SECONDARY_AZURE_CREDENTIALS: ${{ parameters.SECONDARY_AZURE_CREDENTIALS }}
           API_CLIENT_ID: "${{ parameters.API_CLIENT_ID }}"
           AAD_TENANT_ID: "${{ parameters.AAD_TENANT_ID }}"
           TRE_ID: ${{ parameters.TRE_ID }}
@@ -507,6 +510,7 @@ jobs:
           RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
           RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          SECONDARY_SUBSCRIPTION_ID: ${{ parameters.SECONDARY_SUBSCRIPTION_ID }}
           CORE_STORAGE_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           CORE_KEYVAULT_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           USE_EXISTING_PRIVATE_DNS_ZONE: ${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }}
