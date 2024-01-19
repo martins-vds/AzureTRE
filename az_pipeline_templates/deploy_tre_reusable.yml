@@ -520,6 +520,7 @@ jobs:
           SECONDARY_SUBSCRIPTION_ID: ${{ parameters.SECONDARY_SUBSCRIPTION_ID }}
           CORE_STORAGE_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           CORE_KEYVAULT_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
+          CORE_STATIC_WEB_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           USE_EXISTING_PRIVATE_DNS_ZONE: ${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }}
           PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }}
           PRIVATE_DNS_ZONE_AZURE_CREDENTIALS: ${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }}

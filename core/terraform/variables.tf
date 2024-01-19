@@ -212,7 +212,12 @@ variable "core_keyvault_allowed_subnet_ids" {
   type        = list(string)
   default     = []
   description = "Network rule set for keyvault"
+}
 
+variable "core_static_web_allowed_subnet_ids" {
+  type        = list(string)
+  default     = []
+  description = "Network rule set for static web"
 }
 
 variable "deploy_app_gateway" {
