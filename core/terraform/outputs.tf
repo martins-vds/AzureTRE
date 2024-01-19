@@ -112,3 +112,7 @@ output "event_grid_airlock_notification_topic_resource_id" {
 output "service_bus_step_result_queue" {
   value = module.airlock_resources.service_bus_step_result_queue
 }
+
+output "static_web_storage" {
+  value = azurerm_storage_account.staticweb.name
+}

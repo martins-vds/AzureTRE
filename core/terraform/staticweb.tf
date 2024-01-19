@@ -1,7 +1,7 @@
 # See https://microsoft.github.io/AzureTRE/tre-developers/letsencrypt/
 resource "azurerm_storage_account" "staticweb" {
   name                            = local.staticweb_storage_name
-  resource_group_name             = var.resource_group_name
+  resource_group_name             = azurerm_resource_group.core.name
   location                        = var.location
   account_kind                    = "StorageV2"
   account_tier                    = "Standard"
@@ -33,15 +33,15 @@ resource "azurerm_role_assignment" "stgwriter" {
 resource "azurerm_private_endpoint" "webpe" {
   name                = "pe-web-${local.staticweb_storage_name}"
   location            = var.location
-  resource_group_name = var.resource_group_name
-  subnet_id           = var.shared_subnet
+  resource_group_name = azurerm_resource_group.core.name
+  subnet_id           = module.network.shared_subnet_id
   tags                = local.tre_core_tags
 
   lifecycle { ignore_changes = [tags] }
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group-web"
-    private_dns_zone_ids = [var.static_web_dns_zone_id]
+    private_dns_zone_ids = [module.network.static_web_dns_zone_id]
   }
 
   private_service_connection {

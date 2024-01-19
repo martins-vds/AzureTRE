@@ -134,7 +134,7 @@ module "appgateway" {
   shared_subnet              = module.network.shared_subnet_id
   api_fqdn                   = azurerm_linux_web_app.api.default_hostname
   keyvault_id                = azurerm_key_vault.kv.id
-  static_web_dns_zone_id     = module.network.static_web_dns_zone_id
+  staticweb_primary_web_host = azurerm_storage_account.staticweb.primary_web_host
   log_analytics_workspace_id = module.azure_monitor.log_analytics_workspace_id
 
   depends_on = [

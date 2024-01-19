@@ -20,9 +20,9 @@ variable "api_fqdn" {
 variable "keyvault_id" {
   type = string
 }
-variable "static_web_dns_zone_id" {
+variable "log_analytics_workspace_id" {
   type = string
 }
-variable "log_analytics_workspace_id" {
+variable "staticweb_primary_web_host" {
   type = string
 }
