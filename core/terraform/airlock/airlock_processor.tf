@@ -121,13 +121,14 @@ resource "azurerm_private_endpoint" "function" {
   lifecycle { ignore_changes = [tags] }
 
   private_dns_zone_group {
-    name                 = "private-dns-zone-group-${local.airlock_function_app_name}"
+    name                 = "private-dns-zone-group"
     private_dns_zone_ids = [var.function_app_core_dns_zone_id]
   }
 
   private_service_connection {
     name                           = "psc-${local.airlock_function_app_name}"
     private_connection_resource_id = azurerm_linux_function_app.airlock_function_app.id
+    subresource_names              = ["sites"]
     is_manual_connection           = false
   }
 }
