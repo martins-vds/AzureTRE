@@ -79,6 +79,10 @@ variable "log_analytics_workspace_id" {
   type = string
 }
 
+variable "function_app_core_dns_zone_id" {
+  type = string
+}
+
 variable "blob_core_dns_zone_id" {
   type = string
 }
