@@ -84,7 +84,7 @@ resource "azurerm_linux_web_app" "api" {
 
     application_stack {
       docker_image_name   = "${var.api_image_repository}:${local.version}"
-      docker_registry_url = local.docker_registry_server
+      docker_registry_url = "htts://${local.docker_registry_server}"
     }
 
     cors {
