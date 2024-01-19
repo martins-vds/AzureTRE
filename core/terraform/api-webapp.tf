@@ -107,6 +107,7 @@ resource "azurerm_linux_web_app" "api" {
     ip_restriction {
       name   = "deny-all"
       action = "Deny"
+      ip_address = "Any"
     }
 
     dynamic "scm_ip_restriction" {
@@ -123,6 +124,7 @@ resource "azurerm_linux_web_app" "api" {
     scm_ip_restriction {
       name   = "deny-all"
       action = "Deny"
+      ip_address = "Any"
     }
   }
 
