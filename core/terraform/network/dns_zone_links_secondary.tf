@@ -1,4 +1,4 @@
-resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor" {
+resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "azure-monitor-link"
@@ -11,7 +11,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor_oms_opinsights" {
+resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor_oms_opinsights_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "azure-monitor-link"
@@ -24,7 +24,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor_oms_opin
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor_ods_opinsights" {
+resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor_ods_opinsights_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "azure-monitor-link"
@@ -36,7 +36,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor_ods_opin
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor_agentsvc" {
+resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor_agentsvc_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "azure-monitor-link"
@@ -48,7 +48,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "azure_monitor_agentsvc
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "blobcore" {
+resource "azurerm_private_dns_zone_virtual_network_link" "blobcore_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "blobcore-link"
@@ -59,7 +59,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "blobcore" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "azurewebsites" {
+resource "azurerm_private_dns_zone_virtual_network_link" "azurewebsites_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "azurewebsites-link"
@@ -71,7 +71,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "azurewebsites" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "webcorelink" {
+resource "azurerm_private_dns_zone_virtual_network_link" "webcorelink_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "staticwebcore-link"
@@ -82,7 +82,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "webcorelink" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "filecorelink" {
+resource "azurerm_private_dns_zone_virtual_network_link" "filecorelink_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "filecore-link"
@@ -93,7 +93,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "filecorelink" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "vaultcore" {
+resource "azurerm_private_dns_zone_virtual_network_link" "vaultcore_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "vaultcore-link"
@@ -104,7 +104,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "vaultcore" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "acrlink" {
+resource "azurerm_private_dns_zone_virtual_network_link" "acrlink_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "acrcore-link"
@@ -115,7 +115,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "acrlink" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "eventgridlink" {
+resource "azurerm_private_dns_zone_virtual_network_link" "eventgridlink_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "eventgrid-link"
@@ -127,7 +127,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "eventgridlink" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "tablelink" {
+resource "azurerm_private_dns_zone_virtual_network_link" "tablelink_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "table-link"
@@ -139,7 +139,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "tablelink" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "queuelink" {
+resource "azurerm_private_dns_zone_virtual_network_link" "queuelink_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "queue-link"
@@ -151,7 +151,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "queuelink" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "mysqllink" {
+resource "azurerm_private_dns_zone_virtual_network_link" "mysqllink_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "mysql-link"
@@ -163,7 +163,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "mysqllink" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "servicebuslink" {
+resource "azurerm_private_dns_zone_virtual_network_link" "servicebuslink_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "servicebus-link"
@@ -175,7 +175,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "servicebuslink" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "cosmoslink" {
+resource "azurerm_private_dns_zone_virtual_network_link" "cosmoslink_secondary" {
   provider              = azurerm.secondary
   count                 = var.use_existing_private_dns_zone ? 1 : 0
   name                  = "cosmos-link"
