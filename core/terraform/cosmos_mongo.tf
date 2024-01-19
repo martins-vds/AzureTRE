@@ -64,7 +64,7 @@ resource "azurerm_private_endpoint" "mongo" {
   lifecycle { ignore_changes = [tags] }
 
   private_dns_zone_group {
-    name                 = "private-dns-zone-group"
+    name                 = "private-dns-zone-group-mongo"
     private_dns_zone_ids = [module.network.mongo_core_dns_zone_id]
   }
 
