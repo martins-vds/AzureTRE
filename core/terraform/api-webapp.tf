@@ -25,6 +25,7 @@ resource "azurerm_linux_web_app" "api" {
   https_only                      = true
   key_vault_reference_identity_id = azurerm_user_assigned_identity.id.id
   virtual_network_subnet_id       = module.network.web_app_subnet_id
+  public_network_access_enabled   = false
   tags                            = local.tre_core_tags
 
   app_settings = {
@@ -82,7 +83,7 @@ resource "azurerm_linux_web_app" "api" {
     ftps_state                                    = "Disabled"
 
     application_stack {
-      docker_image_name = "${var.api_image_repository}:${local.version}"
+      docker_image_name   = "${var.api_image_repository}:${local.version}"
       docker_registry_url = local.docker_registry_server
     }
 
