@@ -164,7 +164,7 @@ module "airlock_resources" {
   arm_environment                       = var.arm_environment
   tre_core_tags                         = local.tre_core_tags
   log_analytics_workspace_id            = module.azure_monitor.log_analytics_workspace_id
-  function_app_core_dns_zone_id         = module.network.web_app_subnet_id
+  function_app_core_dns_zone_id         = module.network.azurewebsites_dns_zone_id
   blob_core_dns_zone_id                 = module.network.blob_core_dns_zone_id
   file_core_dns_zone_id                 = module.network.file_core_dns_zone_id
   queue_core_dns_zone_id                = module.network.queue_core_dns_zone_id
