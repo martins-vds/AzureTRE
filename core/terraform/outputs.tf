@@ -18,10 +18,6 @@ output "app_gateway_name" {
   value = one(module.appgateway[*].app_gateway_name)
 }
 
-output "static_web_storage" {
-  value = one(module.appgateway[*].static_web_storage)
-}
-
 output "keyvault_name" {
   value = azurerm_key_vault.kv.name
 }
