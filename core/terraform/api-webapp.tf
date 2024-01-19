@@ -94,13 +94,13 @@ resource "azurerm_linux_web_app" "api" {
     }
 
     dynamic "ip_restriction" {
-      for_each = var.core_api_allowed_subnet_ids
-      iterator = "subnet_id"
+      for_each = toset(var.core_api_allowed_subnet_ids)
 
       content {
         name                      = "allow-subnet"
         action                    = "Allow"
-        virtual_network_subnet_id = subnet_id.value
+        priority                  = 100 + index(var.core_api_allowed_subnet_ids, ip_restriction.value)
+        virtual_network_subnet_id = ip_restriction.value
       }
     }
 
@@ -110,17 +110,17 @@ resource "azurerm_linux_web_app" "api" {
     }
 
     dynamic "scm_ip_restriction" {
-      for_each = var.core_api_allowed_subnet_ids
-      iterator = "subnet_id"
+      for_each = toset(var.core_api_allowed_subnet_ids)
 
       content {
         name                      = "allow-subnet"
         action                    = "Allow"
-        virtual_network_subnet_id = subnet_id.value
+        priority                  = 100 + index(var.core_api_allowed_subnet_ids, scm_ip_restriction.value)
+        virtual_network_subnet_id = scm_ip_restriction.value
       }
     }
 
-    scm_ip_restriction{
+    scm_ip_restriction {
       name   = "deny-all"
       action = "Deny"
     }
