@@ -96,7 +96,7 @@ resource "azurerm_storage_account" "sa_import_in_progress" {
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
-
+  public_network_access_enabled   = false
   # Important! we rely on the fact that the blob craeted events are issued when the creation of the blobs are done.
   # This is true ONLY when Hierarchical Namespace is DISABLED
   is_hns_enabled = false
@@ -170,7 +170,7 @@ resource "azurerm_storage_account" "sa_import_rejected" {
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
-
+  public_network_access_enabled   = false
   # Important! we rely on the fact that the blob craeted events are issued when the creation of the blobs are done.
   # This is true ONLY when Hierarchical Namespace is DISABLED
   is_hns_enabled = false
@@ -218,7 +218,7 @@ resource "azurerm_storage_account" "sa_import_blocked" {
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
-
+  public_network_access_enabled   = false
   # Important! we rely on the fact that the blob craeted events are issued when the creation of the blobs are done.
   # This is true ONLY when Hierarchical Namespace is DISABLED
   is_hns_enabled = false
