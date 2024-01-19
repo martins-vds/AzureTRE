@@ -220,10 +220,14 @@ variable "core_static_web_allowed_subnet_ids" {
   description = "Network rule set for static web"
 }
 
-variable "core_api_allowed_subnet_ids" {
-  type        = list(string)
-  default     = []
-  description = "Network rule set for app gateway"
+variable "core_api_devops_private_dns_subnet_id" {
+  type        = string
+  description = "Subnet ID for private DNS zone for API DevOps"
+
+  validation {
+    condition     = var.core_api_devops_private_dns_subnet_id != ""
+    error_message = "core_api_devops_private_dns_subnet_id must be set"
+  }
 }
 
 variable "deploy_app_gateway" {

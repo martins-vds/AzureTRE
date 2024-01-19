@@ -27,6 +27,8 @@ resource "azurerm_linux_web_app" "api" {
   virtual_network_subnet_id       = module.network.web_app_subnet_id
   tags                            = local.tre_core_tags
 
+  public_network_access_enabled = false
+
   app_settings = {
     "APPLICATIONINSIGHTS_CONNECTION_STRING"          = module.azure_monitor.app_insights_connection_string
     "APPLICATIONINSIGHTS_STATSBEAT_DISABLED_ALL"     = "True"
@@ -92,19 +94,6 @@ resource "azurerm_linux_web_app" "api" {
         var.enable_local_debugging ? "http://localhost:3000" : ""
       ]
     }
-
-    dynamic "ip_restriction" {
-      for_each = toset(var.core_api_allowed_subnet_ids)
-
-      content {
-        name                      = "allow-subnet"
-        action                    = "Allow"
-        priority                  = 100 + index(var.core_api_allowed_subnet_ids, ip_restriction.value)
-        virtual_network_subnet_id = ip_restriction.value
-      }
-    }
-
-    scm_use_main_ip_restriction = true
   }
 
   logs {
@@ -123,6 +112,28 @@ resource "azurerm_linux_web_app" "api" {
   depends_on = [
     module.airlock_resources
   ]
+}
+
+resource "azurerm_private_endpoint" "api_private_endpoint_devops"{
+  name                = "pe-api-devops-${var.tre_id}"
+  resource_group_name = azurerm_resource_group.core.name
+  location            = azurerm_resource_group.core.location
+  subnet_id           = var.core_api_devops_private_dns_subnet_id
+  tags                = local.tre_core_tags
+
+  lifecycle { ignore_changes = [tags] }
+
+  private_service_connection {
+    private_connection_resource_id = azurerm_linux_web_app.api.id
+    name                           = "psc-api-devops-${var.tre_id}"
+    subresource_names              = ["sites"]
+    is_manual_connection           = false
+  }
+
+  private_dns_zone_group {
+    name                 = module.terraform_azurerm_environment_configuration.private_links["privatelink.azurewebsites.net"]
+    private_dns_zone_ids = [module.network.azurewebsites_dns_zone_id]
+  }
 }
 
 resource "azurerm_private_endpoint" "api_private_endpoint" {
