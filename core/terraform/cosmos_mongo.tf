@@ -45,6 +45,8 @@ resource "azurerm_cosmosdb_mongo_database" "mongo" {
   name                = "porter"
   resource_group_name = azurerm_resource_group.core.name
   account_name        = azurerm_cosmosdb_account.mongo.name
+
+  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_management_lock" "mongo" {
