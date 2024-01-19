@@ -11,9 +11,9 @@ if [[ -z ${STORAGE_ACCOUNT:-} ]]; then
 fi
 
 # The storage account is protected by network rules
-echo "Enabling public access to storage account..."
-az storage account update --default-action Allow --name "${STORAGE_ACCOUNT}"
-sleep 30
+# echo "Enabling public access to storage account..."
+# az storage account update --default-action Allow --name "${STORAGE_ACCOUNT}"
+# sleep 30
 
 echo "Uploading ${CONTENT_DIR} to static web storage"
 
@@ -27,5 +27,5 @@ az storage blob upload-batch \
     --only-show-errors \
     --overwrite
 
-echo "Disabling public access to storage account..."
-az storage account update --default-action Deny --name "${STORAGE_ACCOUNT}"
+# echo "Disabling public access to storage account..."
+# az storage account update --default-action Deny --name "${STORAGE_ACCOUNT}"
