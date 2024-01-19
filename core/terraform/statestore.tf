@@ -40,8 +40,6 @@ resource "azurerm_cosmosdb_sql_database" "tre_db" {
   name                = "AzureTRE"
   resource_group_name = azurerm_resource_group.core.name
   account_name        = azurerm_cosmosdb_account.tre_db_account.name
-
-  lifecycle { ignore_changes = [tags] }
 }
 
 moved {
