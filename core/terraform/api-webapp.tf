@@ -25,7 +25,6 @@ resource "azurerm_linux_web_app" "api" {
   https_only                      = true
   key_vault_reference_identity_id = azurerm_user_assigned_identity.id.id
   virtual_network_subnet_id       = module.network.web_app_subnet_id
-  public_network_access_enabled   = false
   tags                            = local.tre_core_tags
 
   app_settings = {
@@ -81,6 +80,7 @@ resource "azurerm_linux_web_app" "api" {
     container_registry_managed_identity_client_id = azurerm_user_assigned_identity.id.client_id
     minimum_tls_version                           = "1.2"
     ftps_state                                    = "Disabled"
+    always_on                                     = true
 
     application_stack {
       docker_image_name   = "${var.api_image_repository}:${local.version}"
@@ -91,6 +91,38 @@ resource "azurerm_linux_web_app" "api" {
       allowed_origins = [
         var.enable_local_debugging ? "http://localhost:3000" : ""
       ]
+    }
+
+    dynamic "ip_restriction" {
+      for_each = var.core_api_allowed_subnet_ids
+      iterator = "subnet_id"
+
+      content {
+        name                      = "allow-subnet"
+        action                    = "Allow"
+        virtual_network_subnet_id = subnet_id.value
+      }
+    }
+
+    ip_restriction {
+      name   = "deny-all"
+      action = "Deny"
+    }
+
+    dynamic "scm_ip_restriction" {
+      for_each = var.core_api_allowed_subnet_ids
+      iterator = "subnet_id"
+
+      content {
+        name                      = "allow-subnet"
+        action                    = "Allow"
+        virtual_network_subnet_id = subnet_id.value
+      }
+    }
+
+    scm_ip_restriction{
+      name   = "deny-all"
+      action = "Deny"
     }
   }
 

@@ -220,6 +220,12 @@ variable "core_static_web_allowed_subnet_ids" {
   description = "Network rule set for static web"
 }
 
+variable "core_api_allowed_subnet_ids" {
+  type        = list(string)
+  default     = []
+  description = "Network rule set for app gateway"
+}
+
 variable "deploy_app_gateway" {
   type        = bool
   default     = true

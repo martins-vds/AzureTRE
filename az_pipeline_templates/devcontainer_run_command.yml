@@ -118,6 +118,8 @@ parameters:
     default: "'[]'"
   - name: CORE_STATIC_WEB_ALLOWED_SUBNET_IDS
     default: "'[]'"
+  - name: CORE_API_ALLOWED_SUBNET_IDS
+    default: "'[]'"
   - name: LOGGING_LEVEL
     default: "INFO"
     values:
@@ -299,6 +301,7 @@ steps:
           -e TF_VAR_core_storage_allowed_subnet_ids=${{ parameters.CORE_STORAGE_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_core_keyvault_allowed_subnet_ids=${{ parameters.CORE_KEYVAULT_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_core_static_web_allowed_subnet_ids=${{ parameters.CORE_STATIC_WEB_ALLOWED_SUBNET_IDS }} \
+          -e TF_VAR_core_api_allowed_subnet_ids=${{ parameters.CORE_API_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_use_existing_private_dns_zone=${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }} \
           -e TF_VAR_private_dns_zone_resource_group_name=${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }} \
           -e TF_VAR_private_dns_zone_azure_credentials=${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }} \
