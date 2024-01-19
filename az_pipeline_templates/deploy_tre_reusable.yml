@@ -11,6 +11,7 @@ parameters:
     values:
       - "all"
       - "core"
+      - "ui"
       - "workspace-bundles"
       - "user-resource-bundles"
       - "shared-bundles"
@@ -779,7 +780,7 @@ jobs:
 
   - job: deploy_ui
     displayName: Deploy UI
-    condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
+    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'ui')) }})
     dependsOn: [deploy_tre]
     pool:
       name: ${{ parameters.agentPool }}

@@ -10,6 +10,7 @@ parameters:
     values:
       - "all"
       - "core"
+      - "ui"
       - "workspace-bundles"
       - "user-resource-bundles"
       - "shared-bundles"
