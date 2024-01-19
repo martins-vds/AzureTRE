@@ -115,7 +115,7 @@ resource "azurerm_private_endpoint" "function" {
   name                = "pe-${local.airlock_function_app_name}"
   location            = var.location
   resource_group_name = var.resource_group_name
-  subnet_id           = var.airlock_processor_subnet_id
+  subnet_id           = var.airlock_function_subnet_id
   tags                = var.tre_core_tags
 
   lifecycle { ignore_changes = [tags] }

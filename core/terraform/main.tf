@@ -157,6 +157,7 @@ module "airlock_resources" {
   mgmt_acr_name                         = var.acr_name
   api_principal_id                      = azurerm_user_assigned_identity.id.principal_id
   airlock_app_service_plan_sku          = var.core_app_service_plan_sku
+  airlock_function_subnet_id            = module.network.shared_subnet_id
   airlock_processor_subnet_id           = module.network.airlock_processor_subnet_id
   airlock_servicebus                    = azurerm_servicebus_namespace.sb
   applicationinsights_connection_string = module.azure_monitor.app_insights_connection_string
