@@ -104,28 +104,7 @@ resource "azurerm_linux_web_app" "api" {
       }
     }
 
-    ip_restriction {
-      name   = "deny-all"
-      action = "Deny"
-      ip_address = "0.0.0.0/32"
-    }
-
-    dynamic "scm_ip_restriction" {
-      for_each = toset(var.core_api_allowed_subnet_ids)
-
-      content {
-        name                      = "allow-subnet"
-        action                    = "Allow"
-        priority                  = 100 + index(var.core_api_allowed_subnet_ids, scm_ip_restriction.value)
-        virtual_network_subnet_id = scm_ip_restriction.value
-      }
-    }
-
-    scm_ip_restriction {
-      name   = "deny-all"
-      action = "Deny"
-      ip_address = "0.0.0.0/32"
-    }
+    scm_use_main_ip_restriction = true
   }
 
   logs {
