@@ -7,6 +7,7 @@ resource "azurerm_cosmosdb_account" "mongo" {
   enable_automatic_failover = false
   mongo_server_version      = 4.2
   ip_range_filter           = "${local.azure_portal_cosmos_ips}${var.enable_local_debugging ? ",${local.myip}" : ""}"
+  public_network_access_enabled = false
 
   capabilities {
     name = "EnableServerless"
