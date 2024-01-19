@@ -28,6 +28,11 @@ resource "azurerm_storage_account" "sa_airlock_processor_func_app" {
   public_network_access_enabled   = false
   tags                            = var.tre_core_tags
 
+  network_rules {
+    default_action = "Deny"
+    bypass         = ["AzureServices"]
+  }
+
   lifecycle { ignore_changes = [tags] }
 }
 
