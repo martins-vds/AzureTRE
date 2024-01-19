@@ -241,6 +241,8 @@ parameters:
     displayName: Deploy App Gateway
     type: string
     default: "false"
+  - name: CORE_DDOS_PLAN_ID
+    default: ""
 jobs:
   - job: validation
     displayName: Validation
@@ -527,6 +529,7 @@ jobs:
           PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }}
           PRIVATE_DNS_ZONE_AZURE_CREDENTIALS: ${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }}
           DEPLOY_APP_GATEWAY: ${{ parameters.DEPLOY_APP_GATEWAY }}
+          CORE_DDOS_PLAN_ID: ${{ parameters.CORE_DDOS_PLAN_ID }}
           LOGGING_LEVEL: ${{ parameters.LOGGING_LEVEL }}
 
       - template: devcontainer_run_command.yml

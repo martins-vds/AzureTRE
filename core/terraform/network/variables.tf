@@ -39,3 +39,12 @@ variable "private_dns_zone_resource_group_name" {
   default     = ""
   description = "Resource group of private DNS zone for ACR"
 }
+variable "ddos_plan_id" {
+  type        = string
+  description = "DDOS plan ID"
+
+  validation {
+    condition     = var.ddos_plan_id != ""
+    error_message = "DDOS plan ID must be specified"
+  }
+}

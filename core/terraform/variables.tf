@@ -31,6 +31,16 @@ variable "tre_address_space" {
   description = "Overall TRE Address Space pool, will be used for workspace VNETs, can be a supernet of address_space."
 }
 
+variable "core_ddos_plan_id" {
+  type = string
+  description = "DDOS plan ID"
+
+  validation {
+    condition     = var.core_ddos_plan_id != ""
+    error_message = "DDOS plan ID must be specified"
+  }
+}
+
 variable "api_image_repository" {
   type        = string
   description = "Repository for API image"

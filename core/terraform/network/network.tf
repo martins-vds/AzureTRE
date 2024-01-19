@@ -5,6 +5,11 @@ resource "azurerm_virtual_network" "core" {
   address_space       = [var.core_address_space]
   tags                = local.tre_core_tags
 
+  ddos_protection_plan {
+    enable = true
+    id = var.ddos_plan_id
+  }
+
   lifecycle { ignore_changes = [tags] }
 }
 

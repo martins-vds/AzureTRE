@@ -120,6 +120,8 @@ parameters:
     default: "'[]'"
   - name: CORE_API_DEVOPS_PRIVATE_DNS_SUBNET_ID
     default: ""
+  - name: CORE_DDOS_PLAN_ID
+    default: ""
   - name: LOGGING_LEVEL
     default: "INFO"
     values:
@@ -298,6 +300,7 @@ steps:
           -e TF_VAR_mgmt_storage_allowed_subnet_ids=${{ parameters.MGMT_STORAGE_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_mgmt_acr_allowed_networks=${{ parameters.MGMT_ACR_ALLOWED_NETWORKS }} \
           -e TF_VAR_mgmt_acr_private_endpoint_subnet_id=${{ parameters.MGMT_ACR_PRIVATE_ENDPOINT_SUBNET_ID }} \
+          -e TF_VAR_core_ddos_plan_id=${{ parameters.CORE_DDOS_PLAN_ID }} \
           -e TF_VAR_core_storage_allowed_subnet_ids=${{ parameters.CORE_STORAGE_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_core_keyvault_allowed_subnet_ids=${{ parameters.CORE_KEYVAULT_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_core_static_web_allowed_subnet_ids=${{ parameters.CORE_STATIC_WEB_ALLOWED_SUBNET_IDS }} \
