@@ -69,7 +69,7 @@ resource "azurerm_private_endpoint" "sspe" {
   lifecycle { ignore_changes = [tags] }
 
   private_dns_zone_group {
-    name                 = "private-dns-zone-group-cosmos"
+    name                 = "default"
     private_dns_zone_ids = [module.network.cosmos_core_dns_zone_id]
   }
 
