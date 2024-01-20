@@ -91,7 +91,8 @@ resource "azurerm_linux_web_app" "api" {
 
     cors {
       allowed_origins = [
-        var.enable_local_debugging ? "http://localhost:3000" : ""
+        var.enable_local_debugging ? "http://localhost:3000" : "",
+        azurerm_storage_account.staticweb.primary_web_endpoint,
       ]
     }
 

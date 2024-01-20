@@ -21,7 +21,7 @@ elif [ -n "${API_CLIENT_ID:-}" ] && [ -n "${TEST_APP_ID:-}" ] && [ -n "${TEST_US
 then
   # Use resource owner password credentials flow with USERNAME/PASSWORD
   echo "Using TEST_USER_NAME to get token via resource owner password credential flow"
-  token_response=$(curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d \
+  token_response=$(curl -sS -X POST -H "Content-Type: application/x-www-form-urlencoded" -d \
     "grant_type=password&resource=""${API_CLIENT_ID}""&client_id=""${TEST_APP_ID}""&username=""${TEST_USER_NAME}""&password=""${TEST_USER_PASSWORD}""&scope=default)" \
     "${activeDirectoryUri}/${AAD_TENANT_ID}"/oauth2/token)
 fi
