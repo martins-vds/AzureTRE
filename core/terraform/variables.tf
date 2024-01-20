@@ -230,14 +230,20 @@ variable "core_static_web_allowed_subnet_ids" {
   description = "Network rule set for static web"
 }
 
-variable "core_api_devops_private_dns_subnet_id" {
+variable "core_api_allowed_devops_subnet_id" {
   type        = string
-  description = "Subnet ID for private DNS zone for API DevOps"
+  description = "Subnet ID for Azure DevOps agents"
 
   validation {
-    condition     = var.core_api_devops_private_dns_subnet_id != ""
-    error_message = "core_api_devops_private_dns_subnet_id must be set"
+    condition     = var.core_api_allowed_devops_subnet_id != ""
+    error_message = "core_api_allowed_devops_subnet_id must be set"
   }
+}
+
+variable "core_api_additional_allowed_subnet_ids" {
+  type = string
+  default = ""
+  description = "Additional subnet IDs for API"
 }
 
 variable "deploy_app_gateway" {

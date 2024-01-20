@@ -118,8 +118,10 @@ parameters:
     default: "'[]'"
   - name: CORE_STATIC_WEB_ALLOWED_SUBNET_IDS
     default: "'[]'"
-  - name: CORE_API_DEVOPS_PRIVATE_DNS_SUBNET_ID
+  - name: CORE_API_ALLOWED_DEVOPS_SUBNET_ID
     default: ""
+  - name: CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS
+    default: "'[]'"
   - name: CORE_DDOS_PLAN_ID
     default: ""
   - name: LOGGING_LEVEL
@@ -304,7 +306,8 @@ steps:
           -e TF_VAR_core_storage_allowed_subnet_ids=${{ parameters.CORE_STORAGE_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_core_keyvault_allowed_subnet_ids=${{ parameters.CORE_KEYVAULT_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_core_static_web_allowed_subnet_ids=${{ parameters.CORE_STATIC_WEB_ALLOWED_SUBNET_IDS }} \
-          -e TF_VAR_core_api_devops_private_dns_subnet_id=${{ parameters.CORE_API_DEVOPS_PRIVATE_DNS_SUBNET_ID }} \
+          -e TF_VAR_core_api_allowed_devops_subnet_id=${{ parameters.CORE_API_ALLOWED_DEVOPS_SUBNET_ID }} \
+          -e TF_VAR_core_api_additional_allowed_subnet_ids="${{ parameters.CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS }}" \
           -e TF_VAR_use_existing_private_dns_zone=${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }} \
           -e TF_VAR_private_dns_zone_resource_group_name=${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }} \
           -e TF_VAR_private_dns_zone_azure_credentials=${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }} \

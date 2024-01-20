@@ -27,7 +27,7 @@ resource "azurerm_linux_web_app" "api" {
   virtual_network_subnet_id       = module.network.web_app_subnet_id
   tags                            = local.tre_core_tags
 
-  public_network_access_enabled = false
+  public_network_access_enabled = true
 
   app_settings = {
     "APPLICATIONINSIGHTS_CONNECTION_STRING"          = module.azure_monitor.app_insights_connection_string
@@ -94,6 +94,23 @@ resource "azurerm_linux_web_app" "api" {
         var.enable_local_debugging ? "http://localhost:3000" : ""
       ]
     }
+
+    ip_restriction {
+      virtual_network_subnet_id = var.core_api_allowed_devops_subnet_id
+      action                    = "Allow Azure DevOps Agents Access"
+      priority                  = 100
+    }
+
+    dynamic "ip_restriction" {
+      for_each = var.core_api_additional_allowed_subnet_ids != "" ? split(",", var.core_api_additional_allowed_subnet_ids) : []
+      content {
+        virtual_network_subnet_id = ip_restriction.value
+        action                    = "Allow Additional Subnet Access"
+        priority                  = 101 + index(var.core_api_additional_allowed_subnet_ids, ip_restriction.value)
+      }
+    }
+
+    scm_use_main_ip_restriction = true
   }
 
   logs {
@@ -112,50 +129,6 @@ resource "azurerm_linux_web_app" "api" {
   depends_on = [
     module.airlock_resources
   ]
-}
-
-resource "azurerm_private_endpoint" "api_private_endpoint_devops"{
-  name                = "pe-api-devops-${var.tre_id}"
-  resource_group_name = azurerm_resource_group.core.name
-  location            = azurerm_resource_group.core.location
-  subnet_id           = var.core_api_devops_private_dns_subnet_id
-  tags                = local.tre_core_tags
-
-  lifecycle { ignore_changes = [tags] }
-
-  private_service_connection {
-    private_connection_resource_id = azurerm_linux_web_app.api.id
-    name                           = "psc-api-devops-${var.tre_id}"
-    subresource_names              = ["sites"]
-    is_manual_connection           = false
-  }
-
-  private_dns_zone_group {
-    name                 = module.terraform_azurerm_environment_configuration.private_links["privatelink.azurewebsites.net"]
-    private_dns_zone_ids = [module.network.azurewebsites_dns_zone_id]
-  }
-}
-
-resource "azurerm_private_endpoint" "api_private_endpoint" {
-  name                = "pe-api-${var.tre_id}"
-  resource_group_name = azurerm_resource_group.core.name
-  location            = azurerm_resource_group.core.location
-  subnet_id           = module.network.shared_subnet_id
-  tags                = local.tre_core_tags
-
-  lifecycle { ignore_changes = [tags] }
-
-  private_service_connection {
-    private_connection_resource_id = azurerm_linux_web_app.api.id
-    name                           = "psc-api-${var.tre_id}"
-    subresource_names              = ["sites"]
-    is_manual_connection           = false
-  }
-
-  private_dns_zone_group {
-    name                 = module.terraform_azurerm_environment_configuration.private_links["privatelink.azurewebsites.net"]
-    private_dns_zone_ids = [module.network.azurewebsites_dns_zone_id]
-  }
 }
 
 resource "azurerm_monitor_diagnostic_setting" "webapp_api" {
