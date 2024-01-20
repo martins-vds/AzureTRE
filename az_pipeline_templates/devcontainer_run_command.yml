@@ -121,7 +121,7 @@ parameters:
   - name: CORE_API_ALLOWED_DEVOPS_SUBNET_ID
     default: ""
   - name: CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS
-    default: "'[]'"
+    default: ""
   - name: CORE_DDOS_PLAN_ID
     default: ""
   - name: LOGGING_LEVEL
