@@ -23,7 +23,7 @@ USAGE
 
 function get_http_code() {
   curl_output="$1"
-  http_code=$(echo "${curl_output}" | grep HTTP | sed 's/.*HTTP\/1\.1 \([0-9]\+\).*/\1/' | tail -n 1)
+  http_code=$(echo "${curl_output}" | grep HTTP | sed -rn 's/HTTP\/(1\.1|2) ([[:digit:]]+)/\2/p' | tail -n 1)
 }
 
 curl_options=(--retry 3 --retry-max-time 300 --max-time 90)
