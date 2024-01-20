@@ -21,11 +21,6 @@ USAGE
     exit 1
 }
 
-function get_http_code() {
-  curl_output="$1"
-  http_code=$(echo "${curl_output}" | grep HTTP | sed -rn 's/HTTP\/(1\.1|2) ([[:digit:]]+)/\2/p' | tail -n 1)
-}
-
 curl_options=(--retry 3 --retry-max-time 300 --max-time 90)
 
 # if no arguments are provided, return usage function
@@ -78,10 +73,8 @@ if [ -z "${access_token:-}" ]; then
   access_token=${ACCESS_TOKEN}
 fi
 
-migrate_result=$(curl -isS -X "POST" "${tre_url}/api/migrations" "${curl_options[@]}" \
-                -H "accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer ${access_token}")
-get_http_code "${migrate_result}"
-echo "${migrate_result}"
+http_code=$(curl -sS -o migration_result.txt --write-out "%{http_code}" -X "POST" "${tre_url}/api/migrations" "${curl_options[@]}" -H "accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer ${access_token}")
+cat migration_result.txt
 if [[ ${http_code} != 202 ]]; then
   echo "Error while migrating state store"
   exit 1
