@@ -140,8 +140,7 @@ module "appgateway" {
   depends_on = [
     module.network,
     azurerm_key_vault.kv,
-    azurerm_key_vault_access_policy.deployer,
-    azurerm_private_endpoint.api_private_endpoint
+    azurerm_key_vault_access_policy.deployer
   ]
 }
 
