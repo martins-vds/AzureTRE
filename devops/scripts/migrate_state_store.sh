@@ -78,7 +78,7 @@ if [ -z "${access_token:-}" ]; then
   access_token=${ACCESS_TOKEN}
 fi
 
-migrate_result=$(curl -i -X "POST" "${tre_url}/api/migrations" "${curl_options[@]}" \
+migrate_result=$(curl -isS -X "POST" "${tre_url}/api/migrations" "${curl_options[@]}" \
                 -H "accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer ${access_token}")
 get_http_code "${migrate_result}"
 echo "${migrate_result}"
