@@ -97,7 +97,8 @@ resource "azurerm_linux_web_app" "api" {
 
     ip_restriction {
       virtual_network_subnet_id = var.core_api_allowed_devops_subnet_id
-      action                    = "Allow Azure DevOps Agents Access"
+      name                      = "Allow Azure DevOps Agents Access"
+      action                    = "Allow"
       priority                  = 100
     }
 
@@ -105,7 +106,8 @@ resource "azurerm_linux_web_app" "api" {
       for_each = var.core_api_additional_allowed_subnet_ids != "" ? split(",", var.core_api_additional_allowed_subnet_ids) : []
       content {
         virtual_network_subnet_id = ip_restriction.value
-        action                    = "Allow Additional Subnet Access"
+        action                    = "Allow"
+        name                      = "Allow Additional Subnet Access"
         priority                  = 101 + index(var.core_api_additional_allowed_subnet_ids, ip_restriction.value)
       }
     }
