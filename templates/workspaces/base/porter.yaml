@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-workspace-base
-version: 1.6.3
+version: 1.6.4
 description: "A base Azure TRE workspace"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -122,7 +122,15 @@ parameters:
   - name: enable_firewall
     type: boolean
     default: false
-
+  - name: use_existing_private_dns_zone
+    type: boolean
+    default: false
+  - name: private_dns_zone_subscription_id
+    type: string
+    default: ""
+  - name: private_dns_zone_resource_group_name
+    type: string
+    default: ""
 outputs:
   - name: app_role_id_workspace_owner
     type: string
@@ -191,6 +199,9 @@ install:
         arm_environment: ${ bundle.parameters.arm_environment }
         enable_bastion: ${ bundle.parameters.enable_bastion }
         enable_firewall: ${ bundle.parameters.enable_firewall }
+        use_existing_private_dns_zone: ${ bundle.parameters.use_existing_private_dns_zone }
+        private_dns_zone_subscription_id: ${ bundle.parameters.private_dns_zone_subscription_id }
+        private_dns_zone_resource_group_name: ${ bundle.parameters.private_dns_zone_resource_group_name }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
