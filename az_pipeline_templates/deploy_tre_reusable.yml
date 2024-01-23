@@ -845,6 +845,7 @@ jobs:
           IS_API_SECURED: false
           WORKSPACE_APP_SERVICE_PLAN_SKU: ${{ parameters.WORKSPACE_APP_SERVICE_PLAN_SKU }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          DEPLOY_APP_GATEWAY: ${{ parameters.DEPLOY_APP_GATEWAY }}
 
       - publish: "./e2e_tests/pytest_e2e_smoke.xml"
         artifact: E2E Test (Smoke) Results
