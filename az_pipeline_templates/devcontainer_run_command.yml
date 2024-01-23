@@ -195,13 +195,16 @@ steps:
       targetType: 'inline'
       script: |
         if [ "${{ parameters.DEPLOY_APP_GATEWAY }}" == "false" ]; then
+          tre_ui_url="https://stweb${{ parameters.TRE_ID }}.z9.web.core.windows.net"
           tre_url="https://api-${{ parameters.TRE_ID }}.azurewebsites.net"
         else
           source devops/scripts/construct_tre_url.sh
           tre_url=$(construct_tre_url "${{ parameters.TRE_ID }}" "${{ parameters.LOCATION }}" "${{ parameters.AZURE_ENVIRONMENT }}")
+          tre_ui_url=$tre_url
         fi
 
         echo "##vso[task.setvariable variable=TRE_URL;]$tre_url"
+        echo "##vso[task.setvariable variable=TRE_UI_URL;]$tre_ui_url"
         echo "Set TRE_URL to $tre_url"
 
   - task: Bash@3
@@ -313,5 +316,6 @@ steps:
           -e TF_VAR_private_dns_zone_azure_credentials=${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }} \
           -e TF_VAR_deploy_app_gateway=${{ parameters.DEPLOY_APP_GATEWAY }} \
           -e DEPLOY_APP_GATEWAY=${{ parameters.DEPLOY_APP_GATEWAY }} \
+          -e TRE_UI_URL="$(TRE_UI_URL)" \
           '${{ parameters.CI_CACHE_ACR_NAME }}$(ACR_DOMAIN_SUFFIX)/tredev:${{ parameters.DEVCONTAINER_TAG }}' \
         bash -c "${{ parameters.COMMAND }}"
