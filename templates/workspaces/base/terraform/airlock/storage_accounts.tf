@@ -37,7 +37,7 @@ resource "azurerm_private_endpoint" "import_approved_pe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group-sa-import-approved"
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.blobcore.id]
+    private_dns_zone_ids = [var.blobcore_zone_id]
   }
 
   private_service_connection {
@@ -89,7 +89,7 @@ resource "azurerm_private_endpoint" "export_internal_pe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group-sa-export-int"
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.blobcore.id]
+    private_dns_zone_ids = [var.blobcore_zone_id]
   }
 
   private_service_connection {
