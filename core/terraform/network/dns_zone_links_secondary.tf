@@ -186,3 +186,15 @@ resource "azurerm_private_dns_zone_virtual_network_link" "cosmoslink_secondary" 
 
   lifecycle { ignore_changes = [tags] }
 }
+
+resource "azurerm_private_dns_zone_virtual_network_link" "mongolink_secondary" {
+  provider              = azurerm.secondary
+  count                 = var.use_existing_private_dns_zone ? 1 : 0
+  name                  = "mongo-link-secondary"
+  resource_group_name   = var.private_dns_zone_resource_group_name
+  private_dns_zone_name = module.dns_zones.mongo.name
+  virtual_network_id    = azurerm_virtual_network.core.id
+  tags                  = local.tre_core_tags
+
+  lifecycle { ignore_changes = [tags] }
+}
