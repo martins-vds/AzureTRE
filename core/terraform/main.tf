@@ -217,6 +217,19 @@ module "resource_processor_vmss_porter" {
   ]
 }
 
+module "avd" {
+  source              = "./avd"
+  tre_id              = var.tre_id
+  location            = var.location
+  resource_group_name = azurerm_resource_group.core.name
+  key_vault_id        = azurerm_key_vault.kv.id
+
+  depends_on = [
+    azurerm_key_vault.kv,
+    azurerm_key_vault_access_policy.deployer
+  ]
+}
+
 module "terraform_azurerm_environment_configuration" {
   source          = "git::https://github.com/microsoft/terraform-azurerm-environment-configuration.git?ref=0.2.0"
   arm_environment = var.arm_environment
