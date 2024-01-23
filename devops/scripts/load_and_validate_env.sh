@@ -81,7 +81,12 @@ else
     export ARM_ENVIRONMENT
     export TF_VAR_arm_environment="${ARM_ENVIRONMENT}"
 
-    TRE_URL=$(construct_tre_url "${TRE_ID}" "${LOCATION}" "${AZURE_ENVIRONMENT}")
+    if [[ $DEPLOY_APP_GATEWAY == "false" ]]; then
+      TRE_URL="https://stweb${TRE_ID}.z9.web.core.windows.net"
+    else
+      TRE_URL=$(construct_tre_url "${TRE_ID}" "${LOCATION}" "${AZURE_ENVIRONMENT}")
+    fi
+
     export TRE_URL
 fi
 
