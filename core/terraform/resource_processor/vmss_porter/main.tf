@@ -191,13 +191,31 @@ resource "azurerm_role_assignment" "vmss_sb_receiver" {
   principal_id         = azurerm_user_assigned_identity.vmss_msi.principal_id
 }
 
+resource "terraform_data" "wait_for_vmss_identity" {
+  provisioner "local-exec" {
+    command    = "bash -c \"sleep 120s\""
+    on_failure = fail
+  }
+
+  triggers_replace = [
+    azurerm_user_assigned_identity.vmss_msi.principal_id
+  ]
+
+  depends_on = [
+    azurerm_user_assigned_identity.vmss_msi
+  ]
+}
+
 resource "azurerm_role_assignment" "subscription_administrator" {
   # Below is a workaround TF replacing this resource when using the data object.
   scope                = var.subscription_id != "" ? "/subscriptions/${var.subscription_id}" : data.azurerm_subscription.current.id
   role_definition_name = "User Access Administrator"
   principal_id         = azurerm_user_assigned_identity.vmss_msi.principal_id
 
-  depends_on = [ azurerm_user_assigned_identity.vmss_msi ]
+  depends_on = [
+    azurerm_user_assigned_identity.vmss_msi,
+    terraform_data.wait_for_vmss_identity
+  ]
 }
 
 resource "azurerm_role_assignment" "subscription_contributor" {
@@ -206,7 +224,10 @@ resource "azurerm_role_assignment" "subscription_contributor" {
   role_definition_name = "Contributor"
   principal_id         = azurerm_user_assigned_identity.vmss_msi.principal_id
 
-  depends_on = [ azurerm_user_assigned_identity.vmss_msi ]
+  depends_on = [
+    azurerm_user_assigned_identity.vmss_msi,
+    terraform_data.wait_for_vmss_identity
+  ]
 }
 
 resource "azurerm_key_vault_access_policy" "resource_processor" {
