@@ -85,25 +85,6 @@ resource "azurerm_resource_group" "core" {
   lifecycle { ignore_changes = [tags] }
 }
 
-module "azure_monitor" {
-  source                                   = "./azure-monitor"
-  tre_id                                   = var.tre_id
-  location                                 = var.location
-  resource_group_name                      = azurerm_resource_group.core.name
-  shared_subnet_id                         = module.network.shared_subnet_id
-  azure_monitor_dns_zone_id                = module.network.azure_monitor_dns_zone_id
-  azure_monitor_oms_opinsights_dns_zone_id = module.network.azure_monitor_oms_opinsights_dns_zone_id
-  azure_monitor_ods_opinsights_dns_zone_id = module.network.azure_monitor_ods_opinsights_dns_zone_id
-  azure_monitor_agentsvc_dns_zone_id       = module.network.azure_monitor_agentsvc_dns_zone_id
-  blob_core_dns_zone_id                    = module.network.blob_core_dns_zone_id
-  tre_core_tags                            = local.tre_core_tags
-  enable_local_debugging                   = var.enable_local_debugging
-
-  depends_on = [
-    module.network
-  ]
-}
-
 module "network" {
   source                               = "./network"
   tre_id                               = var.tre_id
@@ -122,6 +103,25 @@ module "network" {
     azurerm.primary   = azurerm
     azurerm.secondary = azurerm.secondary
   }
+}
+
+module "azure_monitor" {
+  source                                   = "./azure-monitor"
+  tre_id                                   = var.tre_id
+  location                                 = var.location
+  resource_group_name                      = azurerm_resource_group.core.name
+  shared_subnet_id                         = module.network.shared_subnet_id
+  azure_monitor_dns_zone_id                = module.network.azure_monitor_dns_zone_id
+  azure_monitor_oms_opinsights_dns_zone_id = module.network.azure_monitor_oms_opinsights_dns_zone_id
+  azure_monitor_ods_opinsights_dns_zone_id = module.network.azure_monitor_ods_opinsights_dns_zone_id
+  azure_monitor_agentsvc_dns_zone_id       = module.network.azure_monitor_agentsvc_dns_zone_id
+  blob_core_dns_zone_id                    = module.network.blob_core_dns_zone_id
+  tre_core_tags                            = local.tre_core_tags
+  enable_local_debugging                   = var.enable_local_debugging
+
+  depends_on = [
+    module.network
+  ]
 }
 
 module "appgateway" {

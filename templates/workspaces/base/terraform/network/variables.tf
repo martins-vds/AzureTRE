@@ -25,3 +25,13 @@ variable "enable_bastion" {
 variable "enable_firewall" {
   type = bool
 }
+variable "use_primary_dns_zones" {
+  type        = bool
+  default     = false
+  description = "Use existing private DNS zone for ACR"
+}
+variable "private_dns_zone_resource_group_name" {
+  type        = string
+  default     = ""
+  description = "Resource group of private DNS zone for ACR"
+}

@@ -33,8 +33,9 @@
       "type": "boolean",
       "title": "Enable Firewall",
       "description": "Allow access to the workspace via Azure Firewall",
-      "default": false,
-      "updateable": true
+      "default": true,
+      "updateable": false,
+      "readOnly": true
     },
     "app_service_plan_sku": {
       "type": "string",
@@ -327,6 +328,9 @@
       "classNames": "tre-hidden"
     },
     "address_spaces": {
+      "classNames": "tre-hidden"
+    },
+    "enable_firewall": {
       "classNames": "tre-hidden"
     },
     "ui:order": [

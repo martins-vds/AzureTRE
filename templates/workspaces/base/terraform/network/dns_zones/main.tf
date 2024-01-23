@@ -4,8 +4,12 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = ">=3.86.0"
-
       configuration_aliases = [ azurerm.primary, azurerm.secondary ]
      }
   }
+}
+
+module "terraform_azurerm_environment_configuration" {
+  source          = "git::https://github.com/microsoft/terraform-azurerm-environment-configuration.git?ref=0.2.0"
+  arm_environment = var.arm_environment
 }

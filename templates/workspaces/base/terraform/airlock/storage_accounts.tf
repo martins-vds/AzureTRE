@@ -147,7 +147,7 @@ resource "azurerm_private_endpoint" "export_inprogress_pe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group-sa-export-ip"
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.blobcore.id]
+    private_dns_zone_ids = [var.blobcore_zone_id]
   }
 
   private_service_connection {
@@ -166,7 +166,7 @@ resource "azurerm_storage_account" "sa_export_rejected" {
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
-
+  public_network_access_enabled   = false
   # Important! we rely on the fact that the blob craeted events are issued when the creation of the blobs are done.
   # This is true ONLY when Hierarchical Namespace is DISABLED
   is_hns_enabled = false
@@ -198,7 +198,7 @@ resource "azurerm_private_endpoint" "export_rejected_pe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group-sa-export-rej"
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.blobcore.id]
+    private_dns_zone_ids = [var.blobcore_zone_id]
   }
 
   private_service_connection {
@@ -217,6 +217,7 @@ resource "azurerm_storage_account" "sa_export_blocked" {
   account_tier                    = "Standard"
   account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
+  public_network_access_enabled   = false
 
   # Important! we rely on the fact that the blob craeted events are issued when the creation of the blobs are done.
   # This is true ONLY when Hierarchical Namespace is DISABLED
@@ -249,7 +250,7 @@ resource "azurerm_private_endpoint" "export_blocked_pe" {
 
   private_dns_zone_group {
     name                 = "private-dns-zone-group-sa-export-blocked"
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.blobcore.id]
+    private_dns_zone_ids = [var.blobcore_zone_id]
   }
 
   private_service_connection {

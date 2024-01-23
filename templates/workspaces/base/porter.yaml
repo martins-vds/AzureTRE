@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-workspace-base
-version: 1.6.4
+version: 1.6.5
 description: "A base Azure TRE workspace"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -121,7 +121,7 @@ parameters:
     default: false
   - name: enable_firewall
     type: boolean
-    default: false
+    default: true
   - name: use_existing_private_dns_zone
     type: boolean
     default: false
@@ -166,7 +166,7 @@ outputs:
 mixins:
   - exec
   - terraform:
-      clientVersion: 1.4.6
+      clientVersion: 1.7.0
   - az:
       clientVersion: 2.49.0
 
@@ -200,8 +200,12 @@ install:
         enable_bastion: ${ bundle.parameters.enable_bastion }
         enable_firewall: ${ bundle.parameters.enable_firewall }
         use_existing_private_dns_zone: ${ bundle.parameters.use_existing_private_dns_zone }
-        private_dns_zone_subscription_id: ${ bundle.parameters.private_dns_zone_subscription_id }
         private_dns_zone_resource_group_name: ${ bundle.parameters.private_dns_zone_resource_group_name }
+        secondary_arm_client_id: ${ bundle.credentials.ARM_CLIENT_ID }
+        secondary_arm_client_secret: ${ bundle.credentials.ARM_CLIENT_SECRET }
+        secondary_arm_tenant_id: ${ bundle.credentials.ARM_TENANT_ID }
+        secondary_arm_subscription_id: ${ bundle.credentials.private_dns_zone_subscription_id }
+
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -244,6 +248,12 @@ upgrade:
         arm_environment: ${ bundle.parameters.arm_environment }
         enable_bastion: ${ bundle.parameters.enable_bastion }
         enable_firewall: ${ bundle.parameters.enable_firewall }
+        use_existing_private_dns_zone: ${ bundle.parameters.use_existing_private_dns_zone }
+        private_dns_zone_resource_group_name: ${ bundle.parameters.private_dns_zone_resource_group_name }
+        secondary_arm_client_id: ${ bundle.credentials.ARM_CLIENT_ID }
+        secondary_arm_client_secret: ${ bundle.credentials.ARM_CLIENT_SECRET }
+        secondary_arm_tenant_id: ${ bundle.credentials.ARM_TENANT_ID }
+        secondary_arm_subscription_id: ${ bundle.credentials.private_dns_zone_subscription_id }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -309,6 +319,12 @@ uninstall:
         arm_environment: ${ bundle.parameters.arm_environment }
         enable_bastion: ${ bundle.parameters.enable_bastion }
         enable_firewall: ${ bundle.parameters.enable_firewall }
+        use_existing_private_dns_zone: ${ bundle.parameters.use_existing_private_dns_zone }
+        private_dns_zone_resource_group_name: ${ bundle.parameters.private_dns_zone_resource_group_name }
+        secondary_arm_client_id: ${ bundle.credentials.ARM_CLIENT_ID }
+        secondary_arm_client_secret: ${ bundle.credentials.ARM_CLIENT_SECRET }
+        secondary_arm_tenant_id: ${ bundle.credentials.ARM_TENANT_ID }
+        secondary_arm_subscription_id: ${ bundle.credentials.private_dns_zone_subscription_id }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }

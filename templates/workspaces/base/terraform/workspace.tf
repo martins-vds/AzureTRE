@@ -27,6 +27,14 @@ module "network" {
   arm_environment        = var.arm_environment
   enable_bastion         = var.enable_bastion
   enable_firewall        = var.enable_firewall
+
+  use_primary_dns_zones                = !var.use_existing_private_dns_zone
+  private_dns_zone_resource_group_name = var.private_dns_zone_resource_group_name
+
+  providers = {
+    azurerm.primary   = azurerm
+    azurerm.secondary = azurerm.secondary
+  }
 }
 
 module "aad" {
@@ -58,11 +66,11 @@ module "airlock" {
   short_workspace_id          = local.short_workspace_id
   airlock_processor_subnet_id = module.network.airlock_processor_subnet_id
   arm_environment             = var.arm_environment
+  blobcore_zone_id            = module.network.blobcore_zone_id
   depends_on = [
     module.network,
   ]
 }
-
 
 module "azure_monitor" {
   source                                   = "./azure-monitor"

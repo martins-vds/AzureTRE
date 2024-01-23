@@ -1,3 +1,16 @@
+module "dns_zones" {
+  source                = "./dns_zones"
+  use_primary_dns_zones = var.use_primary_dns_zones
+  resource_group_name   = var.private_dns_zone_resource_group_name
+  tre_id                = var.tre_id
+  arm_environment       = var.arm_environment
+  providers = {
+    azurerm.primary   = azurerm.primary
+    azurerm.secondary = azurerm.secondary
+  }
+}
+
+
 resource "azurerm_virtual_network" "ws" {
   name                = "vnet-${local.workspace_resource_name_suffix}"
   location            = var.location
@@ -5,7 +18,7 @@ resource "azurerm_virtual_network" "ws" {
   address_space       = local.address_spaces
   tags                = var.tre_workspace_tags
 
-  lifecycle { ignore_changes = [tags] }
+  lifecycle { ignore_changes = [tags, ddos_protection_plan] }
 }
 
 resource "azurerm_subnet" "services" {
@@ -86,7 +99,7 @@ moved {
 }
 
 resource "azurerm_subnet_route_table_association" "rt_services_subnet_association" {
-  count = var.enable_firewall ? 1 : 0
+  count          = var.enable_firewall ? 1 : 0
   route_table_id = data.azurerm_route_table.rt[0].id
   subnet_id      = azurerm_subnet.services.id
   depends_on = [
@@ -97,7 +110,7 @@ resource "azurerm_subnet_route_table_association" "rt_services_subnet_associatio
 
 
 resource "azurerm_subnet_route_table_association" "rt_webapps_subnet_association" {
-  count = var.enable_firewall ? 1 : 0
+  count          = var.enable_firewall ? 1 : 0
   route_table_id = data.azurerm_route_table.rt[0].id
   subnet_id      = azurerm_subnet.webapps.id
   depends_on = [
