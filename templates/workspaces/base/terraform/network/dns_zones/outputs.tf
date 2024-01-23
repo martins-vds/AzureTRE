@@ -152,7 +152,7 @@ output "dfs" {
   }
 }
 
-output "azurehealthcareapis" {
+output "health" {
   value = {
     name = var.use_primary_dns_zones ? one(data.azurerm_private_dns_zone.azurehealthcareapis[*].name) : one(data.azurerm_private_dns_zone.azurehealthcareapis_secondary[*].name)
     id   = var.use_primary_dns_zones ? one(data.azurerm_private_dns_zone.azurehealthcareapis[*].id) : one(data.azurerm_private_dns_zone.azurehealthcareapis_secondary[*].id)
@@ -166,14 +166,14 @@ output "dicom" {
   }
 }
 
-output "api" {
+output "azureml" {
   value = {
     name = var.use_primary_dns_zones ? one(data.azurerm_private_dns_zone.api[*].name) : one(data.azurerm_private_dns_zone.api_secondary[*].name)
     id   = var.use_primary_dns_zones ? one(data.azurerm_private_dns_zone.api[*].id) : one(data.azurerm_private_dns_zone.api_secondary[*].id)
   }
 }
 
-output "cert" {
+output "azuremlcert" {
   value = {
     name = var.use_primary_dns_zones ? one(data.azurerm_private_dns_zone.cert[*].name) : one(data.azurerm_private_dns_zone.cert_secondary[*].name)
     id   = var.use_primary_dns_zones ? one(data.azurerm_private_dns_zone.cert[*].id) : one(data.azurerm_private_dns_zone.cert_secondary[*].id)
@@ -201,7 +201,7 @@ output "mysql" {
   }
 }
 
-output "azuredatabricks" {
+output "databricks" {
   value = {
     name = var.use_primary_dns_zones ? one(data.azurerm_private_dns_zone.azuredatabricks[*].name) : one(data.azurerm_private_dns_zone.azuredatabricks_secondary[*].name)
     id   = var.use_primary_dns_zones ? one(data.azurerm_private_dns_zone.azuredatabricks[*].id) : one(data.azurerm_private_dns_zone.azuredatabricks_secondary[*].id)

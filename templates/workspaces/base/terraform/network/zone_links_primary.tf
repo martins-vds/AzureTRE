@@ -40,7 +40,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "dfscorelink" {
   count                 = var.use_primary_dns_zones ? 1 : 0
   name                  = "dfscorelink-${local.workspace_resource_name_suffix}"
   resource_group_name   = local.core_resource_group_name
-  private_dns_zone_name = module.dns_zones.dfscore.name
+  private_dns_zone_name = module.dns_zones.dfs.name
   virtual_network_id    = azurerm_virtual_network.ws.id
   tags                  = var.tre_workspace_tags
 
@@ -155,17 +155,17 @@ resource "azurerm_private_dns_zone_virtual_network_link" "postgreslink" {
   lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "nexuslink" {
-  provider              = azurerm.primary
-  count                 = var.use_primary_dns_zones ? 1 : 0
-  name                  = "nexuslink-${local.workspace_resource_name_suffix}"
-  resource_group_name   = local.core_resource_group_name
-  private_dns_zone_name = module.dns_zones.nexus.name
-  virtual_network_id    = azurerm_virtual_network.ws.id
-  tags                  = var.tre_workspace_tags
+# resource "azurerm_private_dns_zone_virtual_network_link" "nexuslink" {
+#   provider              = azurerm.primary
+#   count                 = var.use_primary_dns_zones ? 1 : 0
+#   name                  = "nexuslink-${local.workspace_resource_name_suffix}"
+#   resource_group_name   = local.core_resource_group_name
+#   private_dns_zone_name = module.dns_zones.nexus.name
+#   virtual_network_id    = azurerm_virtual_network.ws.id
+#   tags                  = var.tre_workspace_tags
 
-  lifecycle { ignore_changes = [tags] }
-}
+#   lifecycle { ignore_changes = [tags] }
+# }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "databrickslink" {
   provider              = azurerm.primary

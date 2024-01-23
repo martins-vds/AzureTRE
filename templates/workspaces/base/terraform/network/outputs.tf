@@ -19,7 +19,7 @@ output "blobcore_zone_id" {
 }
 
 output "dfscore_zone_id" {
-  value = module.dns_zones.dfscore.id
+  value = module.dns_zones.dfs.id
 }
 
 output "airlock_processor_subnet_id" {
