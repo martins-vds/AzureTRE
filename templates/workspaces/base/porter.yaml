@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-workspace-base
-version: 1.6.5
+version: 1.6.6
 description: "A base Azure TRE workspace"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -201,10 +201,10 @@ install:
         enable_firewall: ${ bundle.parameters.enable_firewall }
         use_existing_private_dns_zone: ${ bundle.parameters.use_existing_private_dns_zone }
         private_dns_zone_resource_group_name: ${ bundle.parameters.private_dns_zone_resource_group_name }
-        secondary_arm_client_id: ${ bundle.credentials.ARM_CLIENT_ID }
-        secondary_arm_client_secret: ${ bundle.credentials.ARM_CLIENT_SECRET }
-        secondary_arm_tenant_id: ${ bundle.credentials.ARM_TENANT_ID }
-        secondary_arm_subscription_id: ${ bundle.credentials.private_dns_zone_subscription_id }
+        secondary_arm_client_id: ${ bundle.credentials.azure_client_id }
+        secondary_arm_client_secret: ${ bundle.credentials.azure_client_secret }
+        secondary_arm_tenant_id: ${ bundle.credentials.azure_tenant_id }
+        secondary_arm_subscription_id: ${ bundle.parameters.private_dns_zone_subscription_id }
 
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
@@ -250,10 +250,10 @@ upgrade:
         enable_firewall: ${ bundle.parameters.enable_firewall }
         use_existing_private_dns_zone: ${ bundle.parameters.use_existing_private_dns_zone }
         private_dns_zone_resource_group_name: ${ bundle.parameters.private_dns_zone_resource_group_name }
-        secondary_arm_client_id: ${ bundle.credentials.ARM_CLIENT_ID }
-        secondary_arm_client_secret: ${ bundle.credentials.ARM_CLIENT_SECRET }
-        secondary_arm_tenant_id: ${ bundle.credentials.ARM_TENANT_ID }
-        secondary_arm_subscription_id: ${ bundle.credentials.private_dns_zone_subscription_id }
+        secondary_arm_client_id: ${ bundle.credentials.azure_client_id }
+        secondary_arm_client_secret: ${ bundle.credentials.azure_client_secret }
+        secondary_arm_tenant_id: ${ bundle.credentials.azure_tenant_id }
+        secondary_arm_subscription_id: ${ bundle.parameters.private_dns_zone_subscription_id }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -321,10 +321,10 @@ uninstall:
         enable_firewall: ${ bundle.parameters.enable_firewall }
         use_existing_private_dns_zone: ${ bundle.parameters.use_existing_private_dns_zone }
         private_dns_zone_resource_group_name: ${ bundle.parameters.private_dns_zone_resource_group_name }
-        secondary_arm_client_id: ${ bundle.credentials.ARM_CLIENT_ID }
-        secondary_arm_client_secret: ${ bundle.credentials.ARM_CLIENT_SECRET }
-        secondary_arm_tenant_id: ${ bundle.credentials.ARM_TENANT_ID }
-        secondary_arm_subscription_id: ${ bundle.credentials.private_dns_zone_subscription_id }
+        secondary_arm_client_id: ${ bundle.credentials.azure_client_id }
+        secondary_arm_client_secret: ${ bundle.credentials.azure_client_secret }
+        secondary_arm_tenant_id: ${ bundle.credentials.azure_tenant_id }
+        secondary_arm_subscription_id: ${ bundle.parameters.private_dns_zone_subscription_id }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
