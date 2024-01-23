@@ -102,7 +102,7 @@
             "description": "Subscription ID of the private DNS zone to use for the workspace",
             "updateable": false
           },
-          "private_dns_zones_resource_group_name": {
+          "private_dns_zone_resource_group_name": {
             "type": "string",
             "title": "Private DNS Zone Resource Group Name",
             "description": "Name of the resource group containing the private DNS zone to use for the workspace",
@@ -111,7 +111,7 @@
         },
         "required": [
           "private_dns_zone_subscription_id",
-          "private_dns_zones_resource_group_name"
+          "private_dns_zone_resource_group_name"
         ]
       }
     },
