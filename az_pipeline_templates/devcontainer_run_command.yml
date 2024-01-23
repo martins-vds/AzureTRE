@@ -206,6 +206,7 @@ steps:
         echo "##vso[task.setvariable variable=TRE_URL;]$tre_url"
         echo "##vso[task.setvariable variable=TRE_UI_URL;]$tre_ui_url"
         echo "Set TRE_URL to $tre_url"
+        echo "Set TRE_UI_URL to $tre_ui_url"
 
   - task: Bash@3
     displayName: '${{ parameters.DISPLAY_NAME }} - Construct ARM_ENVIRONMENT'
