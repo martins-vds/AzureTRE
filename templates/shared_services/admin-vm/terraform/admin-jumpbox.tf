@@ -171,5 +171,5 @@ resource "azurerm_virtual_machine_extension" "avd-dsc" {
 
   lifecycle { ignore_changes = [tags] }
 
-  depends_on = [ azurerm_virtual_machine_extension.guest_config ]
+  depends_on = [ azurerm_virtual_machine_extension.oms_agent ]
 }
