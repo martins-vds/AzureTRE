@@ -51,6 +51,10 @@ resource "azurerm_windows_virtual_machine" "jumpbox" {
     storage_account_type = "Standard_LRS"
   }
 
+  identity {
+    type = "SystemAssigned"
+  }
+
   lifecycle { ignore_changes = [tags] }
 }
 
