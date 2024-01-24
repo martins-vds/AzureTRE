@@ -161,20 +161,23 @@ resource "azurerm_virtual_machine_extension" "avd-dsv" {
 
   settings = <<SETTINGS
   {
-    "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_09-08-2022.zip",
+    "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_1.0.02566.260.zip",
     "configurationFunction": "Configuration.ps1\\AddSessionHost",
     "properties": {
       "HostPoolName":"${data.azurerm_virtual_desktop_host_pool.core_hostpool.name}",
       "AadJoin": true,
-      "UseAgentDownloadEndpoint": true,
-      "EnableVerboseMsiLogging": true
+      "RegistrationInfoTokenCredential": {
+        "UserName": "PLACEHOLDER_DO_NOT_USE",
+        "Password": "PrivateSettingsRef:RegistrationInfoToken"
+      },
+      "UseAgentDownloadEndpoint": true
     }
   }
   SETTINGS
 
   protected_settings = <<PROTECTED_SETTINGS
   {
-    "properties": {
+    "Items": {
       "RegistrationInfoToken": "${data.azurerm_key_vault_secret.avd_registration_token.value}"
     }
   }
