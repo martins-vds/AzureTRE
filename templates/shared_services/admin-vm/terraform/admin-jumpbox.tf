@@ -36,6 +36,7 @@ resource "azurerm_windows_virtual_machine" "jumpbox" {
   admin_username             = "adminuser"
   admin_password             = random_password.password.result
   tags                       = local.tre_shared_service_tags
+  encryption_at_host_enabled = true
 
   source_image_reference {
     publisher = "MicrosoftWindowsDesktop"
@@ -74,6 +75,69 @@ resource "azurerm_virtual_machine_extension" "antimalware" {
   settings = jsonencode({
     "AntimalwareEnabled" = true
   })
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_virtual_machine_extension" "aad_login" {
+  name                 = "${azurerm_windows_virtual_machine.jumpbox.name}-aad-login"
+  virtual_machine_id   = azurerm_windows_virtual_machine.jumpbox.id
+  publisher            = "Microsoft.Azure.ActiveDirectory"
+  type                 = "AADLoginForWindows"
+  type_handler_version = "1.0"
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_virtual_machine_extension" "oms_agent" {
+  name                       = "${azurerm_windows_virtual_machine.jumpbox.name}-oms-agent"
+  virtual_machine_id         = azurerm_windows_virtual_machine.jumpbox.id
+  publisher                  = "Microsoft.EnterpriseCloud.Monitoring"
+  type                       = "MicrosoftMonitoringAgent"
+  type_handler_version       = "1.0"
+  auto_upgrade_minor_version = true
+  tags                       = local.tre_shared_service_tags
+
+  settings = <<SETTINGS
+  {
+    "workspaceId": "${data.azurerm_log_analytics_workspace.oms-workspace.workspace_id}"
+  }
+  SETTINGS
+
+  protected_settings = <<PROTECTED_SETTINGS
+  {
+      "workspaceKey": "${data.azurerm_log_analytics_workspace.oms-workspace.primary_shared_key}"
+  }
+  PROTECTED_SETTINGS
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_virtual_machine_extension" "vmext_dsc" {
+  name                       = "${azurerm_windows_virtual_machine.jumpbox.name}-avd-dsc"
+  virtual_machine_id         = azurerm_windows_virtual_machine.jumpbox.id
+  publisher                  = "Microsoft.Powershell"
+  type                       = "DSC"
+  type_handler_version       = "2.73"
+  auto_upgrade_minor_version = true
+
+  settings = <<SETTINGS
+    {
+      "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_09-08-2022.zip",
+      "configurationFunction": "Configuration.ps1\\AddSessionHost",
+      "properties": {
+        "HostPoolName":"${data.azurerm_virtual_desktop_host_pool.core_hostpool.name}"
+      }
+    }
+  SETTINGS
+
+  protected_settings = <<PROTECTED_SETTINGS
+  {
+    "properties": {
+      "registrationInfoToken": "${data.azurerm_key_vault_secret.avd_registration_token.value}",
+    }
+  }
+  PROTECTED_SETTINGS
 
   lifecycle { ignore_changes = [tags] }
 }

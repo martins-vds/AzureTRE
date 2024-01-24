@@ -11,3 +11,8 @@ variable "tre_resource_id" {
 variable "admin_jumpbox_vm_sku" {
   type = string
 }
+
+variable "admin_jumpbox_vm_users" {
+  type = string
+  default = ""
+}
