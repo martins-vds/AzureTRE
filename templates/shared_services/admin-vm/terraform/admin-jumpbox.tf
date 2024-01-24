@@ -137,21 +137,7 @@ resource "azurerm_virtual_machine_extension" "oms_agent" {
   depends_on = [ azurerm_virtual_machine_extension.app_dependency ]
 }
 
-resource "azurerm_virtual_machine_extension" "guest_config" {
-  name                       = "${azurerm_windows_virtual_machine.jumpbox.name}-guest-config"
-  virtual_machine_id         = azurerm_windows_virtual_machine.jumpbox.id
-  publisher                  = "Microsoft.GuestConfiguration"
-  type                       = "GuestConfiguration"
-  type_handler_version       = "1.1"
-  auto_upgrade_minor_version = true
-  automatic_upgrade_enabled  = true
-
-  lifecycle { ignore_changes = [tags] }
-
-  depends_on = [ azurerm_virtual_machine_extension.oms_agent ]
-}
-
-resource "azurerm_virtual_machine_extension" "avd-dsv" {
+resource "azurerm_virtual_machine_extension" "avd-dsc" {
   name                       = "${azurerm_windows_virtual_machine.jumpbox.name}-avd-dsc"
   virtual_machine_id         = azurerm_windows_virtual_machine.jumpbox.id
   publisher                  = "Microsoft.Powershell"
