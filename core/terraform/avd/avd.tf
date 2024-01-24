@@ -5,6 +5,7 @@ resource "azurerm_virtual_desktop_workspace" "workspace" {
   location            = var.location
   friendly_name       = "${local.prefix} Workspace"
   description         = "${local.prefix} Workspace"
+
 }
 
 # Create AVD host pool
@@ -35,6 +36,7 @@ resource "azurerm_virtual_desktop_application_group" "dag" {
   name          = local.appgroup
   friendly_name = "Core TRE Desktop Application Group"
   description   = "AVD application group"
+  default_desktop_display_name = "Core TRE"
   depends_on    = [azurerm_virtual_desktop_host_pool.hostpool, azurerm_virtual_desktop_workspace.workspace]
 }
 
