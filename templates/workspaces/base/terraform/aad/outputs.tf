@@ -11,15 +11,15 @@ output "app_role_workspace_airlock_manager_id" {
 }
 
 output "ws_group_workspace_airlock_managers_id" {
-  value = azuread_group.workspace_airlock_managers.id
+  value = one(azuread_group.workspace_airlock_managers[*].id)
 }
 
 output "ws_group_workspace_researchers_id" {
-  value = azuread_group.workspace_researchers.id
+  value = one(azuread_group.workspace_researchers[*].id)
 }
 
 output "ws_group_workspace_owners_id" {
-  value = azuread_group.workspace_owners.id
+  value = one(azuread_group.workspace_owners[*].id)
 }
 
 output "client_id" {
