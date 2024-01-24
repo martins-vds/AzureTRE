@@ -92,3 +92,22 @@ module "azure_monitor" {
     module.airlock
   ]
 }
+
+module "avd" {
+  source = "./avd"
+
+  location            = var.location
+  tre_id              = var.tre_id
+  tre_resource_id     = var.tre_resource_id
+  resource_group_name = azurerm_resource_group.ws.name
+
+  avd_users = var.create_aad_groups ? [
+    module.aad.ws_group_workspace_airlock_managers_id,
+    module.aad.ws_group_workspace_researchers_id,
+    module.aad.ws_group_workspace_owners_id,
+  ] : []
+
+  depends_on = [
+    module.aad
+  ]
+}

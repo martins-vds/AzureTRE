@@ -49,7 +49,7 @@ variable "register_aad_application" {
 
 variable "create_aad_groups" {
   type        = bool
-  default     = false
+  default     = true
   description = "Create AAD groups automatically for the Workspace Application Roles."
 }
 
