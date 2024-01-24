@@ -134,7 +134,7 @@ resource "azurerm_virtual_machine_extension" "vmext_dsc" {
   protected_settings = <<PROTECTED_SETTINGS
   {
     "properties": {
-      "registrationInfoToken": "${data.azurerm_key_vault_secret.avd_registration_token.value}",
+      "registrationInfoToken": "${data.azurerm_key_vault_secret.avd_registration_token.value}"
     }
   }
   PROTECTED_SETTINGS
