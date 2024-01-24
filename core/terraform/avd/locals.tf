@@ -6,6 +6,6 @@ locals {
 
   workspace = "avd-ws-${var.tre_id}"
   hostpool  = "avd-hp-${var.tre_id}"
-  rfc3339   = timeadd(timestamp(), "8760h")
+  rfc3339   = timeadd(timestamp(), "720h")
   prefix    = "avd-${var.tre_id}"
 }
