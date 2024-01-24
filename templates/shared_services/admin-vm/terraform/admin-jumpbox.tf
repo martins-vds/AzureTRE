@@ -38,6 +38,9 @@ resource "azurerm_windows_virtual_machine" "jumpbox" {
   tags                       = local.tre_shared_service_tags
   encryption_at_host_enabled = true
 
+  secure_boot_enabled = true
+  vtpm_enabled = true
+
   source_image_reference {
     publisher = "MicrosoftWindowsDesktop"
     offer     = "windows-11"
@@ -72,7 +75,7 @@ resource "azurerm_virtual_machine_extension" "antimalware" {
   name                       = "${azurerm_windows_virtual_machine.jumpbox.name}-AntimalwareExtension"
   publisher                  = "Microsoft.Azure.Security"
   type                       = "IaaSAntimalware"
-  type_handler_version       = "1.3"
+  type_handler_version       = "1.7"
   auto_upgrade_minor_version = true
   tags                       = local.tre_shared_service_tags
 
@@ -122,7 +125,7 @@ resource "azurerm_virtual_machine_extension" "vmext_dsc" {
   virtual_machine_id         = azurerm_windows_virtual_machine.jumpbox.id
   publisher                  = "Microsoft.Powershell"
   type                       = "DSC"
-  type_handler_version       = "2.73"
+  type_handler_version       = "2.9"
   auto_upgrade_minor_version = true
 
   settings = <<SETTINGS
@@ -130,7 +133,9 @@ resource "azurerm_virtual_machine_extension" "vmext_dsc" {
       "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_09-08-2022.zip",
       "configurationFunction": "Configuration.ps1\\AddSessionHost",
       "properties": {
-        "HostPoolName":"${data.azurerm_virtual_desktop_host_pool.core_hostpool.name}"
+        "HostPoolName":"${data.azurerm_virtual_desktop_host_pool.core_hostpool.name}",
+        "AadJoin": "true",
+        "UseAgentDownloadEndpoint": "true",
       }
     }
   SETTINGS
