@@ -106,6 +106,8 @@ resource "azurerm_virtual_machine_extension" "app_dependency" {
   tags                       = local.tre_shared_service_tags
 
   lifecycle { ignore_changes = [tags] }
+
+  depends_on = [ azurerm_virtual_machine_extension.aad_login ]
 }
 
 resource "azurerm_virtual_machine_extension" "oms_agent" {
@@ -131,9 +133,25 @@ resource "azurerm_virtual_machine_extension" "oms_agent" {
   PROTECTED_SETTINGS
 
   lifecycle { ignore_changes = [tags] }
+
+  depends_on = [ azurerm_virtual_machine_extension.app_dependency ]
 }
 
-resource "azurerm_virtual_machine_extension" "vmext_dsc" {
+resource "azurerm_virtual_machine_extension" "guest_config" {
+  name                       = "${azurerm_windows_virtual_machine.jumpbox.name}-guest-config"
+  virtual_machine_id         = azurerm_windows_virtual_machine.jumpbox.id
+  publisher                  = "Microsoft.GuestConfiguration"
+  type                       = "GuestConfiguration"
+  type_handler_version       = "1.1"
+  auto_upgrade_minor_version = true
+  automatic_upgrade_enabled  = true
+
+  lifecycle { ignore_changes = [tags] }
+
+  depends_on = [ azurerm_virtual_machine_extension.oms_agent ]
+}
+
+resource "azurerm_virtual_machine_extension" "avd-dsv" {
   name                       = "${azurerm_windows_virtual_machine.jumpbox.name}-avd-dsc"
   virtual_machine_id         = azurerm_windows_virtual_machine.jumpbox.id
   publisher                  = "Microsoft.Powershell"
@@ -163,4 +181,6 @@ resource "azurerm_virtual_machine_extension" "vmext_dsc" {
   PROTECTED_SETTINGS
 
   lifecycle { ignore_changes = [tags] }
+
+  depends_on = [ azurerm_virtual_machine_extension.guest_config ]
 }
