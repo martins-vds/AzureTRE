@@ -39,7 +39,7 @@ resource "azurerm_windows_virtual_machine" "jumpbox" {
   encryption_at_host_enabled = true
 
   secure_boot_enabled = true
-  vtpm_enabled = true
+  vtpm_enabled        = true
 
   source_image_reference {
     publisher = "MicrosoftWindowsDesktop"
@@ -96,6 +96,18 @@ resource "azurerm_virtual_machine_extension" "aad_login" {
   lifecycle { ignore_changes = [tags] }
 }
 
+resource "azurerm_virtual_machine_extension" "app_dependency" {
+  name                       = "${azurerm_windows_virtual_machine.jumpbox.name}-dependency-agent"
+  virtual_machine_id         = azurerm_windows_virtual_machine.jumpbox.id
+  publisher                  = "Microsoft.Azure.Monitoring.DependencyAgent"
+  type                       = "DependencyAgentWindows"
+  type_handler_version       = "9.5"
+  auto_upgrade_minor_version = true
+  tags                       = local.tre_shared_service_tags
+
+  lifecycle { ignore_changes = [tags] }
+}
+
 resource "azurerm_virtual_machine_extension" "oms_agent" {
   name                       = "${azurerm_windows_virtual_machine.jumpbox.name}-oms-agent"
   virtual_machine_id         = azurerm_windows_virtual_machine.jumpbox.id
@@ -107,7 +119,8 @@ resource "azurerm_virtual_machine_extension" "oms_agent" {
 
   settings = <<SETTINGS
   {
-    "workspaceId": "${data.azurerm_log_analytics_workspace.oms-workspace.workspace_id}"
+    "workspaceId": "${data.azurerm_log_analytics_workspace.oms-workspace.workspace_id}",
+    "stopOnMultipleConnections": true
   }
   SETTINGS
 
@@ -134,8 +147,8 @@ resource "azurerm_virtual_machine_extension" "vmext_dsc" {
     "configurationFunction": "Configuration.ps1\\AddSessionHost",
     "properties": {
       "HostPoolName":"${data.azurerm_virtual_desktop_host_pool.core_hostpool.name}",
-      "AadJoin": "$True",
-      "UseAgentDownloadEndpoint": "$True"
+      "AadJoin": true,
+      "UseAgentDownloadEndpoint": true
     }
   }
   SETTINGS
