@@ -7,5 +7,6 @@ locals {
   workspace = "core-avd-ws-${var.tre_id}"
   hostpool  = "core-avd-hp-${var.tre_id}"
   rfc3339   = timeadd(timestamp(), "720h")
+  appgroup  = "core-avd-ag-${var.tre_id}"
   prefix    = "core-avd-${var.tre_id}"
 }

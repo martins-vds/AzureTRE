@@ -15,7 +15,7 @@ resource "azurerm_virtual_desktop_host_pool" "hostpool" {
   friendly_name            = local.hostpool
   validate_environment     = true
   custom_rdp_properties    = "audiocapturemode:i:1;audiomode:i:0;"
-  description              = "${local.prefix} Azure TRE HostPool"
+  description              = "Azure TRE Host Pool"
   type                     = "Pooled"
   maximum_sessions_allowed = 16
   load_balancer_type       = "DepthFirst" #[BreadthFirst DepthFirst]
@@ -32,8 +32,8 @@ resource "azurerm_virtual_desktop_application_group" "dag" {
   location            = var.location
   host_pool_id        = azurerm_virtual_desktop_host_pool.hostpool.id
   type          = "Desktop"
-  name          = "${local.prefix}-dag"
-  friendly_name = "Azure TRE Desktop Application Group"
+  name          = local.appgroup
+  friendly_name = "Core TRE Desktop Application Group"
   description   = "AVD application group"
   depends_on    = [azurerm_virtual_desktop_host_pool.hostpool, azurerm_virtual_desktop_workspace.workspace]
 }
