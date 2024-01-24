@@ -148,7 +148,8 @@ resource "azurerm_virtual_machine_extension" "vmext_dsc" {
     "properties": {
       "HostPoolName":"${data.azurerm_virtual_desktop_host_pool.core_hostpool.name}",
       "AadJoin": true,
-      "UseAgentDownloadEndpoint": true
+      "UseAgentDownloadEndpoint": true,
+      "EnableVerboseMsiLogging": true
     }
   }
   SETTINGS
