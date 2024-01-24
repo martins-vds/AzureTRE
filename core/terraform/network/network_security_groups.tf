@@ -163,6 +163,18 @@ resource "azurerm_network_security_group" "default_rules" {
   resource_group_name = var.resource_group_name
   tags                = local.tre_core_tags
 
+  security_rule {
+    name                       = "AllowWindowsVirtualDesktopInbound"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "WindowsVirtualDesktop"
+    destination_address_prefix = "VirtualNetwork"
+  }
+
   lifecycle { ignore_changes = [tags] }
 }
 

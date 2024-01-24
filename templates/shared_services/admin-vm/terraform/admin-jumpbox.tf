@@ -44,7 +44,7 @@ resource "azurerm_windows_virtual_machine" "jumpbox" {
   source_image_reference {
     publisher = "MicrosoftWindowsDesktop"
     offer     = "windows-11"
-    sku       = "win11-21h2-pro"
+    sku       = "win11-23h2-avd"
     version   = "latest"
   }
 
@@ -91,7 +91,7 @@ resource "azurerm_virtual_machine_extension" "aad_login" {
   virtual_machine_id   = azurerm_windows_virtual_machine.jumpbox.id
   publisher            = "Microsoft.Azure.ActiveDirectory"
   type                 = "AADLoginForWindows"
-  type_handler_version = "2.0"
+  type_handler_version = "2.1"
 
   lifecycle { ignore_changes = [tags] }
 }
