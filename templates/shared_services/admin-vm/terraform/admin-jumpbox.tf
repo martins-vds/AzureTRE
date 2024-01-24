@@ -134,7 +134,8 @@ resource "azurerm_virtual_machine_extension" "vmext_dsc" {
     "configurationFunction": "Configuration.ps1\\AddSessionHost",
     "properties": {
       "HostPoolName":"${data.azurerm_virtual_desktop_host_pool.core_hostpool.name}",
-      "AadJoin": "$True"
+      "AadJoin": "$True",
+      "UseAgentDownloadEndpoint": "$True"
     }
   }
   SETTINGS
