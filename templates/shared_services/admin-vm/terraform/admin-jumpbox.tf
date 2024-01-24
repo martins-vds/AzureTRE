@@ -88,7 +88,7 @@ resource "azurerm_virtual_machine_extension" "aad_login" {
   virtual_machine_id   = azurerm_windows_virtual_machine.jumpbox.id
   publisher            = "Microsoft.Azure.ActiveDirectory"
   type                 = "AADLoginForWindows"
-  type_handler_version = "1.0"
+  type_handler_version = "2.0"
 
   lifecycle { ignore_changes = [tags] }
 }
