@@ -29,6 +29,12 @@ resource "azurerm_subnet" "services" {
   # notice that private endpoints do not adhere to NSG rules
   private_endpoint_network_policies_enabled     = false
   private_link_service_network_policies_enabled = true
+
+  service_endpoints = [
+    "Microsoft.Storage",
+    "Microsoft.ContainerRegistry",
+    "Microsoft.KeyVault"
+  ]
 }
 
 resource "azurerm_subnet" "webapps" {
