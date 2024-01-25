@@ -15,7 +15,7 @@ resource "azurerm_virtual_desktop_host_pool" "hostpool" {
   name                     = local.hostpool
   friendly_name            = local.hostpool
   validate_environment     = true
-  custom_rdp_properties    = "audiocapturemode:i:1;audiomode:i:0;enablerdsaadauth:i:1;redirectclipboard:i:0"
+  custom_rdp_properties    = "audiocapturemode:i:1;audiomode:i:0;enablerdsaadauth:i:1;redirectclipboard:i:0;targetisaadjoined:i:1;"
   description              = "Azure TRE Host Pool"
   type                     = "Pooled"
   maximum_sessions_allowed = 16
