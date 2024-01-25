@@ -10,6 +10,12 @@ resource "azurerm_virtual_desktop_application_group" "dag" {
   default_desktop_display_name = "Workspace ${local.short_workspace_id}"
 }
 
+# Associate Workspace and DAG
+resource "azurerm_virtual_desktop_workspace_application_group_association" "ws-dag" {
+  application_group_id = azurerm_virtual_desktop_application_group.dag.id
+  workspace_id         = data.azapi_resource_id.core_workspace.id
+}
+
 resource "azurerm_role_assignment" "avd_user" {
   count              = length(var.avd_users)
   scope              = azurerm_virtual_desktop_application_group.dag.id
