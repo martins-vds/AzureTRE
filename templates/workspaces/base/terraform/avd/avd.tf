@@ -8,7 +8,6 @@ resource "azurerm_virtual_desktop_application_group" "dag" {
   friendly_name       = "Workspace ${local.short_workspace_id} Desktop Application Group"
   description         = "AVD application group"
   default_desktop_display_name = "Workspace ${local.short_workspace_id}"
-  depends_on          = [azurerm_virtual_desktop_workspace.workspace]
 }
 
 resource "azurerm_role_assignment" "avd_user" {

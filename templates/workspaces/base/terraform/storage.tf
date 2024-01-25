@@ -7,9 +7,19 @@ resource "azurerm_storage_account" "stg" {
   allow_nested_items_to_be_public = false
   is_hns_enabled                  = true
   public_network_access_enabled   = false
-  tags = local.tre_workspace_tags
+  tags                            = local.tre_workspace_tags
 
   lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_storage_account_network_rules" "stgrules" {
+  storage_account_id = azurerm_storage_account.stg.id
+
+  # When deploying from a local machine we need to "allow"
+  default_action = var.enable_local_debugging ? "Allow" : "Deny"
+  bypass         = ["AzureServices"]
+
+  virtual_network_subnet_ids = [module.network.services_subnet_id]
 }
 
 resource "azurerm_storage_share" "shared_storage" {
@@ -34,13 +44,6 @@ resource "azurerm_storage_container" "stgcontainer" {
   ]
 }
 
-resource "azurerm_storage_account_network_rules" "stgrules" {
-  storage_account_id = azurerm_storage_account.stg.id
-
-  # When deploying from a local machine we need to "allow"
-  default_action = var.enable_local_debugging ? "Allow" : "Deny"
-  bypass         = ["AzureServices"]
-}
 
 resource "azurerm_private_endpoint" "stgfilepe" {
   name                = "stgfilepe-${local.workspace_resource_name_suffix}"
