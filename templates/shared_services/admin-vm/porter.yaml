@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-shared-service-admin-vm
-version: 0.4.20
+version: 0.4.21
 description: "An admin vm shared service"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -45,6 +45,13 @@ parameters:
     type: string
     default: Standard_B2s
 
+outputs:
+  - name: connection_uri
+    type: string
+    applyTo:
+      - install
+      - upgrade
+
 mixins:
   - terraform:
       clientVersion: 1.7.0
@@ -61,6 +68,8 @@ install:
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
         key: ${ bundle.parameters.tre_id }-shared-service-admin-vm
+      outputs:
+        - name: connection_uri
 
 upgrade:
   - terraform:
@@ -74,6 +83,8 @@ upgrade:
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
         key: ${ bundle.parameters.tre_id }-shared-service-admin-vm
+      outputs:
+        - name: connection_uri
 
 uninstall:
   - terraform:
