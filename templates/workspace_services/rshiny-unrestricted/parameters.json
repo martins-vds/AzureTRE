@@ -2,7 +2,7 @@
   "schemaType": "ParameterSet",
   "schemaVersion": "1.0.1",
   "namespace": "",
-  "name": "tre-workspace-service-rshiny",
+  "name": "tre-workspace-service-rshiny-unrestricted",
   "parameters": [
     {
       "name": "id",
