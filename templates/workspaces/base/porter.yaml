@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-workspace-base
-version: 1.6.15
+version: 1.6.17
 description: "A base Azure TRE workspace"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -116,9 +116,6 @@ parameters:
     default: true
   - name: arm_environment
     type: string
-  - name: enable_bastion
-    type: boolean
-    default: false
   - name: enable_firewall
     type: boolean
     default: true
@@ -197,7 +194,6 @@ install:
         app_service_plan_sku: ${ bundle.parameters.app_service_plan_sku }
         enable_airlock: ${ bundle.parameters.enable_airlock }
         arm_environment: ${ bundle.parameters.arm_environment }
-        enable_bastion: ${ bundle.parameters.enable_bastion }
         enable_firewall: ${ bundle.parameters.enable_firewall }
         use_existing_private_dns_zone: ${ bundle.parameters.use_existing_private_dns_zone }
         private_dns_zone_resource_group_name: ${ bundle.parameters.private_dns_zone_resource_group_name }
@@ -246,7 +242,6 @@ upgrade:
         app_service_plan_sku: ${ bundle.parameters.app_service_plan_sku }
         enable_airlock: ${ bundle.parameters.enable_airlock }
         arm_environment: ${ bundle.parameters.arm_environment }
-        enable_bastion: ${ bundle.parameters.enable_bastion }
         enable_firewall: ${ bundle.parameters.enable_firewall }
         use_existing_private_dns_zone: ${ bundle.parameters.use_existing_private_dns_zone }
         private_dns_zone_resource_group_name: ${ bundle.parameters.private_dns_zone_resource_group_name }
@@ -317,7 +312,6 @@ uninstall:
         app_service_plan_sku: ${ bundle.parameters.app_service_plan_sku }
         enable_airlock: ${ bundle.parameters.enable_airlock }
         arm_environment: ${ bundle.parameters.arm_environment }
-        enable_bastion: ${ bundle.parameters.enable_bastion }
         enable_firewall: ${ bundle.parameters.enable_firewall }
         use_existing_private_dns_zone: ${ bundle.parameters.use_existing_private_dns_zone }
         private_dns_zone_resource_group_name: ${ bundle.parameters.private_dns_zone_resource_group_name }

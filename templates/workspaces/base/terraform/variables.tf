@@ -123,11 +123,6 @@ variable "arm_environment" {
   type = string
 }
 
-variable "enable_bastion" {
-  type        = bool
-  default     = false
-  description = "Enable Bastion"
-}
 variable "enable_firewall" {
   type        = bool
   default     = false
