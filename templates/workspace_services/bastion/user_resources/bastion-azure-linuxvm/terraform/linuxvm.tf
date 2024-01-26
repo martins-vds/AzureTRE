@@ -84,9 +84,12 @@ data "template_cloudinit_config" "config" {
     content      = data.template_file.get_apt_keys.rendered
   }
 
-  part {
-    content_type = "text/cloud-config"
-    content      = data.template_file.apt_sources_config.rendered
+  dynamic "part" {
+    for_each = data.template_file.apt_sources_config[*].rendered != "" ? [1] : []
+    content {
+      content_type = "text/cloud-config"
+      content      = data.template_file.apt_sources_config[0].rendered
+    }
   }
 
   part {
