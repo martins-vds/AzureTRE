@@ -2,7 +2,7 @@
   "schemaType": "ParameterSet",
   "schemaVersion": "1.0.1",
   "namespace": "",
-  "name": "tre-shared-service-admin-vm",
+  "name": "tre-shared-service-admin-vm-avd",
   "parameters": [
     {
       "name": "tre_id",

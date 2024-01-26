@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema",
-  "$id": "https://github.com/microsoft/AzureTRE/templates/shared_services/admin-vm/template_schema.json",
+  "$id": "https://github.com/microsoft/AzureTRE/templates/shared_services/admin-vm-avd/template_schema.json",
   "type": "object",
-  "title": "Admin VM Shared Service",
+  "title": "Admin VM Shared Service for Azure Virtual Desktop",
   "description": "Provides VM in the core network",
   "required": [],
   "properties": {

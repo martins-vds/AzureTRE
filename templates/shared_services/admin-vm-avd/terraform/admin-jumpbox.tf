@@ -1,3 +1,11 @@
+module "avd" {
+  source              = "./avd"
+  location            = data.azurerm_resource_group.rg.location
+  resource_group_name = data.azurerm_resource_group.rg.name
+  key_vault_id        = data.azurerm_key_vault.keyvault.id
+  tre_id              = var.tre_id
+}
+
 resource "azurerm_network_interface" "jumpbox_nic" {
   name                = "nic-vm-${var.tre_id}"
   resource_group_name = data.azurerm_resource_group.rg.name
@@ -107,7 +115,7 @@ resource "azurerm_virtual_machine_extension" "app_dependency" {
 
   lifecycle { ignore_changes = [tags] }
 
-  depends_on = [ azurerm_virtual_machine_extension.aad_login ]
+  depends_on = [azurerm_virtual_machine_extension.aad_login]
 }
 
 resource "azurerm_virtual_machine_extension" "oms_agent" {
@@ -134,7 +142,7 @@ resource "azurerm_virtual_machine_extension" "oms_agent" {
 
   lifecycle { ignore_changes = [tags] }
 
-  depends_on = [ azurerm_virtual_machine_extension.app_dependency ]
+  depends_on = [azurerm_virtual_machine_extension.app_dependency]
 }
 
 resource "azurerm_virtual_machine_extension" "avd-dsc" {
@@ -150,7 +158,7 @@ resource "azurerm_virtual_machine_extension" "avd-dsc" {
     "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_1.0.02566.260.zip",
     "configurationFunction": "Configuration.ps1\\AddSessionHost",
     "properties": {
-      "HostPoolName":"${data.azurerm_virtual_desktop_host_pool.core_hostpool.name}",
+      "HostPoolName":"${module.avd.hostpool_name}",
       "AadJoin": true,
       "RegistrationInfoTokenCredential": {
         "UserName": "PLACEHOLDER_DO_NOT_USE",
@@ -164,12 +172,12 @@ resource "azurerm_virtual_machine_extension" "avd-dsc" {
   protected_settings = <<PROTECTED_SETTINGS
   {
     "Items": {
-      "RegistrationInfoToken": "${data.azurerm_key_vault_secret.avd_registration_token.value}"
+      "RegistrationInfoToken": "${module.avd.registration_info_token}"
     }
   }
   PROTECTED_SETTINGS
 
   lifecycle { ignore_changes = [tags] }
 
-  depends_on = [ azurerm_virtual_machine_extension.oms_agent ]
+  depends_on = [azurerm_virtual_machine_extension.oms_agent]
 }
