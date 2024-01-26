@@ -19,7 +19,7 @@ resource "azurerm_storage_account_network_rules" "stgrules" {
   default_action = var.enable_local_debugging ? "Allow" : "Deny"
   bypass         = ["AzureServices"]
 
-  virtual_network_subnet_ids = [module.network.services_subnet_id]
+  virtual_network_subnet_ids = [module.network.services_subnet_id, module.network.resource_processor_subnet_id]
 }
 
 resource "azurerm_storage_share" "shared_storage" {

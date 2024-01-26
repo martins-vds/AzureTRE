@@ -28,3 +28,6 @@ variable "arm_environment" {
 variable "blobcore_zone_id" {
   type = string
 }
+variable "resource_processor_subnet_id" {
+  type = string
+}

@@ -26,6 +26,10 @@ output "airlock_processor_subnet_id" {
   value = data.azurerm_subnet.airlockprocessor.id
 }
 
+output "resource_processor_subnet_id" {
+  value = data.azurerm_subnet.resourceprocessor.id
+}
+
 output "azure_monitor_dns_zone_id" {
   value = module.dns_zones.azure_monitor.id
 }

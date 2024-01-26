@@ -12,8 +12,9 @@ resource "azurerm_storage_account" "sa_import_approved" {
   is_hns_enabled = false
 
   network_rules {
-    default_action = var.enable_local_debugging ? "Allow" : "Deny"
-    bypass         = ["AzureServices"]
+    default_action             = var.enable_local_debugging ? "Allow" : "Deny"
+    bypass                     = ["AzureServices"]
+    virtual_network_subnet_ids = [var.resource_processor_subnet_id]
   }
 
   tags = merge(
@@ -63,8 +64,9 @@ resource "azurerm_storage_account" "sa_export_internal" {
   is_hns_enabled = false
 
   network_rules {
-    default_action = var.enable_local_debugging ? "Allow" : "Deny"
-    bypass         = ["AzureServices"]
+    default_action             = var.enable_local_debugging ? "Allow" : "Deny"
+    bypass                     = ["AzureServices"]
+    virtual_network_subnet_ids = [var.resource_processor_subnet_id]
   }
 
   tags = merge(
@@ -129,7 +131,7 @@ resource "azurerm_storage_account_network_rules" "sa_export_inprogress_rules" {
   # The Airlock processor is unable to copy blobs from the export-inprogress storage account when the only method of access from the Airlock processor is a private endpoint in the core VNet,
   # so we need to allow the Airlock processor subnet to access this storage account without using a private endpoint.
   # https://github.com/microsoft/AzureTRE/issues/2098
-  virtual_network_subnet_ids = [var.airlock_processor_subnet_id]
+  virtual_network_subnet_ids = [var.airlock_processor_subnet_id, var.resource_processor_subnet_id]
 
   default_action = var.enable_local_debugging ? "Allow" : "Deny"
   bypass         = ["AzureServices"]
@@ -172,8 +174,9 @@ resource "azurerm_storage_account" "sa_export_rejected" {
   is_hns_enabled = false
 
   network_rules {
-    default_action = var.enable_local_debugging ? "Allow" : "Deny"
-    bypass         = ["AzureServices"]
+    default_action             = var.enable_local_debugging ? "Allow" : "Deny"
+    bypass                     = ["AzureServices"]
+    virtual_network_subnet_ids = [var.resource_processor_subnet_id]
   }
 
   tags = merge(
@@ -224,8 +227,9 @@ resource "azurerm_storage_account" "sa_export_blocked" {
   is_hns_enabled = false
 
   network_rules {
-    default_action = var.enable_local_debugging ? "Allow" : "Deny"
-    bypass         = ["AzureServices"]
+    default_action             = var.enable_local_debugging ? "Allow" : "Deny"
+    bypass                     = ["AzureServices"]
+    virtual_network_subnet_ids = [var.resource_processor_subnet_id]
   }
 
   tags = merge(
