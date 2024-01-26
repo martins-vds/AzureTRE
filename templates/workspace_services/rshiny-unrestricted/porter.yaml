@@ -1,6 +1,6 @@
 schemaVersion: 1.0.0
 name: tre-workspace-service-rshiny-unrestricted
-version: 0.0.2
+version: 0.0.3
 description: "A RShiny workspace service"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -105,7 +105,7 @@ install:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
-        key: tre-workspace-service-rshiny-${ bundle.parameters.id }
+        key: tre-workspace-service-rshiny-unrestricted-${ bundle.parameters.id }
       outputs:
         - name: connection_uri
         - name: is_exposed_externally
@@ -127,7 +127,7 @@ upgrade:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
-        key: tre-workspace-service-rshiny-${ bundle.parameters.id }
+        key: tre-workspace-service-rshiny-unrestricted-${ bundle.parameters.id }
       outputs:
         - name: connection_uri
         - name: is_exposed_externally
@@ -149,4 +149,4 @@ uninstall:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
-        key: tre-workspace-service-rshiny-${ bundle.parameters.id }
+        key: tre-workspace-service-rshiny-unrestricted-${ bundle.parameters.id }
