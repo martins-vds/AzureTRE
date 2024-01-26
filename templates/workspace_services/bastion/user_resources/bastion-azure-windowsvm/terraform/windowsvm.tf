@@ -98,9 +98,50 @@ resource "azurerm_virtual_machine_extension" "config_script" {
     {
       "commandToExecute": "powershell -ExecutionPolicy Unrestricted -NoProfile -NonInteractive -command \"cp c:/azuredata/customdata.bin c:/azuredata/configure.ps1; c:/azuredata/configure.ps1 \""
     }
-PROT
+  PROT
 
   lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_virtual_machine_extension" "antimalware" {
+  virtual_machine_id         = azurerm_windows_virtual_machine.windowsvm.id
+  name                       = "${azurerm_windows_virtual_machine.windowsvm.name}-antimalware"
+  publisher                  = "Microsoft.Azure.Security"
+  type                       = "IaaSAntimalware"
+  type_handler_version       = "1.7"
+  auto_upgrade_minor_version = true
+  tags                       = local.tre_user_resources_tags
+
+  settings = jsonencode({
+    "AntimalwareEnabled" = true
+  })
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_virtual_machine_extension" "aad_login" {
+  name                 = "${azurerm_windows_virtual_machine.windowsvm.name}-aad-login"
+  virtual_machine_id   = azurerm_windows_virtual_machine.windowsvm.id
+  publisher            = "Microsoft.Azure.ActiveDirectory"
+  type                 = "AADLoginForWindows"
+  type_handler_version = "2.1"
+  tags                 = local.tre_user_resources_tags
+
+  lifecycle { ignore_changes = [tags] }
+}
+
+resource "azurerm_virtual_machine_extension" "app_dependency" {
+  name                       = "${azurerm_windows_virtual_machine.windowsvm.name}-dependency-agent"
+  virtual_machine_id         = azurerm_windows_virtual_machine.windowsvm.id
+  publisher                  = "Microsoft.Azure.Monitoring.DependencyAgent"
+  type                       = "DependencyAgentWindows"
+  type_handler_version       = "9.5"
+  auto_upgrade_minor_version = true
+  tags                       = local.tre_user_resources_tags
+
+  lifecycle { ignore_changes = [tags] }
+
+  depends_on = [azurerm_virtual_machine_extension.aad_login]
 }
 
 resource "azurerm_virtual_machine_extension" "oms_agent" {
@@ -114,7 +155,8 @@ resource "azurerm_virtual_machine_extension" "oms_agent" {
 
   settings = <<SETTINGS
   {
-    "workspaceId": "${data.azurerm_log_analytics_workspace.oms-workspace.workspace_id}"
+    "workspaceId": "${data.azurerm_log_analytics_workspace.oms-workspace.workspace_id}",
+    "stopOnMultipleConnections": true
   }
   SETTINGS
 
@@ -124,16 +166,9 @@ resource "azurerm_virtual_machine_extension" "oms_agent" {
   }
   PROTECTED_SETTINGS
 
-}
-
-resource "azurerm_virtual_machine_extension" "aad_login" {
-  name                 = "${azurerm_windows_virtual_machine.windowsvm.name}-aad-login"
-  virtual_machine_id   = azurerm_windows_virtual_machine.windowsvm.id
-  publisher            = "Microsoft.Azure.ActiveDirectory"
-  type                 = "AADLoginForWindows"
-  type_handler_version = "1.0"
-
   lifecycle { ignore_changes = [tags] }
+
+  depends_on = [azurerm_virtual_machine_extension.app_dependency]
 }
 
 resource "azurerm_role_assignment" "vm_user_role_assignment" {
