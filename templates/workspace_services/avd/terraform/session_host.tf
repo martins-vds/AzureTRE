@@ -36,7 +36,7 @@ resource "random_password" "password" {
 }
 
 resource "azurerm_windows_virtual_machine" "session_host" {
-  name                       = "vm-${var.tre_id}"
+  name                       = local.vm_name
   resource_group_name        = data.azurerm_resource_group.ws.name
   location                   = data.azurerm_resource_group.ws.location
   network_interface_ids      = [azurerm_network_interface.session_host_nic.id]

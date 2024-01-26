@@ -15,7 +15,7 @@ If(!(Test-Path $PipConfigFolderPath))
 
 $PipConfigFilePath = $PipConfigFolderPath + "pip.ini"
 
-if( ${nexus_proxy_url} -ne "")
+if( "${nexus_proxy_url}" -ne "")
 {
   $ConfigBody = @"
 [global]
@@ -31,7 +31,7 @@ trusted-host = ${nexus_proxy_url}
 }
 
 ### Anaconda Config
-if( ${CondaConfig} -eq 1 -and ${nexus_proxy_url} -ne "")
+if( ${CondaConfig} -eq 1 -and "${nexus_proxy_url}" -ne "")
 {
   conda config --add channels ${nexus_proxy_url}/repository/conda-mirror/main/  --system
   conda config --add channels ${nexus_proxy_url}/repository/conda-repo/main/  --system
@@ -39,7 +39,7 @@ if( ${CondaConfig} -eq 1 -and ${nexus_proxy_url} -ne "")
   conda config --set channel_alias ${nexus_proxy_url}/repository/conda-mirror/  --system
 }
 
-if (${nexus_proxy_url} -ne "")
+if ("${nexus_proxy_url}" -ne "")
 {
   # Docker proxy config
   $DaemonConfig = @"
