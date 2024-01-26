@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.0.3
+version: 0.0.4
 description: "Azure Virtual Desktop"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -125,7 +125,6 @@ install:
       vars:
         workspace_id: ${ bundle.parameters.workspace_id }
         tre_id: ${ bundle.parameters.tre_id }
-        parent_service_id: ${ bundle.parameters.parent_service_id }
         tre_resource_id: ${ bundle.parameters.id }
         image: ${ bundle.parameters.os_image }
         vm_size: ${ bundle.parameters.vm_size }
@@ -148,7 +147,6 @@ upgrade:
       vars:
         workspace_id: ${ bundle.parameters.workspace_id }
         tre_id: ${ bundle.parameters.tre_id }
-        parent_service_id: ${ bundle.parameters.parent_service_id }
         tre_resource_id: ${ bundle.parameters.id }
         image: ${ bundle.parameters.os_image }
         vm_size: ${ bundle.parameters.vm_size }
@@ -171,7 +169,6 @@ uninstall:
       vars:
         workspace_id: ${ bundle.parameters.workspace_id }
         tre_id: ${ bundle.parameters.tre_id }
-        parent_service_id: ${ bundle.parameters.parent_service_id }
         tre_resource_id: ${ bundle.parameters.id }
         image: ${ bundle.parameters.os_image }
         vm_size: ${ bundle.parameters.vm_size }
