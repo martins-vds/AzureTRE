@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-shared-service-admin-vm-avd
-version: 0.0.1
+version: 0.0.2
 description: "An admin vm shared service for Azure Virtual Desktop"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
