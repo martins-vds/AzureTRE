@@ -92,7 +92,6 @@ module "network" {
   resource_group_name                  = azurerm_resource_group.core.name
   core_address_space                   = var.core_address_space
   arm_environment                      = var.arm_environment
-  enable_bastion                       = var.enable_bastion
   mgmt_storage_account_name            = var.mgmt_storage_account_name
   mgmt_resource_group_name             = var.mgmt_resource_group_name
   mgmt_acr_name                        = var.acr_name
@@ -212,19 +211,6 @@ module "resource_processor_vmss_porter" {
   depends_on = [
     module.network,
     module.azure_monitor,
-    azurerm_key_vault.kv,
-    azurerm_key_vault_access_policy.deployer
-  ]
-}
-
-module "avd" {
-  source              = "./avd"
-  tre_id              = var.tre_id
-  location            = var.location
-  resource_group_name = azurerm_resource_group.core.name
-  key_vault_id        = azurerm_key_vault.kv.id
-
-  depends_on = [
     azurerm_key_vault.kv,
     azurerm_key_vault_access_policy.deployer
   ]

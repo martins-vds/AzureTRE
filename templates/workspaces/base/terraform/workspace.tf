@@ -25,7 +25,6 @@ module "network" {
   tre_resource_id        = var.tre_resource_id
   tre_workspace_tags     = local.tre_workspace_tags
   arm_environment        = var.arm_environment
-  enable_bastion         = var.enable_bastion
   enable_firewall        = var.enable_firewall
 
   use_primary_dns_zones                = !var.use_existing_private_dns_zone
@@ -90,24 +89,5 @@ module "azure_monitor" {
   depends_on = [
     module.network,
     module.airlock
-  ]
-}
-
-module "avd" {
-  source = "./avd"
-
-  location            = var.location
-  tre_id              = var.tre_id
-  tre_resource_id     = var.tre_resource_id
-  resource_group_name = azurerm_resource_group.ws.name
-
-  avd_users = var.register_aad_application && var.create_aad_groups ? [
-    one(module.aad[*].ws_group_workspace_airlock_managers_id),
-    one(module.aad[*].ws_group_workspace_researchers_id),
-    one(module.aad[*].ws_group_workspace_owners_id),
-  ] : []
-
-  depends_on = [
-    module.aad
   ]
 }

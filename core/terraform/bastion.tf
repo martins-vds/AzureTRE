@@ -17,11 +17,12 @@ resource "azurerm_bastion_host" "bastion" {
   location               = azurerm_resource_group.core.location
   sku                    = "Standard"
   shareable_link_enabled = true
+  tunneling_enabled      = true
 
   ip_configuration {
     name                 = "configuration"
     subnet_id            = module.network.bastion_subnet_id
-    public_ip_address_id = azurerm_public_ip.bastion[0].id
+    public_ip_address_id = one(azurerm_public_ip.bastion[*].id)
   }
 
   tags = local.tre_core_tags

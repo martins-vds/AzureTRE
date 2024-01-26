@@ -19,7 +19,6 @@ data "azurerm_subnet" "bastion" {
   resource_group_name  = local.core_resource_group_name
   virtual_network_name = local.core_vnet
   name                 = "AzureBastionSubnet"
-  count = var.enable_bastion ? 1 : 0
 }
 
 data "azurerm_subnet" "resourceprocessor" {
