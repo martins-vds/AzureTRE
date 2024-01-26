@@ -158,6 +158,18 @@ resource "azurerm_virtual_machine_extension" "oms_agent" {
     PROTECTED_SETTINGS
 }
 
+resource "azurerm_virtual_machine_extension" "aad_login" {
+  name                       = "${azurerm_linux_virtual_machine.linuxvm.name}-aad-login"
+  virtual_machine_id         = azurerm_linux_virtual_machine.linuxvm.id
+  publisher                  = "Microsoft.Azure.ActiveDirectory.LinuxSSH"
+  auto_upgrade_minor_version = true
+  type                       = "AADLoginForLinux"
+  type_handler_version       = "1.0"
+  tags                       = local.tre_user_resources_tags
+
+  lifecycle { ignore_changes = [tags] }
+}
+
 resource "azurerm_key_vault_secret" "linuxvm_password" {
   name         = local.vm_password_secret_name
   value        = "${random_string.username.result}\n${random_password.password.result}"
