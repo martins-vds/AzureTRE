@@ -47,6 +47,13 @@
       "title": "Shared storage",
       "default": true,
       "description": "Enable access to shared storage"
+    },
+    "use_core_app_gateway": {
+      "$id": "#/properties/use_core_app_gateway",
+      "type": "boolean",
+      "title": "Use Core App Gateway",
+      "default": false,
+      "description": "Enable Nexus proxy through Core App Gateway"
     }
   }
 }

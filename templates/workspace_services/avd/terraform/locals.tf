@@ -16,7 +16,8 @@ locals {
     tre_workspace_id         = var.workspace_id
     tre_workspace_service_id = var.tre_resource_id
   }
-  nexus_proxy_url = "https://nexus-${data.azurerm_public_ip.app_gateway_ip.fqdn}"
+
+  nexus_proxy_url = var.use_core_app_gateway ? "https://nexus-${one(data.azurerm_public_ip.app_gateway_ip[*].fqdn)}" : ""
 
   # Load VM SKU/image details from porter.yaml
   porter_yaml   = yamldecode(file("${path.module}/../porter.yaml"))

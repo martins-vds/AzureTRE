@@ -23,6 +23,7 @@ data "azurerm_key_vault" "ws" {
 }
 
 data "azurerm_public_ip" "app_gateway_ip" {
+  count               = var.use_core_app_gateway ? 1 : 0
   name                = "pip-agw-${var.tre_id}"
   resource_group_name = data.azurerm_resource_group.core.name
 }
@@ -39,6 +40,6 @@ data "azurerm_storage_share" "shared_storage" {
 }
 
 data "azurerm_log_analytics_workspace" "oms-workspace" {
-  name = local.law_name
+  name                = local.law_name
   resource_group_name = data.azurerm_resource_group.core.name
 }

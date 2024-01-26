@@ -36,3 +36,7 @@ variable "vm_users_object_id" {
   type    = string
   default = ""
 }
+variable "use_core_app_gateway" {
+  type    = bool
+  default = false
+}

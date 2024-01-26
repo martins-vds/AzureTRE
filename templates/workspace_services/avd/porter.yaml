@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.0.1
+version: 0.0.2
 description: "Azure Virtual Desktop"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -69,6 +69,9 @@ parameters:
     type: string
     description: "The object ID of the Azure AD group that should have access to the VM"
     default: ""
+  - name: use_core_app_gateway
+    type: boolean
+    default: false
   - name: workspace_id
     type: string
   - name: tre_id
@@ -134,6 +137,7 @@ install:
         shared_storage_access: ${ bundle.parameters.shared_storage_access }
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }
+        use_core_app_gateway: ${ bundle.parameters.use_core_app_gateway }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -156,6 +160,7 @@ upgrade:
         shared_storage_access: ${ bundle.parameters.shared_storage_access }
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }
+        use_core_app_gateway: ${ bundle.parameters.use_core_app_gateway }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -178,6 +183,7 @@ uninstall:
         shared_storage_access: ${ bundle.parameters.shared_storage_access }
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }
+        use_core_app_gateway: ${ bundle.parameters.use_core_app_gateway }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }

@@ -93,6 +93,12 @@
       "source": {
         "env": "IMAGE_GALLERY_ID"
       }
+    },
+    {
+      "name": "use_core_app_gateway",
+      "source": {
+        "env": "USE_CORE_APP_GATEWAY"
+      }
     }
   ]
 }
