@@ -153,6 +153,9 @@ jobs:
         - BUNDLE_TYPE: "workspace_service"
           BUNDLE_DIR: "./templates/workspace_services/ohdsi"
           BUNDLE_NAME: "ohdsi"
+        - BUNDLE_TYPE: "workspace_service"
+          BUNDLE_DIR: "./templates/workspace_services/avd"
+          BUNDLE_NAME: "avd"
       SHARED_BUNDLES:
         - BUNDLE_TYPE: "shared_service"
           BUNDLE_DIR: "./templates/shared_services/firewall"
