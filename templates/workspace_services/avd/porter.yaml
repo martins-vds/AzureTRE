@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.0.2
+version: 0.0.3
 description: "Azure Virtual Desktop"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -80,10 +80,6 @@ parameters:
   - name: id
     type: string
     description: "Resource ID"
-  - name: parent_service_id
-    type: string
-    description: "Resource group containing the shared ACR"
-    env: PARENT_SERVICE_ID
   - name: image_gallery_id
     type: string
     description: Azure resource ID for the compute image gallery to pull images from (if specifying custom images by name)

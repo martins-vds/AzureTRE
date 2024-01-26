@@ -23,12 +23,6 @@
       }
     },
     {
-      "name": "parent_service_id",
-      "source": {
-        "env": "PARENT_SERVICE_ID"
-      }
-    },
-    {
       "name": "tfstate_container_name",
       "source": {
         "env": "TERRAFORM_STATE_CONTAINER_NAME"
