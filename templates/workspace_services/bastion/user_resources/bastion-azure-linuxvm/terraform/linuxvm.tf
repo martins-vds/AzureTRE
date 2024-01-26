@@ -129,6 +129,7 @@ data "template_file" "pypi_sources_config" {
 }
 
 data "template_file" "apt_sources_config" {
+  count    = local.nexus_proxy_url != "" ? 1 : 0
   template = file("${path.module}/apt_sources_config.yml")
   vars = {
     nexus_proxy_url = local.nexus_proxy_url
