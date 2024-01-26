@@ -44,10 +44,6 @@ parameters:
     displayName: Deploy Firewall
     type: boolean
     default: 'false'
-  - name: enableBastion
-    displayName: Deploy Bastion Host
-    type: boolean
-    default: 'false'
   - name: deployAppGateway
     displayName: Deploy Application Gateway
     type: boolean
@@ -97,8 +93,6 @@ jobs:
       WORKSPACE_APP_SERVICE_PLAN_SKU: 'P1v2'
       RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: "5"
       ENABLE_SWAGGER: 'false'
-      ${{ if eq(parameters.enableBastion , 'true') }}:
-        ENABLE_BASTION: 'true'
       DEPLOY_FIREWALL: ${{ parameters.deployFirewall }}
       CORE_ADDRESS_SPACE: '10.0.0.0/22'
       CORE_APP_SERVICE_PLAN_SKU: 'P1v2'
@@ -184,6 +178,9 @@ jobs:
         - BUNDLE_TYPE: "shared_service"
           BUNDLE_DIR: "./templates/shared_services/databricks-auth/"
           BUNDLE_NAME: "databricks_auth"
+        - BUNDLE_TYPE: "shared_service"
+          BUNDLE_DIR: "./templates/shared_services/bastion/"
+          BUNDLE_NAME: "bastion"
       USER_RESOURCE_BUNDLES:
         - BUNDLE_TYPE: "user_resource"
           BUNDLE_DIR: "./templates/workspace_services/guacamole/user_resources/guacamole-azure-windowsvm"

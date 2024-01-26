@@ -182,13 +182,6 @@ parameters:
     values:
       - "true"
       - "false"
-  - name: ENABLE_BASTION
-    displayName: Enable Bastion
-    type: string
-    default: "false"
-    values:
-      - "true"
-      - "false"
   - name: DEPLOY_FIREWALL
     displayName: Deploy Firewall
     type: boolean
@@ -509,7 +502,6 @@ jobs:
           CORE_ADDRESS_SPACE: ${{ parameters.CORE_ADDRESS_SPACE }}
           TRE_ADDRESS_SPACE: ${{ parameters.TRE_ADDRESS_SPACE }}
           ENABLE_SWAGGER: "${{ parameters.ENABLE_SWAGGER }}"
-          ENABLE_BASTION: "${{ parameters.ENABLE_BASTION }}"
           SWAGGER_UI_CLIENT_ID: "${{ parameters.SWAGGER_UI_CLIENT_ID }}"
           API_CLIENT_SECRET: "${{ parameters.API_CLIENT_SECRET }}"
           APPLICATION_ADMIN_CLIENT_ID: "${{ parameters.APPLICATION_ADMIN_CLIENT_ID }}"
