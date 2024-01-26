@@ -88,7 +88,7 @@ resource "azurerm_windows_virtual_machine" "session_host" {
 }
 
 resource "azurerm_key_vault_secret" "session_host_credentials" {
-  name         = "${azurerm_windows_virtual_machine.session_host.name}-session_host-password"
+  name         = "${azurerm_windows_virtual_machine.session_host.name}-session-host-password"
   value        = random_password.password.result
   key_vault_id = data.azurerm_key_vault.ws.id
   tags         = local.tre_workspace_service_tags
