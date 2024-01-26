@@ -1,13 +1,13 @@
 schemaVersion: 1.0.0
 name: tre-workspace-service-rshiny-unrestricted
-version: 0.0.3
+version: 0.0.4
 description: "A RShiny workspace service"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
 
 custom:
   runtime_image:
-    name: rshiny-unrestricted-workspace-service
+    name: rshiny-workspace-service-unrestricted
     build:
       version_file: version.txt
       docker_file: rshiny-app/Dockerfile
