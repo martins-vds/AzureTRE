@@ -47,9 +47,6 @@ resource "azurerm_windows_virtual_machine" "session_host" {
   tags                       = local.tre_workspace_service_tags
   encryption_at_host_enabled = true
 
-  secure_boot_enabled = true
-  vtpm_enabled        = true
-
   custom_data = base64encode(templatefile(
     "${path.module}/vm_config.ps1", {
       nexus_proxy_url        = local.nexus_proxy_url
