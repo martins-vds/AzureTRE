@@ -7,5 +7,4 @@ locals {
     tre_shared_service_id = var.tre_resource_id
   }
   law_name = "log-${var.tre_id}"
-  core_hostpool                  = "core-avd-hp-${var.tre_id}"
 }
