@@ -226,13 +226,15 @@ steps:
   - task: AzureCLI@2
     displayName: '${{ parameters.DISPLAY_NAME }} - Run command in DevContainer'
     env:
-      RP_BUNDLE_VALUES: ${{ convertToJson(parameters.RP_BUNDLE_VALUES) }}
+      RP_BUNDLE_VALUES: "${{ convertToJson(parameters.RP_BUNDLE_VALUES) }}"
     inputs:
       azureSubscription: ${{ parameters.AZURE_CREDENTIALS }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
         $bundle_values=$(echo "$RP_BUNDLE_VALUES" | jq)
+
+        echo $bundle_values
 
         docker run --rm --mount \
           "type=bind,src=$(Build.SourcesDirectory),dst=/workspaces/tre" \
