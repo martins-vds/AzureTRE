@@ -107,6 +107,10 @@ jobs:
         use_core_private_dns_zones: "$(USE_CORE_PRIVATE_DNS_ZONES)"
         private_dns_zones_subscription_id: "$(SECONDARY_SUBSCRIPTION_ID)"
         private_dns_zones_resource_group_name: "$(PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME)"
+        ${{ if eq(parameters.deployAppGateway, 'true') }}:
+          use_core_app_gateway: 'true'
+        ${{ else }}:
+          use_core_app_gateway: 'false'
       CORE_DDOS_PLAN_ID: $(CORE_DDOS_PLAN_ID)
       CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS: $(CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS)
       ${{ if eq(parameters.deployAppGateway, 'true') }}:
