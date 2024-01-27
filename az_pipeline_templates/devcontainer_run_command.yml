@@ -125,10 +125,10 @@ parameters:
       - "INFO"
       - "WARN"
       - "ERROR"
-  - name: USE_EXISTING_PRIVATE_DNS_ZONE
+  - name: USE_CORE_PRIVATE_DNS_ZONES
     default: "false"
     type: string
-  - name: PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME
+  - name: PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME
     default: ""
   - name: PRIVATE_DNS_ZONE_AZURE_CREDENTIALS
     default: "secondary"
@@ -303,8 +303,8 @@ steps:
           -e TF_VAR_core_static_web_allowed_subnet_ids=${{ parameters.CORE_STATIC_WEB_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_core_api_allowed_devops_subnet_id=${{ parameters.CORE_API_ALLOWED_DEVOPS_SUBNET_ID }} \
           -e TF_VAR_core_api_additional_allowed_subnet_ids="${{ parameters.CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS }}" \
-          -e TF_VAR_use_existing_private_dns_zone=${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }} \
-          -e TF_VAR_private_dns_zone_resource_group_name=${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }} \
+          -e TF_VAR_use_core_private_dns_zones=${{ parameters.USE_CORE_PRIVATE_DNS_ZONES }} \
+          -e TF_VAR_private_dns_zones_resource_group_name=${{ parameters.PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME }} \
           -e TF_VAR_private_dns_zone_azure_credentials=${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }} \
           -e TF_VAR_deploy_app_gateway=${{ parameters.DEPLOY_APP_GATEWAY }} \
           -e DEPLOY_APP_GATEWAY=${{ parameters.DEPLOY_APP_GATEWAY }} \

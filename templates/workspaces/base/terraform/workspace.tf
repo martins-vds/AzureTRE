@@ -17,18 +17,17 @@ resource "azurerm_resource_group" "ws" {
 // dependencies for each resource seperatly, so to make it easier we packed all network
 // resources as a single module that should be depended on.
 module "network" {
-  source                 = "./network"
-  location               = var.location
-  tre_id                 = var.tre_id
-  address_spaces         = var.address_spaces
-  ws_resource_group_name = azurerm_resource_group.ws.name
-  tre_resource_id        = var.tre_resource_id
-  tre_workspace_tags     = local.tre_workspace_tags
-  arm_environment        = var.arm_environment
-  enable_firewall        = var.enable_firewall
-
-  use_primary_dns_zones                = !var.use_existing_private_dns_zone
-  private_dns_zone_resource_group_name = var.private_dns_zone_resource_group_name
+  source                                = "./network"
+  location                              = var.location
+  tre_id                                = var.tre_id
+  address_spaces                        = var.address_spaces
+  ws_resource_group_name                = azurerm_resource_group.ws.name
+  tre_resource_id                       = var.tre_resource_id
+  tre_workspace_tags                    = local.tre_workspace_tags
+  arm_environment                       = var.arm_environment
+  enable_firewall                       = var.enable_firewall
+  use_primary_dns_zones                 = var.use_core_private_dns_zones
+  private_dns_zones_resource_group_name = var.private_dns_zones_resource_group_name
 
   providers = {
     azurerm.primary   = azurerm

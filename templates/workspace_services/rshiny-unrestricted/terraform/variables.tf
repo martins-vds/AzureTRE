@@ -24,17 +24,13 @@ variable "gitea_storage_limit" {
 variable "arm_environment" {
   type = string
 }
-variable "use_existing_private_dns_zone" {
+variable "use_core_private_dns_zones" {
   type        = bool
   description = "Use existing private DNS zone"
   default     = false
 }
-variable "private_dns_zone_subscription_id" {
-  type        = string
-  description = "Subscription ID of the private DNS zone"
-  default     = ""
-}
-variable "private_dns_zone_resource_group_name" {
+
+variable "private_dns_zones_resource_group_name" {
   type        = string
   description = "Resource group name of the private DNS zone"
   default     = ""

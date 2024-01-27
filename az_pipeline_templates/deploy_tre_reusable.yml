@@ -219,10 +219,10 @@ parameters:
       - "INFO"
       - "WARN"
       - "ERROR"
-  - name: USE_EXISTING_PRIVATE_DNS_ZONE
+  - name: USE_CORE_PRIVATE_DNS_ZONES
     default: "false"
     type: string
-  - name: PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME
+  - name: PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME
     default: ""
   - name: PRIVATE_DNS_ZONE_AZURE_CREDENTIALS
     default: "secondary"
@@ -390,8 +390,8 @@ jobs:
           MGMT_STORAGE_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           MGMT_ACR_PRIVATE_ENDPOINT_SUBNET_ID: $(pipeline_network_subnet_id)
           BOOTSTRAP_STORAGE_ALLOWED_SUBNET_IDS: $(pipeline_network_subnet_id)
-          USE_EXISTING_PRIVATE_DNS_ZONE: ${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }}
-          PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }}
+          USE_CORE_PRIVATE_DNS_ZONES: ${{ parameters.USE_CORE_PRIVATE_DNS_ZONES }}
+          PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME }}
           PRIVATE_DNS_ZONE_AZURE_CREDENTIALS: ${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           SECONDARY_SUBSCRIPTION_ID: ${{ parameters.SECONDARY_SUBSCRIPTION_ID }}
@@ -520,8 +520,8 @@ jobs:
           CORE_STATIC_WEB_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           CORE_API_ALLOWED_DEVOPS_SUBNET_ID: $(pipeline_network_subnet_id)
           CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS: ${{ parameters.CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS }}
-          USE_EXISTING_PRIVATE_DNS_ZONE: ${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }}
-          PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }}
+          USE_CORE_PRIVATE_DNS_ZONES: ${{ parameters.USE_CORE_PRIVATE_DNS_ZONES }}
+          PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME }}
           PRIVATE_DNS_ZONE_AZURE_CREDENTIALS: ${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }}
           DEPLOY_APP_GATEWAY: ${{ parameters.DEPLOY_APP_GATEWAY }}
           CORE_DDOS_PLAN_ID: ${{ parameters.CORE_DDOS_PLAN_ID }}

@@ -245,13 +245,13 @@ variable "deploy_app_gateway" {
   description = "Deploy app gateway"
 }
 
-variable "use_existing_private_dns_zone" {
+variable "use_core_private_dns_zones" {
   type        = bool
   default     = false
   description = "Use existing private DNS zone for ACR"
 }
 
-variable "private_dns_zone_resource_group_name" {
+variable "private_dns_zones_resource_group_name" {
   type        = string
   default     = ""
   description = "Resource group of private DNS zone for ACR"

@@ -27,7 +27,7 @@ variable "use_primary_dns_zones" {
   default     = false
   description = "Use existing private DNS zone for ACR"
 }
-variable "private_dns_zone_resource_group_name" {
+variable "private_dns_zones_resource_group_name" {
   type        = string
   default     = ""
   description = "Resource group of private DNS zone for ACR"

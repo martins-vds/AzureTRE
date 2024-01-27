@@ -65,21 +65,21 @@
       }
     },
     {
-      "name": "use_existing_private_dns_zone",
+      "name": "use_core_private_dns_zones",
       "source": {
-        "env": "USE_EXISTING_PRIVATE_DNS_ZONE"
+        "env": "USE_CORE_PRIVATE_DNS_ZONES"
       }
     },
     {
-      "name": "private_dns_zone_subscription_id",
+      "name": "private_dns_zones_subscription_id",
       "source": {
         "env": "PRIVATE_DNS_ZONE_SUBSCRIPTION_ID"
       }
     },
     {
-      "name": "private_dns_zone_resource_group_name",
+      "name": "private_dns_zones_resource_group_name",
       "source": {
-        "env": "PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME"
+        "env": "PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME"
       }
     }
   ]

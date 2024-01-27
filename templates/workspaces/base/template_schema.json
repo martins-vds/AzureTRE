@@ -66,48 +66,9 @@
         "Manual"
       ],
       "updateable": true
-    },
-    "use_existing_private_dns_zone": {
-      "type": "boolean",
-      "title": "Use Existing Private DNS Zones",
-      "description": "Use existing private DNS zones for the workspace",
-      "default": false,
-      "updateable": false
     }
   },
   "allOf": [
-    {
-      "if": {
-        "properties": {
-          "use_existing_private_dns_zone": {
-            "const": true
-          }
-        },
-        "required": [
-          "use_existing_private_dns_zone"
-        ]
-      },
-      "then": {
-        "properties": {
-          "private_dns_zone_subscription_id": {
-            "type": "string",
-            "title": "Private DNS Zone Subscription ID",
-            "description": "Subscription ID of the private DNS zone to use for the workspace",
-            "updateable": false
-          },
-          "private_dns_zone_resource_group_name": {
-            "type": "string",
-            "title": "Private DNS Zone Resource Group Name",
-            "description": "Name of the resource group containing the private DNS zone to use for the workspace",
-            "updateable": false
-          }
-        },
-        "required": [
-          "private_dns_zone_subscription_id",
-          "private_dns_zone_resource_group_name"
-        ]
-      }
-    },
     {
       "if": {
         "properties": {

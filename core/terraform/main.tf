@@ -95,8 +95,8 @@ module "network" {
   mgmt_storage_account_name            = var.mgmt_storage_account_name
   mgmt_resource_group_name             = var.mgmt_resource_group_name
   mgmt_acr_name                        = var.acr_name
-  use_existing_private_dns_zone        = var.use_existing_private_dns_zone
-  private_dns_zone_resource_group_name = var.private_dns_zone_resource_group_name
+  use_core_private_dns_zones        = var.use_core_private_dns_zones
+  private_dns_zones_resource_group_name = var.private_dns_zones_resource_group_name
   ddos_plan_id                         = var.core_ddos_plan_id
   providers = {
     azurerm.primary   = azurerm
