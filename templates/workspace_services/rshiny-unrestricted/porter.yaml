@@ -1,6 +1,6 @@
 schemaVersion: 1.0.0
 name: tre-workspace-service-rshiny-unrestricted
-version: 0.0.5
+version: 0.0.6
 description: "A RShiny workspace service"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -38,15 +38,10 @@ parameters:
   - name: use_existing_private_dns_zone
     type: boolean
     default: false
-    env: USE_EXISTING_PRIVATE_DNS_ZONE
   - name: private_dns_zone_subscription_id
     type: string
-    default: ""
-    env: PRIVATE_DNS_ZONE_SUBSCRIPTION_ID
   - name: private_dns_zone_resource_group_name
     type: string
-    default: ""
-    env: PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME
   # the following are added automatically by the resource processor
   - name: id
     type: string
