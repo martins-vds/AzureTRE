@@ -86,18 +86,18 @@ resource "azurerm_resource_group" "core" {
 }
 
 module "network" {
-  source                               = "./network"
-  tre_id                               = var.tre_id
-  location                             = var.location
-  resource_group_name                  = azurerm_resource_group.core.name
-  core_address_space                   = var.core_address_space
-  arm_environment                      = var.arm_environment
-  mgmt_storage_account_name            = var.mgmt_storage_account_name
-  mgmt_resource_group_name             = var.mgmt_resource_group_name
-  mgmt_acr_name                        = var.acr_name
-  use_core_private_dns_zones        = var.use_core_private_dns_zones
-  private_dns_zones_resource_group_name = var.private_dns_zones_resource_group_name
-  ddos_plan_id                         = var.core_ddos_plan_id
+  source                                = "./network"
+  tre_id                                = var.tre_id
+  location                              = var.location
+  resource_group_name                   = azurerm_resource_group.core.name
+  core_address_space                    = var.core_address_space
+  arm_environment                       = var.arm_environment
+  mgmt_storage_account_name             = var.mgmt_storage_account_name
+  mgmt_resource_group_name              = var.mgmt_resource_group_name
+  mgmt_acr_name                         = var.acr_name
+  use_core_private_dns_zones            = var.use_core_private_dns_zones
+  private_dns_zones_resource_group_name = var.use_core_private_dns_zones ? azurerm_resource_group.core.name : var.private_dns_zones_resource_group_name
+  ddos_plan_id                          = var.core_ddos_plan_id
   providers = {
     azurerm.primary   = azurerm
     azurerm.secondary = azurerm.secondary
