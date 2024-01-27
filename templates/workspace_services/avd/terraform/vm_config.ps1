@@ -15,13 +15,15 @@ If(!(Test-Path $PipConfigFolderPath))
 
 $PipConfigFilePath = $PipConfigFolderPath + "pip.ini"
 
-if( "${nexus_proxy_url}" -ne "")
+$proxy = "${nexus_proxy_url}"
+
+if( $proxy -ne "")
 {
   $ConfigBody = @"
 [global]
-index = ${nexus_proxy_url}/repository/pypi/pypi
-index-url = ${nexus_proxy_url}/repository/pypi/simple
-trusted-host = ${nexus_proxy_url}
+index = $($proxy)/repository/pypi/pypi
+index-url = $($proxy)/repository/pypi/simple
+trusted-host = $($proxy)
 "@
 
   # We need to write the ini file in UTF8 (No BOM) as pip won't understand Powershell's default encoding (unicode)
@@ -31,37 +33,33 @@ trusted-host = ${nexus_proxy_url}
 }
 
 ### Anaconda Config
-if( ${CondaConfig} -eq 1 -and "${nexus_proxy_url}" -ne "")
+if( ${CondaConfig} -eq 1 -and $proxy -ne "")
 {
-  conda config --add channels ${nexus_proxy_url}/repository/conda-mirror/main/  --system
-  conda config --add channels ${nexus_proxy_url}/repository/conda-repo/main/  --system
+  conda config --add channels $proxy/repository/conda-mirror/main/  --system
+  conda config --add channels $proxy/repository/conda-repo/main/  --system
   conda config --remove channels defaults --system
-  conda config --set channel_alias ${nexus_proxy_url}/repository/conda-mirror/  --system
+  conda config --set channel_alias $proxy/repository/conda-mirror/  --system
 }
 
-if ("${nexus_proxy_url}" -ne "")
+if ($proxy -ne "")
 {
+
   # Docker proxy config
   $DaemonConfig = @"
   {
-  "registry-mirrors": ["${nexus_proxy_url}:8083"]
+  "registry-mirrors": ["$($proxy):8083"]
   }
   "@
 
   $DaemonConfig | Out-File -Encoding Ascii ( New-Item -Path $env:ProgramData\docker\config\daemon.json -Force )
 
-  # R config
-  # $RconfigFilePathWindows = C:\Progra~1\R\4.1.2\etc\Rprofile.site
-  #Add-Content $RconfigFilePathWindows "local({`n    r <- getOption(`"repos`")`n    r[`"Nexus`"] <- `"${nexus_proxy_url}/repository/r-proxy/`"`n    options(repos = r)`n})"
-  # echo "local({`n    r <- getOption(`"repos`")`n    r[`"Nexus`"] <- `"${nexus_proxy_url}/repository/r-proxy/`"`n    options(repos = r)`n})" > $RconfigFilePathWindows
-
   $RConfig = @"
-  local({
-      r <- getOption("repos")
-      r["Nexus"] <- "${nexus_proxy_url}/repository/r-proxy/"
-      options(repos = r)
-  })
-  "@
+local({
+    r <- getOption("repos")
+    r["Nexus"] <- "$($proxy)/repository/r-proxy/"
+    options(repos = r)
+})
+"@
 
   $RConfig | Out-File -Encoding Ascii ( New-Item -Path $Env:ProgramFiles\R\R-4.1.2\etc\Rprofile.site -Force )
 }
