@@ -234,7 +234,7 @@ steps:
         echo "Using $(AZURE_ENVIRONMENT) azure environment"
         echo "Using $(AZURE_CREDENTIALS_TENANT_ID) tenant id"
 
-        rp_bundle_values="${{ convertToJson(parameters.RP_BUNDLE_VALUES) }}"
+        rp_bundle_values="'${{ convertToJson(parameters.RP_BUNDLE_VALUES) }}'"
         rp_bundle_values="${rp_bundle_values/True/true}"
         rp_bundle_values="${rp_bundle_values/False/false}"
 
