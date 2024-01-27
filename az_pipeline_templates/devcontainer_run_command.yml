@@ -238,6 +238,8 @@ steps:
         rp_bundle_values="${rp_bundle_values/True/true}"
         rp_bundle_values="${rp_bundle_values/False/false}"
 
+        echo $rp_bundle_values
+
         docker run --rm --mount \
           "type=bind,src=$(Build.SourcesDirectory),dst=/workspaces/tre" \
           -v /var/run/docker.sock:/var/run/docker.sock \
