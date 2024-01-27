@@ -230,7 +230,7 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        $bundle_values=$(echo "${{ convertToJson(parameters.RP_BUNDLE_VALUES) }}" | jq)
+        bundle_values=$(echo "${{ convertToJson(parameters.RP_BUNDLE_VALUES) }}" | jq)
 
         echo $bundle_values
 
