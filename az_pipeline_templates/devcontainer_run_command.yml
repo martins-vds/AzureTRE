@@ -232,8 +232,6 @@ steps:
       inlineScript: |
         bundle_values=$(echo '${{ convertToJson(parameters.RP_BUNDLE_VALUES) }}' | jq)
 
-        echo $bundle_values
-
         docker run --rm --mount \
           "type=bind,src=$(Build.SourcesDirectory),dst=/workspaces/tre" \
           -v /var/run/docker.sock:/var/run/docker.sock \
