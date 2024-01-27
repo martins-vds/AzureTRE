@@ -46,10 +46,10 @@ if ($proxy -ne "")
 
   # Docker proxy config
   $DaemonConfig = @"
-  {
-  "registry-mirrors": ["$($proxy):8083"]
-  }
-  "@
+{
+"registry-mirrors": ["$($proxy):8083"]
+}
+"@
 
   $DaemonConfig | Out-File -Encoding Ascii ( New-Item -Path $env:ProgramData\docker\config\daemon.json -Force )
 
