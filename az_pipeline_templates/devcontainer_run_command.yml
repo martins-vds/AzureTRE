@@ -234,6 +234,8 @@ steps:
         echo "Using $(AZURE_ENVIRONMENT) azure environment"
         echo "Using $(AZURE_CREDENTIALS_TENANT_ID) tenant id"
 
+        echo "${{ convertToJson(parameters.RP_BUNDLE_VALUES) }}"
+
         docker run --rm --mount \
           "type=bind,src=$(Build.SourcesDirectory),dst=/workspaces/tre" \
           -v /var/run/docker.sock:/var/run/docker.sock \
