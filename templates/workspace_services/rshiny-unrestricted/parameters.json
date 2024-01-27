@@ -73,7 +73,7 @@
     {
       "name": "private_dns_zones_subscription_id",
       "source": {
-        "env": "PRIVATE_DNS_ZONE_SUBSCRIPTION_ID"
+        "env": "PRIVATE_DNS_ZONES_SUBSCRIPTION_ID"
       }
     },
     {
