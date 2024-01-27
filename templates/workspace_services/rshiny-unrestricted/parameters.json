@@ -63,6 +63,24 @@
       "source": {
         "env": "ARM_ENVIRONMENT"
       }
+    },
+    {
+      "name": "use_existing_private_dns_zone",
+      "source": {
+        "env": "USE_EXISTING_PRIVATE_DNS_ZONE"
+      }
+    },
+    {
+      "name": "private_dns_zone_subscription_id",
+      "source": {
+        "env": "PRIVATE_DNS_ZONE_SUBSCRIPTION_ID"
+      }
+    },
+    {
+      "name": "private_dns_zone_resource_group_name",
+      "source": {
+        "env": "PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME"
+      }
     }
   ]
 }

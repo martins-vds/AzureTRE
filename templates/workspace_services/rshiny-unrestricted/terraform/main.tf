@@ -1,3 +1,15 @@
+module "dns_zones" {
+  source                = "./dns_zones"
+  use_primary_dns_zones = !var.use_existing_private_dns_zone
+  resource_group_name   = var.private_dns_zone_resource_group_name
+  tre_id                = var.tre_id
+  arm_environment       = var.arm_environment
+  providers = {
+    azurerm.primary   = azurerm
+    azurerm.secondary = azurerm.secondary
+  }
+}
+
 # we have to use user-assigned to break a cycle in the dependencies: app identity, kv-policy, secrets in app settings
 resource "azurerm_user_assigned_identity" "rshiny_id" {
   resource_group_name = data.azurerm_resource_group.ws.name
@@ -75,7 +87,7 @@ resource "azurerm_private_endpoint" "rshiny_private_endpoint" {
 
   private_dns_zone_group {
     name                 = module.terraform_azurerm_environment_configuration.private_links["privatelink.azurewebsites.net"]
-    private_dns_zone_ids = [data.azurerm_private_dns_zone.azurewebsites.id]
+    private_dns_zone_ids = [module.dns_zones.azurewebsites.id]
   }
 
   lifecycle { ignore_changes = [tags] }
