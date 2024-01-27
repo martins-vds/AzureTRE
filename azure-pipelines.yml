@@ -104,7 +104,7 @@ jobs:
       PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: $(PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME)
       PRIVATE_DNS_ZONE_AZURE_CREDENTIALS: 'secondary'
       RP_BUNDLE_VALUES:
-        use_existing_private_dns_zone: "$(USE_EXISTING_PRIVATE_DNS_ZONE)"
+        use_existing_private_dns_zone: true
         private_dns_zone_subscription_id: "$(SECONDARY_SUBSCRIPTION_ID)"
         private_dns_zone_resource_group_name: "$(PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME)"
       CORE_DDOS_PLAN_ID: $(CORE_DDOS_PLAN_ID)
