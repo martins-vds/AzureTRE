@@ -28,6 +28,7 @@ resource "azurerm_linux_web_app" "rshiny" {
   service_plan_id                 = data.azurerm_service_plan.workspace.id
   https_only                      = true
   key_vault_reference_identity_id = azurerm_user_assigned_identity.rshiny_id.id
+  public_network_access_enabled   = false
   virtual_network_subnet_id       = data.azurerm_subnet.web_apps.id
   tags                            = local.workspace_service_tags
 
@@ -51,7 +52,7 @@ resource "azurerm_linux_web_app" "rshiny" {
     vnet_route_all_enabled                        = true
 
     application_stack {
-      docker_image_name = "${local.rshiny_image_repository}:${local.version}"
+      docker_image_name   = "${local.rshiny_image_repository}:${local.version}"
       docker_registry_url = "https://${data.azurerm_container_registry.mgmt_acr.login_server}"
     }
   }
