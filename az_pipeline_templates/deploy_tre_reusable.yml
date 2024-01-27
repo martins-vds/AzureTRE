@@ -145,8 +145,8 @@ parameters:
     default: ""
   - name: RP_BUNDLE_VALUES
     displayName: RP bundle values
-    type: string
-    default: "{}"
+    type: object
+    default: {}
   - name: TF_LOG
     displayName: Terraform log level
     type: string
@@ -512,7 +512,7 @@ jobs:
             STATEFUL_RESOURCES_LOCKED: "false"
           CORE_APP_SERVICE_PLAN_SKU: ${{ parameters.CORE_APP_SERVICE_PLAN_SKU }}
           RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
-          RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
+          RP_BUNDLE_VALUES: ${{ parameters.RP_BUNDLE_VALUES }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           SECONDARY_SUBSCRIPTION_ID: ${{ parameters.SECONDARY_SUBSCRIPTION_ID }}
           CORE_STORAGE_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
