@@ -45,6 +45,8 @@ resource "azurerm_linux_virtual_machine" "linuxvm" {
   encryption_at_host_enabled      = true
   admin_username                  = random_string.username.result
   admin_password                  = random_password.password.result
+  vtpm_enabled                    = true
+  secure_boot_enabled             = true
 
   custom_data = data.template_cloudinit_config.config.rendered
 
