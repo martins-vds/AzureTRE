@@ -43,3 +43,30 @@ data "azurerm_log_analytics_workspace" "oms-workspace" {
   name                = local.law_name
   resource_group_name = data.azurerm_resource_group.core.name
 }
+
+data "azurerm_role_definition" "desktop_virtualization_user" {
+  name = "Desktop Virtualization User"
+}
+
+data "azurerm_role_definition" "virtual_machine_user_login" {
+  name = "Virtual Machine User Login"
+}
+
+data "azurerm_role_definition" "virtual_machine_admin_login" {
+  name = "Virtual Machine Administrator Login"
+}
+
+data "azuread_group" "workspace_owners" {
+  display_name     = "${local.workspace_resource_name_suffix} Workspace Owners"
+  security_enabled = true
+}
+
+data "azuread_group" "workspace_researchers" {
+  display_name     = "${local.workspace_resource_name_suffix} Workspace Researchers"
+  security_enabled = true
+}
+
+data "azuread_group" "workspace_airlock_managers" {
+  display_name     = "${local.workspace_resource_name_suffix} Airlock Managers"
+  security_enabled = true
+}
