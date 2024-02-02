@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-workspace-base
-version: 1.6.20
+version: 1.6.21
 description: "A base Azure TRE workspace"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -128,6 +128,9 @@ parameters:
   - name: private_dns_zones_resource_group_name
     type: string
     default: ""
+  - name: use_existing_private_dns_zones
+    type: boolean
+    default: false
 outputs:
   - name: app_role_id_workspace_owner
     type: string
