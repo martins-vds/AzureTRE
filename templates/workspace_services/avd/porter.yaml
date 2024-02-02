@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.0.14
+version: 0.0.15
 description: "Azure Virtual Desktop"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -48,6 +48,7 @@ custom:
     #   conda_config: true
 
 credentials:
+  # Credentials for interacting with Azure
   - name: azure_tenant_id
     env: ARM_TENANT_ID
   - name: azure_subscription_id
@@ -56,6 +57,13 @@ credentials:
     env: ARM_CLIENT_ID
   - name: azure_client_secret
     env: ARM_CLIENT_SECRET
+  # Credentials for interacting with the AAD Auth tenant
+  - name: auth_client_id
+    env: AUTH_CLIENT_ID
+  - name: auth_client_secret
+    env: AUTH_CLIENT_SECRET
+  - name: auth_tenant_id
+    env: AUTH_TENANT_ID
 
 parameters:
   - name: os_image
@@ -140,6 +148,9 @@ install:
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }
         use_core_app_gateway: ${ bundle.parameters.use_core_app_gateway }
+        auth_client_id: ${ bundle.credentials.auth_client_id }
+        auth_client_secret: ${ bundle.credentials.auth_client_secret }
+        auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -162,6 +173,9 @@ upgrade:
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }
         use_core_app_gateway: ${ bundle.parameters.use_core_app_gateway }
+        auth_client_id: ${ bundle.credentials.auth_client_id }
+        auth_client_secret: ${ bundle.credentials.auth_client_secret }
+        auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -184,6 +198,9 @@ uninstall:
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }
         use_core_app_gateway: ${ bundle.parameters.use_core_app_gateway }
+        auth_client_id: ${ bundle.credentials.auth_client_id }
+        auth_client_secret: ${ bundle.credentials.auth_client_secret }
+        auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }

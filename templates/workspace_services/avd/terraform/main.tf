@@ -4,7 +4,11 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "=3.86.0"
-     }
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "=2.20.0"
+    }
     random = {
       source  = "hashicorp/random"
       version = "=3.4.3"
@@ -29,4 +33,10 @@ provider "azurerm" {
       recover_soft_deleted_keys         = true
     }
   }
+}
+
+provider "azuread" {
+  client_id     = var.auth_client_id
+  client_secret = var.auth_client_secret
+  tenant_id     = var.auth_tenant_id
 }

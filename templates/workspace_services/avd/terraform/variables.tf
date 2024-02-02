@@ -38,3 +38,16 @@ variable "use_core_app_gateway" {
   type    = bool
   default = false
 }
+
+variable "auth_tenant_id" {
+  type        = string
+  description = "Used to authenticate into the AAD Tenant to create the AAD App"
+}
+variable "auth_client_id" {
+  type        = string
+  description = "Used to authenticate into the AAD Tenant to create the AAD App"
+}
+variable "auth_client_secret" {
+  type        = string
+  description = "Used to authenticate into the AAD Tenant to create the AAD App"
+}
