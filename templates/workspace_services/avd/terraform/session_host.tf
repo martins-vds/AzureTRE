@@ -5,6 +5,9 @@ module "avd" {
   key_vault_id        = data.azurerm_key_vault.ws.id
   name                = local.service_resource_name_suffix
   tags                = local.tre_workspace_service_tags
+  providers = {
+    azurerm.avdsubscription = azurerm.avdsubscription
+  }
 }
 
 resource "azurerm_network_interface" "session_host_nic" {
