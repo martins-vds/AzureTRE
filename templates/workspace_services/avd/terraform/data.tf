@@ -21,7 +21,7 @@ data "azurerm_virtual_network" "avd" {
   count               = var.avd_different_subscription ? 1 : 0
   provider            = azurerm.avdsubscription
   name                = var.avd_vnet_name
-  resource_group_name = data.azurerm_resource_group.avd.name
+  resource_group_name = one(data.azurerm_resource_group.avd[*].name)
 }
 
 data "azurerm_subnet" "services" {
@@ -34,8 +34,8 @@ data "azurerm_subnet" "avd" {
   count                = var.avd_different_subscription ? 1 : 0
   provider             = azurerm.avdsubscription
   name                 = var.avd_subnet_name
-  virtual_network_name = data.azurerm_virtual_network.avd.name
-  resource_group_name  = data.azurerm_resource_group.avd.name
+  virtual_network_name = one(data.azurerm_virtual_network.avd[*].name)
+  resource_group_name  = one(data.azurerm_resource_group.avd[*].name)
 }
 
 data "azurerm_key_vault" "ws" {

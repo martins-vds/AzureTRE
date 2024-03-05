@@ -15,13 +15,13 @@ module "avd" {
 resource "azurerm_network_interface" "session_host_nic" {
   provider            = azurerm.avdsubscription
   name                = "nic-vm-${var.tre_id}"
-  location            = var.avd_different_subscription ? data.azurerm_resource_group.avd.location : data.azurerm_resource_group.ws.location
-  resource_group_name = var.avd_different_subscription ? data.azurerm_resource_group.avd.name : data.azurerm_resource_group.ws.name
+  location            = var.avd_different_subscription ? one(data.azurerm_resource_group.avd[*].location) : data.azurerm_resource_group.ws.location
+  resource_group_name = var.avd_different_subscription ? one(data.azurerm_resource_group.avd[*].name) : data.azurerm_resource_group.ws.name
   tags                = local.tre_workspace_service_tags
 
   ip_configuration {
     name                          = "internalIPConfig"
-    subnet_id                     = var.avd_different_subscription ? data.azurerm_subnet.avd.id : data.azurerm_subnet.services.id
+    subnet_id                     = var.avd_different_subscription ? one(data.azurerm_subnet.avd[*].id) : data.azurerm_subnet.services.id
     private_ip_address_allocation = "Dynamic"
   }
 
@@ -44,8 +44,8 @@ resource "random_password" "password" {
 resource "azurerm_windows_virtual_machine" "session_host" {
   provider                   = azurerm.avdsubscription
   name                       = local.vm_name
-  resource_group_name        = var.avd_different_subscription ? data.azurerm_resource_group.avd.name : data.azurerm_resource_group.ws.name
-  location                   = var.avd_different_subscription ? data.azurerm_resource_group.avd.location : data.azurerm_resource_group.ws.location
+  resource_group_name        = var.avd_different_subscription ? one(data.azurerm_resource_group.avd[*].name) : data.azurerm_resource_group.ws.name
+  location                   = var.avd_different_subscription ? one(data.azurerm_resource_group.avd[*].location) : data.azurerm_resource_group.ws.location
   network_interface_ids      = [azurerm_network_interface.session_host_nic.id]
   size                       = local.vm_sizes[var.vm_size]
   allow_extension_operations = true
