@@ -39,6 +39,31 @@ variable "use_core_app_gateway" {
   default = false
 }
 
+variable "avd_different_subscription" {
+  type    = bool
+  default = false
+}
+
+variable "avd_subscription_id" {
+  type    = string
+  default = ""
+}
+
+variable "avd_resource_group_name" {
+  type    = string
+  default = ""
+}
+
+variable "avd_vnet_name" {
+  type    = string
+  default = ""
+}
+
+variable "avd_subnet_name" {
+  type    = string
+  default = ""
+}
+
 variable "auth_tenant_id" {
   type        = string
   description = "Used to authenticate into the AAD Tenant to create the AAD App"

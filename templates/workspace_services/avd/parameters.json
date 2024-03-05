@@ -93,6 +93,36 @@
       "source": {
         "env": "USE_CORE_APP_GATEWAY"
       }
+    },
+    {
+      "name": "avd_different_subscription",
+      "source": {
+        "env": "AVD_DIFFERENT_SUBSCRIPTION"
+      }
+    },
+    {
+      "name": "avd_subscription_id",
+      "source": {
+        "env": "AVD_SUBSCRIPTION_ID"
+      }
+    },
+    {
+      "name": "avd_resource_group_name",
+      "source": {
+        "env": "AVD_RESOURCE_GROUP_NAME"
+      }
+    },
+    {
+      "name": "avd_vnet_name",
+      "source": {
+        "env": "AVD_VNET_NAME"
+      }
+    },
+    {
+      "name": "avd_subnet_name",
+      "source": {
+        "env": "AVD_SUBNET_NAME"
+      }
     }
   ]
 }

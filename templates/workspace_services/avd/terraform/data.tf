@@ -6,15 +6,36 @@ data "azurerm_resource_group" "core" {
   name = "rg-${var.tre_id}"
 }
 
+data "azurerm_resource_group" "avd" {
+  count    = var.avd_different_subscription ? 1 : 0
+  provider = azurerm.avdsubscription
+  name     = var.avd_resource_group_name
+}
+
 data "azurerm_virtual_network" "ws" {
   name                = "vnet-${var.tre_id}-ws-${local.short_workspace_id}"
   resource_group_name = data.azurerm_resource_group.ws.name
+}
+
+data "azurerm_virtual_network" "avd" {
+  count               = var.avd_different_subscription ? 1 : 0
+  provider            = azurerm.avdsubscription
+  name                = var.avd_vnet_name
+  resource_group_name = data.azurerm_resource_group.avd.name
 }
 
 data "azurerm_subnet" "services" {
   name                 = "ServicesSubnet"
   virtual_network_name = data.azurerm_virtual_network.ws.name
   resource_group_name  = data.azurerm_resource_group.ws.name
+}
+
+data "azurerm_subnet" "avd" {
+  count                = var.avd_different_subscription ? 1 : 0
+  provider             = azurerm.avdsubscription
+  name                 = var.avd_subnet_name
+  virtual_network_name = data.azurerm_virtual_network.avd.name
+  resource_group_name  = data.azurerm_resource_group.avd.name
 }
 
 data "azurerm_key_vault" "ws" {
@@ -45,15 +66,18 @@ data "azurerm_log_analytics_workspace" "oms-workspace" {
 }
 
 data "azurerm_role_definition" "desktop_virtualization_user" {
-  name = "Desktop Virtualization User"
+  provider = azurerm.avdsubscription
+  name     = "Desktop Virtualization User"
 }
 
 data "azurerm_role_definition" "virtual_machine_user_login" {
-  name = "Virtual Machine User Login"
+  provider = azurerm.avdsubscription
+  name     = "Virtual Machine User Login"
 }
 
 data "azurerm_role_definition" "virtual_machine_admin_login" {
-  name = "Virtual Machine Administrator Login"
+  provider = azurerm.avdsubscription
+  name     = "Virtual Machine Administrator Login"
 }
 
 data "azuread_group" "workspace_owners" {

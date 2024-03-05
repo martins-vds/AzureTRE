@@ -1,5 +1,6 @@
 # Create AVD workspace
 resource "azurerm_virtual_desktop_workspace" "workspace" {
+  provider            = azurerm.avdsubscription
   name                = local.workspace
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -9,6 +10,7 @@ resource "azurerm_virtual_desktop_workspace" "workspace" {
 
 # Create AVD host pool
 resource "azurerm_virtual_desktop_host_pool" "hostpool" {
+  provider                 = azurerm.avdsubscription
   resource_group_name      = var.resource_group_name
   location                 = var.location
   name                     = local.hostpool
@@ -23,30 +25,34 @@ resource "azurerm_virtual_desktop_host_pool" "hostpool" {
 }
 
 resource "azurerm_virtual_desktop_host_pool_registration_info" "registrationinfo" {
+  provider        = azurerm.avdsubscription
   hostpool_id     = azurerm_virtual_desktop_host_pool.hostpool.id
   expiration_date = local.rfc3339
 }
 
 # Create AVD DAG
 resource "azurerm_virtual_desktop_application_group" "dag" {
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  host_pool_id        = azurerm_virtual_desktop_host_pool.hostpool.id
-  type          = "Desktop"
-  name          = local.appgroup
-  friendly_name = "TRE Workspace Desktop Application Group"
-  description   = "AVD application group"
+  provider                     = azurerm.avdsubscription
+  resource_group_name          = var.resource_group_name
+  location                     = var.location
+  host_pool_id                 = azurerm_virtual_desktop_host_pool.hostpool.id
+  type                         = "Desktop"
+  name                         = local.appgroup
+  friendly_name                = "TRE Workspace Desktop Application Group"
+  description                  = "AVD application group"
   default_desktop_display_name = "TRE Workspace - ${var.name}"
-  depends_on    = [azurerm_virtual_desktop_host_pool.hostpool, azurerm_virtual_desktop_workspace.workspace]
+  depends_on                   = [azurerm_virtual_desktop_host_pool.hostpool, azurerm_virtual_desktop_workspace.workspace]
 }
 
 # Associate Workspace and DAG
 resource "azurerm_virtual_desktop_workspace_application_group_association" "ws-dag" {
+  provider             = azurerm.avdsubscription
   application_group_id = azurerm_virtual_desktop_application_group.dag.id
   workspace_id         = azurerm_virtual_desktop_workspace.workspace.id
 }
 
 resource "azurerm_key_vault_secret" "avd_registration_token" {
+  provider     = azurerm.avdsubscription
   name         = "registration-token-${var.name}"
   value        = azurerm_virtual_desktop_host_pool_registration_info.registrationinfo.token
   key_vault_id = var.key_vault_id

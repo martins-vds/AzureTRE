@@ -1,21 +1,22 @@
 module "avd" {
   source              = "./avd"
-  location            = data.azurerm_resource_group.ws.location
-  resource_group_name = data.azurerm_resource_group.ws.name
+  location            = var.avd_different_subscription ? data.azurerm_resource_group.avd.location : data.azurerm_resource_group.ws.location
+  resource_group_name = var.avd_different_subscription ? data.azurerm_resource_group.avd.name : data.azurerm_resource_group.ws.name
   key_vault_id        = data.azurerm_key_vault.ws.id
   name                = local.service_resource_name_suffix
   tags                = local.tre_workspace_service_tags
 }
 
 resource "azurerm_network_interface" "session_host_nic" {
+  provider            = azurerm.avdsubscription
   name                = "nic-vm-${var.tre_id}"
-  resource_group_name = data.azurerm_resource_group.ws.name
-  location            = data.azurerm_resource_group.ws.location
+  location            = var.avd_different_subscription ? data.azurerm_resource_group.avd.location : data.azurerm_resource_group.ws.location
+  resource_group_name = var.avd_different_subscription ? data.azurerm_resource_group.avd.name : data.azurerm_resource_group.ws.name
   tags                = local.tre_workspace_service_tags
 
   ip_configuration {
     name                          = "internalIPConfig"
-    subnet_id                     = data.azurerm_subnet.services.id
+    subnet_id                     = var.avd_different_subscription ? data.azurerm_subnet.avd.id : data.azurerm_subnet.services.id
     private_ip_address_allocation = "Dynamic"
   }
 
@@ -36,9 +37,10 @@ resource "random_password" "password" {
 }
 
 resource "azurerm_windows_virtual_machine" "session_host" {
+  provider                   = azurerm.avdsubscription
   name                       = local.vm_name
-  resource_group_name        = data.azurerm_resource_group.ws.name
-  location                   = data.azurerm_resource_group.ws.location
+  resource_group_name        = var.avd_different_subscription ? data.azurerm_resource_group.avd.name : data.azurerm_resource_group.ws.name
+  location                   = var.avd_different_subscription ? data.azurerm_resource_group.avd.location : data.azurerm_resource_group.ws.location
   network_interface_ids      = [azurerm_network_interface.session_host_nic.id]
   size                       = local.vm_sizes[var.vm_size]
   allow_extension_operations = true
@@ -94,6 +96,7 @@ resource "azurerm_key_vault_secret" "session_host_credentials" {
 }
 
 resource "azurerm_virtual_machine_extension" "config_script" {
+  provider             = azurerm.avdsubscription
   name                 = "${azurerm_windows_virtual_machine.session_host.name}-vmextension"
   virtual_machine_id   = azurerm_windows_virtual_machine.session_host.id
   publisher            = "Microsoft.Compute"
@@ -111,6 +114,7 @@ resource "azurerm_virtual_machine_extension" "config_script" {
 }
 
 resource "azurerm_virtual_machine_extension" "antimalware" {
+  provider                   = azurerm.avdsubscription
   virtual_machine_id         = azurerm_windows_virtual_machine.session_host.id
   name                       = "${azurerm_windows_virtual_machine.session_host.name}-antimalware"
   publisher                  = "Microsoft.Azure.Security"
@@ -129,6 +133,7 @@ resource "azurerm_virtual_machine_extension" "antimalware" {
 }
 
 resource "azurerm_virtual_machine_extension" "aad_login" {
+  provider             = azurerm.avdsubscription
   name                 = "${azurerm_windows_virtual_machine.session_host.name}-aad-login"
   virtual_machine_id   = azurerm_windows_virtual_machine.session_host.id
   publisher            = "Microsoft.Azure.ActiveDirectory"
@@ -155,6 +160,7 @@ resource "azurerm_virtual_machine_extension" "app_dependency" {
 }
 
 resource "azurerm_virtual_machine_extension" "oms_agent" {
+  provider                   = azurerm.avdsubscription
   name                       = "${azurerm_windows_virtual_machine.session_host.name}-oms-agent"
   virtual_machine_id         = azurerm_windows_virtual_machine.session_host.id
   publisher                  = "Microsoft.EnterpriseCloud.Monitoring"
@@ -182,6 +188,7 @@ resource "azurerm_virtual_machine_extension" "oms_agent" {
 }
 
 resource "azurerm_virtual_machine_extension" "avd-dsc" {
+   provider                   = azurerm.avdsubscription
   name                       = "${azurerm_windows_virtual_machine.session_host.name}-avd-dsc"
   virtual_machine_id         = azurerm_windows_virtual_machine.session_host.id
   publisher                  = "Microsoft.Powershell"

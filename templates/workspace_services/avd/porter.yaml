@@ -148,6 +148,11 @@ install:
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }
         use_core_app_gateway: ${ bundle.parameters.use_core_app_gateway }
+        avd_different_subscription: ${ bundle.parameters.avd_different_subscription }
+        avd_subscription_id: ${ bundle.parameters.avd_subscription_id }
+        avd_resource_group_name: ${ bundle.parameters.avd_resource_group_name }
+        avd_vnet_name: ${ bundle.parameters.avd_vnet_name }
+        avd_subnet_name: ${ bundle.parameters.avd_subnet_name }
         auth_client_id: ${ bundle.credentials.auth_client_id }
         auth_client_secret: ${ bundle.credentials.auth_client_secret }
         auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
@@ -173,6 +178,11 @@ upgrade:
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }
         use_core_app_gateway: ${ bundle.parameters.use_core_app_gateway }
+        avd_different_subscription: ${ bundle.parameters.avd_different_subscription }
+        avd_subscription_id: ${ bundle.parameters.avd_subscription_id }
+        avd_resource_group_name: ${ bundle.parameters.avd_resource_group_name }
+        avd_vnet_name: ${ bundle.parameters.avd_vnet_name }
+        avd_subnet_name: ${ bundle.parameters.avd_subnet_name }
         auth_client_id: ${ bundle.credentials.auth_client_id }
         auth_client_secret: ${ bundle.credentials.auth_client_secret }
         auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
@@ -198,6 +208,11 @@ uninstall:
         shared_storage_name: ${ bundle.parameters.shared_storage_name }
         image_gallery_id: ${ bundle.parameters.image_gallery_id }
         use_core_app_gateway: ${ bundle.parameters.use_core_app_gateway }
+        avd_different_subscription: ${ bundle.parameters.avd_different_subscription }
+        avd_subscription_id: ${ bundle.parameters.avd_subscription_id }
+        avd_resource_group_name: ${ bundle.parameters.avd_resource_group_name }
+        avd_vnet_name: ${ bundle.parameters.avd_vnet_name }
+        avd_subnet_name: ${ bundle.parameters.avd_subnet_name }
         auth_client_id: ${ bundle.credentials.auth_client_id }
         auth_client_secret: ${ bundle.credentials.auth_client_secret }
         auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
