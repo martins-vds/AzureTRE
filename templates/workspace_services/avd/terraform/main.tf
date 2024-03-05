@@ -37,7 +37,7 @@ provider "azurerm" {
 
 provider "azurerm" {
   alias           = "avdsubscription"
-  subscription_id = var.avd_different_subscription ? var.avd_subscription_id : ""
+  subscription_id = var.avd_different_subscription ? var.avd_subscription_id : var.azure_subscription_id
   skip_provider_registration = true
 
   features {

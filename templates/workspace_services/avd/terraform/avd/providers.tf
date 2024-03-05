@@ -4,7 +4,10 @@ terraform {
     azurerm = {
       source  = "hashicorp/azurerm"
       version = ">=3.86.0"
-      configuration_aliases = [ azurerm.avdsubscription ]
+      configuration_aliases = [
+        azurerm.primary,
+        azurerm.secondary
+      ]
     }
     azuread = {
       source  = "hashicorp/azuread"

@@ -1,12 +1,14 @@
 module "avd" {
-  source              = "./avd"
-  location            = var.avd_different_subscription ? data.azurerm_resource_group.avd.location : data.azurerm_resource_group.ws.location
-  resource_group_name = var.avd_different_subscription ? data.azurerm_resource_group.avd.name : data.azurerm_resource_group.ws.name
-  key_vault_id        = data.azurerm_key_vault.ws.id
-  name                = local.service_resource_name_suffix
-  tags                = local.tre_workspace_service_tags
+  source                     = "./avd"
+  location                   = var.avd_different_subscription ? data.azurerm_resource_group.avd.location : data.azurerm_resource_group.ws.location
+  resource_group_name        = var.avd_different_subscription ? data.azurerm_resource_group.avd.name : data.azurerm_resource_group.ws.name
+  key_vault_id               = data.azurerm_key_vault.ws.id
+  name                       = local.service_resource_name_suffix
+  tags                       = local.tre_workspace_service_tags
+  use_secondary_subscription = var.avd_different_subscription
   providers = {
-    azurerm.avdsubscription = azurerm.avdsubscription
+    azurerm.primary   = azurerm
+    azurerm.secondary = azurerm.avdsubscription
   }
 }
 
@@ -191,7 +193,7 @@ resource "azurerm_virtual_machine_extension" "oms_agent" {
 }
 
 resource "azurerm_virtual_machine_extension" "avd-dsc" {
-   provider                   = azurerm.avdsubscription
+  provider                   = azurerm.avdsubscription
   name                       = "${azurerm_windows_virtual_machine.session_host.name}-avd-dsc"
   virtual_machine_id         = azurerm_windows_virtual_machine.session_host.id
   publisher                  = "Microsoft.Powershell"

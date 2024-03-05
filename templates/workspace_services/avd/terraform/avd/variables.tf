@@ -18,3 +18,8 @@ variable "key_vault_id" {
 variable "tags" {
   type = map(string)
 }
+
+variable "use_secondary_subscription" {
+  type        = bool
+  description = "Use a different subscription for AVD resources"
+}

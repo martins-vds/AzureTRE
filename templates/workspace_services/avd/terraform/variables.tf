@@ -64,6 +64,11 @@ variable "avd_subnet_name" {
   default = ""
 }
 
+variable "azure_subscription_id" {
+  type    = string
+  description = "Azure Subscription ID"
+}
+
 variable "auth_tenant_id" {
   type        = string
   description = "Used to authenticate into the AAD Tenant to create the AAD App"
