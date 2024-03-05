@@ -137,7 +137,7 @@ jobs:
         - BUNDLE_TYPE: "workspace_service"
           BUNDLE_DIR: "./templates/workspace_services/azureml"
           BUNDLE_NAME: "azureml"
-        - BUNDLE_TYPE: "workspace_service"
+#        - BUNDLE_TYPE: "workspace_service"
 #          BUNDLE_DIR: "./templates/workspace_services/innereye"
 #          BUNDLE_NAME: "innereye"
         - BUNDLE_TYPE: "workspace_service"
