@@ -111,10 +111,16 @@ jobs:
           use_core_app_gateway: 'true'
         ${{ else }}:
           use_core_app_gateway: 'false'
+        avd_different_subscription: "$(AVD_DIFFERENT_SUBSCRIPTION)"
+        avd_subscription_id: "$(AVD_SUBSCRIPTION_ID)"
+        avd_resource_group_name: "$(AVD_RESOURCE_GROUP_NAME)"
+        avd_vnet_name: "$(AVD_VNET_NAME)"
+        avd_subnet_name: "$(AVD_SUBNET_NAME)"
       CORE_DDOS_PLAN_ID: $(CORE_DDOS_PLAN_ID)
       CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS: $(CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS)
       ${{ if eq(parameters.deployAppGateway, 'true') }}:
         DEPLOY_APP_GATEWAY: 'true'
+
       BUNDLES:
         - BUNDLE_TYPE: "workspace"
           BUNDLE_DIR: "./templates/workspaces/base"
@@ -132,8 +138,8 @@ jobs:
           BUNDLE_DIR: "./templates/workspace_services/azureml"
           BUNDLE_NAME: "azureml"
         - BUNDLE_TYPE: "workspace_service"
-          BUNDLE_DIR: "./templates/workspace_services/innereye"
-          BUNDLE_NAME: "innereye"
+#          BUNDLE_DIR: "./templates/workspace_services/innereye"
+#          BUNDLE_NAME: "innereye"
         - BUNDLE_TYPE: "workspace_service"
           BUNDLE_DIR: "./templates/workspace_services/gitea"
           BUNDLE_NAME: "gitea"
