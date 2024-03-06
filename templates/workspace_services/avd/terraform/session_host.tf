@@ -1,7 +1,7 @@
 module "avd" {
   source                     = "./avd"
-  location                   = var.avd_different_subscription ? data.azurerm_resource_group.avd.location : data.azurerm_resource_group.ws.location
-  resource_group_name        = var.avd_different_subscription ? data.azurerm_resource_group.avd.name : data.azurerm_resource_group.ws.name
+  location                   = var.avd_different_subscription ? one(data.azurerm_resource_group.avd[*].location) : data.azurerm_resource_group.ws.location
+  resource_group_name        = var.avd_different_subscription ? one(data.azurerm_resource_group.avd[*].name) : data.azurerm_resource_group.ws.name
   key_vault_id               = data.azurerm_key_vault.ws.id
   name                       = local.service_resource_name_suffix
   tags                       = local.tre_workspace_service_tags
