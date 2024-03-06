@@ -28,7 +28,6 @@ resource "azurerm_storage_share" "shared_storage" {
 
   depends_on = [
     azurerm_private_endpoint.stgfilepe,
-    azurerm_storage_account_network_rules.stgrules
   ]
 }
 
@@ -39,7 +38,6 @@ resource "azurerm_storage_container" "stgcontainer" {
 
   depends_on = [
     azurerm_private_endpoint.stgblobpe,
-    azurerm_storage_account_network_rules.stgrules
   ]
 }
 
