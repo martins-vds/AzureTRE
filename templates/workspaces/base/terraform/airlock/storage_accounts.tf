@@ -122,21 +122,14 @@ resource "azurerm_storage_account" "sa_export_inprogress" {
     }
   )
 
+  network_rules {
+    virtual_network_subnet_ids = [var.airlock_processor_subnet_id, var.resource_processor_subnet_id]
+    default_action = var.enable_local_debugging ? "Allow" : "Deny"
+    bypass         = ["AzureServices"]
+  }
+
   lifecycle { ignore_changes = [tags] }
 }
-
-resource "azurerm_storage_account_network_rules" "sa_export_inprogress_rules" {
-  storage_account_id = azurerm_storage_account.sa_export_inprogress.id
-
-  # The Airlock processor is unable to copy blobs from the export-inprogress storage account when the only method of access from the Airlock processor is a private endpoint in the core VNet,
-  # so we need to allow the Airlock processor subnet to access this storage account without using a private endpoint.
-  # https://github.com/microsoft/AzureTRE/issues/2098
-  virtual_network_subnet_ids = [var.airlock_processor_subnet_id, var.resource_processor_subnet_id]
-
-  default_action = var.enable_local_debugging ? "Allow" : "Deny"
-  bypass         = ["AzureServices"]
-}
-
 
 resource "azurerm_private_endpoint" "export_inprogress_pe" {
   name                = "pe-sa-export-ip-blob-${var.short_workspace_id}"
