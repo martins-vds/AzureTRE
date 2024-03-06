@@ -46,8 +46,8 @@ resource "azurerm_virtual_desktop_application_group" "dag_primary" {
   description                  = "AVD application group"
   default_desktop_display_name = "TRE Workspace - ${var.name}"
   depends_on = [
-    one(azurerm_virtual_desktop_host_pool.hostpool_primary[*]),
-    one(azurerm_virtual_desktop_workspace.workspace_primary[*])
+    azurerm_virtual_desktop_host_pool.hostpool_primary,
+    azurerm_virtual_desktop_workspace.workspace_primary
   ]
 }
 
