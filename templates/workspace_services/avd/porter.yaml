@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.0.17
+version: 0.0.18
 description: "Azure Virtual Desktop"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -122,6 +122,21 @@ parameters:
     default: "AzureCloud"
     description: "Used by Azure CLI to set the Azure environment"
     env: AZURE_ENVIRONMENT
+  - name: avd_different_subscription
+    type: string
+    env: AVD_DIFFERENT_SUBSCRIPTION
+  - name: avd_subscription_id
+    type: string
+    env: AVD_SUBSCRIPTION_ID
+  - name: avd_resource_group_name
+    type: string
+    env: AVD_RESOURCE_GROUP_NAME
+  - name: avd_vnet_name
+    type: string
+    env: AVD_VNET_NAME
+  - name: avd_subnet_name
+    type: string
+    env: AVD_SUBNET_NAME
 
 outputs:
   - name: connection_uri
