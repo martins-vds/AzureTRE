@@ -151,6 +151,7 @@ resource "azurerm_virtual_machine_extension" "aad_login" {
 }
 
 resource "azurerm_virtual_machine_extension" "app_dependency" {
+  provider                   = azurerm.avdsubscription
   name                       = "${azurerm_windows_virtual_machine.session_host.name}-dependency-agent"
   virtual_machine_id         = azurerm_windows_virtual_machine.session_host.id
   publisher                  = "Microsoft.Azure.Monitoring.DependencyAgent"
