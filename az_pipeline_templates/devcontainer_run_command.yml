@@ -139,6 +139,9 @@ parameters:
   - name: DEPLOY_APP_GATEWAY
     default: "false"
     type: string
+  - name: DEPLOY_BASTION
+    default: "false"
+    type: string
 steps:
   - task: AzureCLI@2
     displayName: '${{ parameters.DISPLAY_NAME }} - Set Main Azure Credentials'
@@ -307,6 +310,7 @@ steps:
           -e TF_VAR_private_dns_zones_resource_group_name=${{ parameters.PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME }} \
           -e TF_VAR_private_dns_zone_azure_credentials=${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }} \
           -e TF_VAR_deploy_app_gateway=${{ parameters.DEPLOY_APP_GATEWAY }} \
+          -e TF_VAR_deploy_bastion=${{ parameters.DEPLOY_BASTION }} \
           -e DEPLOY_APP_GATEWAY=${{ parameters.DEPLOY_APP_GATEWAY }} \
           -e TRE_UI_URL="$(TRE_UI_URL)" \
           '${{ parameters.CI_CACHE_ACR_NAME }}$(ACR_DOMAIN_SUFFIX)/tredev:${{ parameters.DEVCONTAINER_TAG }}' \

@@ -98,6 +98,7 @@ module "network" {
   use_core_private_dns_zones            = var.use_core_private_dns_zones
   private_dns_zones_resource_group_name = var.use_core_private_dns_zones ? azurerm_resource_group.core.name : var.private_dns_zones_resource_group_name
   ddos_plan_id                          = var.core_ddos_plan_id
+  deploy_bastion                        = var.deploy_bastion
   providers = {
     azurerm.primary   = azurerm
     azurerm.secondary = azurerm.secondary

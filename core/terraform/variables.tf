@@ -32,7 +32,7 @@ variable "tre_address_space" {
 }
 
 variable "core_ddos_plan_id" {
-  type = string
+  type        = string
   description = "DDOS plan ID"
 
   validation {
@@ -84,6 +84,12 @@ variable "enable_swagger" {
   default     = false
   description = "Determines whether the Swagger interface for the API will be available."
   sensitive   = false
+}
+
+variable "deploy_bastion" {
+  type        = bool
+  default     = false
+  description = "Determines whether to deploy a bastion host"
 }
 
 variable "swagger_ui_client_id" {
@@ -234,8 +240,8 @@ variable "core_api_allowed_devops_subnet_id" {
 }
 
 variable "core_api_additional_allowed_subnet_ids" {
-  type = string
-  default = ""
+  type        = string
+  default     = ""
   description = "Additional subnet IDs for API"
 }
 
@@ -257,13 +263,13 @@ variable "private_dns_zones_resource_group_name" {
   description = "Resource group of private DNS zone for ACR"
 }
 
-variable "private_dns_zone_azure_credentials"{
+variable "private_dns_zone_azure_credentials" {
   type        = string
   default     = "secondary"
   description = "Azure credentials for private DNS zone for ACR"
 
   validation {
-    condition = contains(["primary", "secondary"], var.private_dns_zone_azure_credentials)
+    condition     = contains(["primary", "secondary"], var.private_dns_zone_azure_credentials)
     error_message = "private_dns_zone_azure_credentials must be either primary or secondary"
   }
 }
@@ -290,5 +296,5 @@ variable "secondary_arm_client_secret" {
   type        = string
   default     = ""
   description = "Secondary ARM client secret"
-  sensitive = true
+  sensitive   = true
 }

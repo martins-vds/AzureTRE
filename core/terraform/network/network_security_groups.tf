@@ -1,6 +1,7 @@
 # Network security group for Azure Bastion subnet
 # See https://docs.microsoft.com/azure/bastion/bastion-nsg
 resource "azurerm_network_security_group" "bastion" {
+  count               = var.deploy_bastion ? 1 : 0
   name                = "nsg-bastion-subnet"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -106,10 +107,11 @@ resource "azurerm_network_security_group" "bastion" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "bastion" {
-  subnet_id                 = azurerm_subnet.bastion.id
-  network_security_group_id = azurerm_network_security_group.bastion.id
+  count                     = var.deploy_bastion ? 1 : 0
+  subnet_id                 = one(azurerm_subnet.bastion[*].id)
+  network_security_group_id = one(azurerm_network_security_group.bastion[*].id)
   # depend on the last subnet we created in the vnet
-  depends_on = [azurerm_subnet.firewall_management]
+  depends_on = [azurerm_subnet.bastion]
 }
 
 # Network security group for Application Gateway
@@ -191,7 +193,7 @@ resource "azurerm_subnet_network_security_group_association" "web_app" {
 resource "azurerm_subnet_network_security_group_association" "resource_processor" {
   subnet_id                 = azurerm_subnet.resource_processor.id
   network_security_group_id = azurerm_network_security_group.default_rules.id
-  depends_on                = [azurerm_subnet_network_security_group_association.web_app,azurerm_subnet.resource_processor]
+  depends_on                = [azurerm_subnet_network_security_group_association.web_app, azurerm_subnet.resource_processor]
 }
 
 resource "azurerm_subnet_network_security_group_association" "airlock_processor" {

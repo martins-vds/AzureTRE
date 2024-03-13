@@ -22,7 +22,7 @@ variable "mgmt_resource_group_name" {
   description = "Shared management resource group"
 }
 variable "mgmt_acr_name" {
-  type = string
+  type        = string
   description = "value of the mgmt acr name"
 }
 variable "use_core_private_dns_zones" {
@@ -43,4 +43,10 @@ variable "ddos_plan_id" {
     condition     = var.ddos_plan_id != ""
     error_message = "DDOS plan ID must be specified"
   }
+}
+
+variable "deploy_bastion" {
+  type        = bool
+  default     = false
+  description = "Deploy a bastion host in the mgmt resource group"
 }

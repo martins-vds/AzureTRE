@@ -3,7 +3,7 @@ output "core_vnet_id" {
 }
 
 output "bastion_subnet_id" {
-  value = azurerm_subnet.bastion.id
+  value = one(azurerm_subnet.bastion[*].id)
 }
 
 output "azure_firewall_subnet_id" {

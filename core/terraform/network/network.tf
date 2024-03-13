@@ -7,13 +7,14 @@ resource "azurerm_virtual_network" "core" {
 
   ddos_protection_plan {
     enable = true
-    id = var.ddos_plan_id
+    id     = var.ddos_plan_id
   }
 
   lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_subnet" "bastion" {
+  count                = var.deploy_bastion ? 1 : 0
   name                 = "AzureBastionSubnet"
   virtual_network_name = azurerm_virtual_network.core.name
   resource_group_name  = var.resource_group_name
@@ -92,7 +93,7 @@ resource "terraform_data" "resource_processor_network_rule" {
     azurerm_subnet.resource_processor.id
   ]
 
-  depends_on = [ azurerm_subnet.resource_processor ]
+  depends_on = [azurerm_subnet.resource_processor]
 }
 
 resource "azurerm_subnet" "airlock_processor" {
