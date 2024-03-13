@@ -19,7 +19,7 @@ terraform {
     }
     azapi = {
       source  = "Azure/azapi"
-      version = "~> 1.9.0"
+      version = "~> 1.12.0"
     }
   }
 
@@ -54,6 +54,8 @@ provider "azurerm" {
   subscription_id = var.secondary_arm_subscription_id
   tenant_id       = var.secondary_arm_tenant_id
 
+  skip_provider_registration = true
+
   features {
     key_vault {
       # Don't purge on destroy (this would fail due to purge protection being enabled on keyvault)
@@ -83,6 +85,25 @@ resource "azurerm_resource_group" "core" {
   lifecycle { ignore_changes = [tags] }
 }
 
+module "network" {
+  source                                = "./network"
+  tre_id                                = var.tre_id
+  location                              = var.location
+  resource_group_name                   = azurerm_resource_group.core.name
+  core_address_space                    = var.core_address_space
+  arm_environment                       = var.arm_environment
+  mgmt_storage_account_name             = var.mgmt_storage_account_name
+  mgmt_resource_group_name              = var.mgmt_resource_group_name
+  mgmt_acr_name                         = var.acr_name
+  use_core_private_dns_zones            = var.use_core_private_dns_zones
+  private_dns_zones_resource_group_name = var.use_core_private_dns_zones ? azurerm_resource_group.core.name : var.private_dns_zones_resource_group_name
+  ddos_plan_id                          = var.core_ddos_plan_id
+  providers = {
+    azurerm.primary   = azurerm
+    azurerm.secondary = azurerm.secondary
+  }
+}
+
 module "azure_monitor" {
   source                                   = "./azure-monitor"
   tre_id                                   = var.tre_id
@@ -102,26 +123,6 @@ module "azure_monitor" {
   ]
 }
 
-module "network" {
-  source                               = "./network"
-  tre_id                               = var.tre_id
-  location                             = var.location
-  resource_group_name                  = azurerm_resource_group.core.name
-  core_address_space                   = var.core_address_space
-  arm_environment                      = var.arm_environment
-  enable_bastion                       = var.enable_bastion
-  mgmt_storage_account_name            = var.mgmt_storage_account_name
-  mgmt_resource_group_name             = var.mgmt_resource_group_name
-  mgmt_acr_name                        = var.acr_name
-  use_existing_private_dns_zone        = var.use_existing_private_dns_zone
-  private_dns_zone_resource_group_name = var.private_dns_zone_resource_group_name
-
-  providers = {
-    azurerm.primary   = azurerm
-    azurerm.secondary = azurerm.secondary
-  }
-}
-
 module "appgateway" {
   count                      = var.deploy_app_gateway ? 1 : 0
   source                     = "./appgateway"
@@ -132,14 +133,13 @@ module "appgateway" {
   shared_subnet              = module.network.shared_subnet_id
   api_fqdn                   = azurerm_linux_web_app.api.default_hostname
   keyvault_id                = azurerm_key_vault.kv.id
-  static_web_dns_zone_id     = module.network.static_web_dns_zone_id
+  staticweb_primary_web_host = azurerm_storage_account.staticweb.primary_web_host
   log_analytics_workspace_id = module.azure_monitor.log_analytics_workspace_id
 
   depends_on = [
     module.network,
     azurerm_key_vault.kv,
-    azurerm_key_vault_access_policy.deployer,
-    azurerm_private_endpoint.api_private_endpoint
+    azurerm_key_vault_access_policy.deployer
   ]
 }
 
@@ -155,6 +155,7 @@ module "airlock_resources" {
   mgmt_acr_name                         = var.acr_name
   api_principal_id                      = azurerm_user_assigned_identity.id.principal_id
   airlock_app_service_plan_sku          = var.core_app_service_plan_sku
+  airlock_function_subnet_id            = module.network.shared_subnet_id
   airlock_processor_subnet_id           = module.network.airlock_processor_subnet_id
   airlock_servicebus                    = azurerm_servicebus_namespace.sb
   applicationinsights_connection_string = module.azure_monitor.app_insights_connection_string
@@ -162,6 +163,7 @@ module "airlock_resources" {
   arm_environment                       = var.arm_environment
   tre_core_tags                         = local.tre_core_tags
   log_analytics_workspace_id            = module.azure_monitor.log_analytics_workspace_id
+  function_app_core_dns_zone_id         = module.network.azurewebsites_dns_zone_id
   blob_core_dns_zone_id                 = module.network.blob_core_dns_zone_id
   file_core_dns_zone_id                 = module.network.file_core_dns_zone_id
   queue_core_dns_zone_id                = module.network.queue_core_dns_zone_id

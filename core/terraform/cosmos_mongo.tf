@@ -7,6 +7,7 @@ resource "azurerm_cosmosdb_account" "mongo" {
   enable_automatic_failover = false
   mongo_server_version      = 4.2
   ip_range_filter           = "${local.azure_portal_cosmos_ips}${var.enable_local_debugging ? ",${local.myip}" : ""}"
+  public_network_access_enabled = false
 
   capabilities {
     name = "EnableServerless"
@@ -63,7 +64,7 @@ resource "azurerm_private_endpoint" "mongo" {
   lifecycle { ignore_changes = [tags] }
 
   private_dns_zone_group {
-    name                 = "private-dns-zone-group"
+    name                 = "default"
     private_dns_zone_ids = [module.network.mongo_core_dns_zone_id]
   }
 

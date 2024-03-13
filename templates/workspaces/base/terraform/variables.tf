@@ -49,7 +49,7 @@ variable "register_aad_application" {
 
 variable "create_aad_groups" {
   type        = bool
-  default     = false
+  default     = true
   description = "Create AAD groups automatically for the Workspace Application Roles."
 }
 
@@ -123,13 +123,45 @@ variable "arm_environment" {
   type = string
 }
 
-variable "enable_bastion" {
-  type        = bool
-  default     = false
-  description = "Enable Bastion"
-}
 variable "enable_firewall" {
   type        = bool
   default     = false
   description = "Enable Firewall"
+}
+
+variable "use_core_private_dns_zones" {
+  type        = bool
+  default     = false
+  description = "Use existing private DNS zone for ACR"
+}
+
+variable "private_dns_zones_resource_group_name" {
+  type        = string
+  default     = ""
+  description = "Resource group of private DNS zone for ACR"
+}
+
+variable "secondary_arm_tenant_id" {
+  type        = string
+  default     = ""
+  description = "Secondary ARM tenant ID"
+}
+
+variable "secondary_arm_subscription_id" {
+  type        = string
+  default     = ""
+  description = "Secondary ARM subscription ID"
+}
+
+variable "secondary_arm_client_id" {
+  type        = string
+  default     = ""
+  description = "Secondary ARM client ID"
+}
+
+variable "secondary_arm_client_secret" {
+  type        = string
+  default     = ""
+  description = "Secondary ARM client secret"
+  sensitive = true
 }

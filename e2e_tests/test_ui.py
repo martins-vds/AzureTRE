@@ -9,7 +9,7 @@ pytestmark = pytest.mark.asyncio
 
 @pytest.mark.smoke
 async def test_ui() -> None:
-    endpoint = f"{config.TRE_URL}"
+    endpoint = f"{config.TRE_UI_URL}"
 
     async with AsyncClient(verify=False) as client:
         response = await client.get(endpoint)

@@ -31,6 +31,16 @@ variable "tre_address_space" {
   description = "Overall TRE Address Space pool, will be used for workspace VNETs, can be a supernet of address_space."
 }
 
+variable "core_ddos_plan_id" {
+  type = string
+  description = "DDOS plan ID"
+
+  validation {
+    condition     = var.core_ddos_plan_id != ""
+    error_message = "DDOS plan ID must be specified"
+  }
+}
+
 variable "api_image_repository" {
   type        = string
   description = "Repository for API image"
@@ -73,13 +83,6 @@ variable "enable_swagger" {
   type        = bool
   default     = false
   description = "Determines whether the Swagger interface for the API will be available."
-  sensitive   = false
-}
-
-variable "enable_bastion" {
-  type        = bool
-  default     = false
-  description = "Determines whether the bastion host will be deployed."
   sensitive   = false
 }
 
@@ -212,7 +215,28 @@ variable "core_keyvault_allowed_subnet_ids" {
   type        = list(string)
   default     = []
   description = "Network rule set for keyvault"
+}
 
+variable "core_static_web_allowed_subnet_ids" {
+  type        = list(string)
+  default     = []
+  description = "Network rule set for static web"
+}
+
+variable "core_api_allowed_devops_subnet_id" {
+  type        = string
+  description = "Subnet ID for Azure DevOps agents"
+
+  validation {
+    condition     = var.core_api_allowed_devops_subnet_id != ""
+    error_message = "core_api_allowed_devops_subnet_id must be set"
+  }
+}
+
+variable "core_api_additional_allowed_subnet_ids" {
+  type = string
+  default = ""
+  description = "Additional subnet IDs for API"
 }
 
 variable "deploy_app_gateway" {
@@ -221,13 +245,13 @@ variable "deploy_app_gateway" {
   description = "Deploy app gateway"
 }
 
-variable "use_existing_private_dns_zone" {
+variable "use_core_private_dns_zones" {
   type        = bool
   default     = false
   description = "Use existing private DNS zone for ACR"
 }
 
-variable "private_dns_zone_resource_group_name" {
+variable "private_dns_zones_resource_group_name" {
   type        = string
   default     = ""
   description = "Resource group of private DNS zone for ACR"

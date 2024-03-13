@@ -17,16 +17,22 @@ resource "azurerm_resource_group" "ws" {
 // dependencies for each resource seperatly, so to make it easier we packed all network
 // resources as a single module that should be depended on.
 module "network" {
-  source                 = "./network"
-  location               = var.location
-  tre_id                 = var.tre_id
-  address_spaces         = var.address_spaces
-  ws_resource_group_name = azurerm_resource_group.ws.name
-  tre_resource_id        = var.tre_resource_id
-  tre_workspace_tags     = local.tre_workspace_tags
-  arm_environment        = var.arm_environment
-  enable_bastion         = var.enable_bastion
-  enable_firewall        = var.enable_firewall
+  source                                = "./network"
+  location                              = var.location
+  tre_id                                = var.tre_id
+  address_spaces                        = var.address_spaces
+  ws_resource_group_name                = azurerm_resource_group.ws.name
+  tre_resource_id                       = var.tre_resource_id
+  tre_workspace_tags                    = local.tre_workspace_tags
+  arm_environment                       = var.arm_environment
+  enable_firewall                       = var.enable_firewall
+  use_primary_dns_zones                 = var.use_core_private_dns_zones
+  private_dns_zones_resource_group_name = var.private_dns_zones_resource_group_name
+
+  providers = {
+    azurerm.primary   = azurerm
+    azurerm.secondary = azurerm.secondary
+  }
 }
 
 module "aad" {
@@ -47,22 +53,23 @@ module "aad" {
 }
 
 module "airlock" {
-  count                       = var.enable_airlock ? 1 : 0
-  source                      = "./airlock"
-  location                    = var.location
-  tre_id                      = var.tre_id
-  tre_workspace_tags          = local.tre_workspace_tags
-  ws_resource_group_name      = azurerm_resource_group.ws.name
-  enable_local_debugging      = var.enable_local_debugging
-  services_subnet_id          = module.network.services_subnet_id
-  short_workspace_id          = local.short_workspace_id
-  airlock_processor_subnet_id = module.network.airlock_processor_subnet_id
-  arm_environment             = var.arm_environment
+  count                        = var.enable_airlock ? 1 : 0
+  source                       = "./airlock"
+  location                     = var.location
+  tre_id                       = var.tre_id
+  tre_workspace_tags           = local.tre_workspace_tags
+  ws_resource_group_name       = azurerm_resource_group.ws.name
+  enable_local_debugging       = var.enable_local_debugging
+  services_subnet_id           = module.network.services_subnet_id
+  short_workspace_id           = local.short_workspace_id
+  airlock_processor_subnet_id  = module.network.airlock_processor_subnet_id
+  arm_environment              = var.arm_environment
+  blobcore_zone_id             = module.network.blobcore_zone_id
+  resource_processor_subnet_id = module.network.resource_processor_subnet_id
   depends_on = [
     module.network,
   ]
 }
-
 
 module "azure_monitor" {
   source                                   = "./azure-monitor"

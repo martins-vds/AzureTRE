@@ -27,26 +27,58 @@
       "default": "Access Windows and Linux virtual machines via Azure Bastion. Documentation for using this service can be found here: [https://bastion.apache.org/doc/gug/using-bastion.html](https://bastion.apache.org/doc/gug/using-bastion.html)",
       "updateable": true
     },
-    "bastion_subscription_id": {
-      "type": "string",
-      "title": "Subscription ID for Azure Bastion",
-      "description": "The subscription ID for the Azure Bastion service",
-      "default": "",
-      "updateable": true
-    },
-    "bastion_resource_group": {
-      "type": "string",
-      "title": "Resource Group for Azure Bastion",
-      "description": "The resource group for the Azure Bastion service",
-      "default": "",
-      "updateable": true
-    },
-    "bastion_name": {
-      "type": "string",
-      "title": "Name of Azure Bastion",
-      "description": "The name of the Azure Bastion service",
-      "default": "",
+    "use_builtin_bastion": {
+      "type": "boolean",
+      "title": "Use built-in Bastion",
+      "description": "Use the built-in Azure Bastion service",
+      "default": true,
       "updateable": true
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "use_builtin_bastion": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "use_builtin_bastion"
+        ]
+      },
+      "else": {
+        "required": [
+          "bastion_subscription_id",
+          "bastion_resource_group",
+          "bastion_name"
+        ],
+        "properties": {
+          "bastion_subscription_id": {
+            "type": "string",
+            "title": "Azure Bastion Subscription ID",
+            "description": "The subscription ID for the Azure Bastion service",
+            "default": "",
+            "updateable": true
+          },
+          "bastion_resource_group": {
+            "type": "string",
+            "title": "Azure Bastion Resource Group",
+            "description": "The resource group for the Azure Bastion service",
+            "default": "",
+            "updateable": true
+          },
+          "bastion_name": {
+            "type": "string",
+            "title": "Azure Bastion Name",
+            "description": "The name of the Azure Bastion service",
+            "default": "",
+            "updateable": true
+          }
+        }
+      }
+    }
+  ]
 }

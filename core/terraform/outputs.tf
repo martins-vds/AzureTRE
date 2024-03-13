@@ -18,10 +18,6 @@ output "app_gateway_name" {
   value = one(module.appgateway[*].app_gateway_name)
 }
 
-output "static_web_storage" {
-  value = one(module.appgateway[*].static_web_storage)
-}
-
 output "keyvault_name" {
   value = azurerm_key_vault.kv.name
 }
@@ -111,4 +107,8 @@ output "event_grid_airlock_notification_topic_resource_id" {
 
 output "service_bus_step_result_queue" {
   value = module.airlock_resources.service_bus_step_result_queue
+}
+
+output "static_web_storage" {
+  value = azurerm_storage_account.staticweb.name
 }

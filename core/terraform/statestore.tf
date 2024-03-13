@@ -1,12 +1,13 @@
 resource "azurerm_cosmosdb_account" "tre_db_account" {
-  name                      = "cosmos-${var.tre_id}"
-  location                  = azurerm_resource_group.core.location
-  resource_group_name       = azurerm_resource_group.core.name
-  offer_type                = "Standard"
-  kind                      = "GlobalDocumentDB"
-  enable_automatic_failover = false
-  ip_range_filter           = "${local.azure_portal_cosmos_ips}${var.enable_local_debugging ? ",${local.myip}" : ""}"
-  tags                      = local.tre_core_tags
+  name                          = "cosmos-${var.tre_id}"
+  location                      = azurerm_resource_group.core.location
+  resource_group_name           = azurerm_resource_group.core.name
+  offer_type                    = "Standard"
+  kind                          = "GlobalDocumentDB"
+  enable_automatic_failover     = false
+  ip_range_filter               = "${local.azure_portal_cosmos_ips}${var.enable_local_debugging ? ",${local.myip}" : ""}"
+  tags                          = local.tre_core_tags
+  public_network_access_enabled = false
 
   dynamic "capabilities" {
     # We can't change an existing cosmos
@@ -68,7 +69,7 @@ resource "azurerm_private_endpoint" "sspe" {
   lifecycle { ignore_changes = [tags] }
 
   private_dns_zone_group {
-    name                 = "private-dns-zone-group"
+    name                 = "default"
     private_dns_zone_ids = [module.network.cosmos_core_dns_zone_id]
   }
 

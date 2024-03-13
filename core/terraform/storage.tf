@@ -11,6 +11,7 @@ resource "azurerm_storage_account" "stg" {
   network_rules {
     default_action = "Deny"
     virtual_network_subnet_ids = var.core_storage_allowed_subnet_ids
+    bypass = [ "AzureServices" ]
   }
 
   lifecycle { ignore_changes = [tags] }

@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-bastion
-version: 0.1.2
+version: 0.1.3
 description: "An Azure TRE service for Azure Bastion"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -26,6 +26,10 @@ parameters:
     type: string
   - name: tre_id
     type: string
+  - name: use_builtin_bastion
+    type: boolean
+    default: true
+    description: "Use the built-in Azure Bastion service"
   - name: bastion_subscription_id
     type: string
     description: "Subscription containing the Azure Bastion service"
@@ -83,36 +87,18 @@ install:
       flags:
         identity:
         username: ${ bundle.credentials.azure_client_id }
-  - az:
+  - exec:
+      command: ./validate_bastion.sh
+      description: "Validate the Azure Bastion service"
       arguments:
-        - account
-        - set
-      flags:
-        subscription: ${bundle.parameters.bastion_subscription_id}
-  - az:
-      arguments:
-        - account
-        - show
+        - ${ bundle.parameters.use_builtin_bastion }
+        - ${ bundle.parameters.tre_id }
+        - ${ bundle.parameters.bastion_subscription_id }
+        - ${ bundle.parameters.bastion_resource_group }
+        - ${ bundle.parameters.bastion_name }
       outputs:
         - name: bastion_subscription_id
           jsonPath: "$.id"
-  - az:
-      arguments:
-        - extension
-        - add
-      flags:
-        name: bastion
-        upgrade:
-        yes:
-  - az:
-      arguments:
-        - network
-        - bastion
-        - show
-      flags:
-        resource-group: ${bundle.parameters.bastion_resource_group}
-        name: ${bundle.parameters.bastion_name}
-      outputs:
         - name: bastion_name
           jsonPath: "$.name"
         - name: bastion_resource_group
@@ -126,36 +112,18 @@ upgrade:
       flags:
         identity:
         username: ${ bundle.credentials.azure_client_id }
-  - az:
+  - exec:
+      command: ./validate_bastion.sh
+      description: "Validate the Azure Bastion service"
       arguments:
-        - account
-        - set
-      flags:
-        subscription: ${bundle.parameters.bastion_subscription_id}
-  - az:
-      arguments:
-        - account
-        - show
+        - ${ bundle.parameters.use_builtin_bastion }
+        - ${ bundle.parameters.tre_id }
+        - ${ bundle.parameters.bastion_subscription_id }
+        - ${ bundle.parameters.bastion_resource_group }
+        - ${ bundle.parameters.bastion_name }
       outputs:
         - name: bastion_subscription_id
           jsonPath: "$.id"
-  - az:
-      arguments:
-        - extension
-        - add
-      flags:
-        name: bastion
-        upgrade:
-        yes:
-  - az:
-      arguments:
-        - network
-        - bastion
-        - show
-      flags:
-        resource-group: ${bundle.parameters.bastion_resource_group}
-        name: ${bundle.parameters.bastion_name}
-      outputs:
         - name: bastion_name
           jsonPath: "$.name"
         - name: bastion_resource_group

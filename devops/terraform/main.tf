@@ -25,10 +25,5 @@ resource "azurerm_storage_account" "state_storage" {
   account_replication_type        = "LRS"
   allow_nested_items_to_be_public = false
 
-  network_rules {
-    default_action             = "Deny"
-    virtual_network_subnet_ids = var.mgmt_storage_allowed_subnet_ids
-  }
-
   lifecycle { ignore_changes = [tags] }
 }

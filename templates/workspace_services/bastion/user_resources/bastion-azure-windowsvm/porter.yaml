@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-bastion-windowsvm
-version: 0.0.5
+version: 0.0.8
 description: "An Azure TRE User Resource Template for Bastion (Windows 10)"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -33,6 +33,13 @@ custom:
         publisher: microsoft-dsvm
         offer: dsvm-win-2019
         sku: winserver-2019
+        version: latest
+      conda_config: true
+    "Server 2022 Data Science VM":
+      source_image_reference:
+        publisher: microsoft-dsvm
+        offer: dsvm-win-2022
+        sku: winserver-2022
         version: latest
       conda_config: true
     # For information on using custom images, see README.me in the bastion/user-resources folder

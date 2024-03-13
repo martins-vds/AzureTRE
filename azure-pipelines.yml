@@ -10,6 +10,7 @@ parameters:
     values:
       - "all"
       - "core"
+      - "ui"
       - "workspace-bundles"
       - "user-resource-bundles"
       - "shared-bundles"
@@ -43,10 +44,6 @@ parameters:
     displayName: Deploy Firewall
     type: boolean
     default: 'false'
-  - name: enableBastion
-    displayName: Deploy Bastion Host
-    type: boolean
-    default: 'false'
   - name: deployAppGateway
     displayName: Deploy Application Gateway
     type: boolean
@@ -70,8 +67,8 @@ jobs:
       DEVCONTAINER_TAG: 'latest'
       AAD_TENANT_ID: $(AAD_TENANT_ID)
       ACR_NAME: $(ACR_NAME)
-      AZURE_CREDENTIALS: 'AzureTRE-Dev'
-      SECONDARY_AZURE_CREDENTIALS: 'AzureTRE-Dev'
+      AZURE_CREDENTIALS: $(AZURE_CREDENTIALS)
+      SECONDARY_AZURE_CREDENTIALS: $(SECONDARY_AZURE_CREDENTIALS)
       API_CLIENT_ID: $(API_CLIENT_ID)
       API_CLIENT_SECRET: $(API_CLIENT_SECRET)
       APPLICATION_ADMIN_CLIENT_ID: $(APPLICATION_ADMIN_CLIENT_ID)
@@ -96,8 +93,6 @@ jobs:
       WORKSPACE_APP_SERVICE_PLAN_SKU: 'P1v2'
       RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: "5"
       ENABLE_SWAGGER: 'false'
-      ${{ if eq(parameters.enableBastion , 'true') }}:
-        ENABLE_BASTION: 'true'
       DEPLOY_FIREWALL: ${{ parameters.deployFirewall }}
       CORE_ADDRESS_SPACE: '10.0.0.0/22'
       CORE_APP_SERVICE_PLAN_SKU: 'P1v2'
@@ -105,9 +100,19 @@ jobs:
       BUILD_AGENTS_RESOURCE_GROUP_NAME: $(BUILD_AGENTS_RESOURCE_GROUP_NAME)
       BUILD_AGENTS_VNET_NAME: $(BUILD_AGENTS_VNET_NAME)
       BUILD_AGENTS_SUBNET_NAME: $(BUILD_AGENTS_SUBNET_NAME)
-      USE_EXISTING_PRIVATE_DNS_ZONE: "$(USE_EXISTING_PRIVATE_DNS_ZONE)"
-      PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: $(PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME)
+      USE_CORE_PRIVATE_DNS_ZONES: "$(USE_CORE_PRIVATE_DNS_ZONES)"
+      PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME: $(PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME)
       PRIVATE_DNS_ZONE_AZURE_CREDENTIALS: 'secondary'
+      RP_BUNDLE_VALUES:
+        use_core_private_dns_zones: "$(USE_CORE_PRIVATE_DNS_ZONES)"
+        private_dns_zones_subscription_id: "$(SECONDARY_SUBSCRIPTION_ID)"
+        private_dns_zones_resource_group_name: "$(PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME)"
+        ${{ if eq(parameters.deployAppGateway, 'true') }}:
+          use_core_app_gateway: 'true'
+        ${{ else }}:
+          use_core_app_gateway: 'false'
+      CORE_DDOS_PLAN_ID: $(CORE_DDOS_PLAN_ID)
+      CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS: $(CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS)
       ${{ if eq(parameters.deployAppGateway, 'true') }}:
         DEPLOY_APP_GATEWAY: 'true'
       BUNDLES:
@@ -136,6 +141,9 @@ jobs:
           BUNDLE_DIR: "./templates/workspace_services/rshiny"
           BUNDLE_NAME: "rshiny"
         - BUNDLE_TYPE: "workspace_service"
+          BUNDLE_DIR: "./templates/workspace_services/rshiny-unrestricted"
+          BUNDLE_NAME: "rshiny-unrestricted"
+        - BUNDLE_TYPE: "workspace_service"
           BUNDLE_DIR: "./templates/workspace_services/bastion"
           BUNDLE_NAME: "bastion"
         - BUNDLE_TYPE: "workspace_service"
@@ -153,6 +161,9 @@ jobs:
         - BUNDLE_TYPE: "workspace_service"
           BUNDLE_DIR: "./templates/workspace_services/ohdsi"
           BUNDLE_NAME: "ohdsi"
+        - BUNDLE_TYPE: "workspace_service"
+          BUNDLE_DIR: "./templates/workspace_services/avd"
+          BUNDLE_NAME: "avd"
       SHARED_BUNDLES:
         - BUNDLE_TYPE: "shared_service"
           BUNDLE_DIR: "./templates/shared_services/firewall"
@@ -161,8 +172,8 @@ jobs:
           BUNDLE_DIR: "./templates/shared_services/gitea"
           BUNDLE_NAME: "gitea_shared"
         - BUNDLE_TYPE: "shared_service"
-          BUNDLE_DIR: "./templates/shared_services/admin-vm/"
-          BUNDLE_NAME: "admin_vm"
+          BUNDLE_DIR: "./templates/shared_services/admin-vm-avd/"
+          BUNDLE_NAME: "admin_vm_avd"
         - BUNDLE_TYPE: "shared_service"
           BUNDLE_DIR: "./templates/shared_services/airlock_notifier/"
           BUNDLE_NAME: "airlock_notifier"
@@ -178,6 +189,9 @@ jobs:
         - BUNDLE_TYPE: "shared_service"
           BUNDLE_DIR: "./templates/shared_services/databricks-auth/"
           BUNDLE_NAME: "databricks_auth"
+        - BUNDLE_TYPE: "shared_service"
+          BUNDLE_DIR: "./templates/shared_services/bastion/"
+          BUNDLE_NAME: "bastion"
       USER_RESOURCE_BUNDLES:
         - BUNDLE_TYPE: "user_resource"
           BUNDLE_DIR: "./templates/workspace_services/guacamole/user_resources/guacamole-azure-windowsvm"

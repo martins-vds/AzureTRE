@@ -161,7 +161,6 @@ resource "azurerm_network_security_rule" "allow_outbound_webapps_to_services" {
 }
 
 resource "azurerm_network_security_rule" "allow_inbound_from_bastion" {
-  count = var.enable_bastion ? 1 : 0
   access                       = "Allow"
   destination_address_prefixes = azurerm_subnet.services.address_prefixes
   destination_port_ranges = [
@@ -175,7 +174,7 @@ resource "azurerm_network_security_rule" "allow_inbound_from_bastion" {
   protocol                    = "Tcp"
   resource_group_name         = var.ws_resource_group_name
   source_address_prefixes = [
-    data.azurerm_subnet.bastion[0].address_prefix
+    data.azurerm_subnet.bastion.address_prefix
   ]
   source_port_range = "*"
 }
@@ -192,23 +191,6 @@ resource "azurerm_network_security_rule" "allow_inbound_from_resourceprocessor" 
   resource_group_name          = var.ws_resource_group_name
   source_address_prefixes = [
     data.azurerm_subnet.resourceprocessor.address_prefix
-  ]
-  source_port_range = "*"
-}
-
-
-resource "azurerm_network_security_rule" "allow_inbound_from_airlockprocessor" {
-  access                       = "Allow"
-  destination_address_prefixes = azurerm_subnet.services.address_prefixes
-  destination_port_range       = "443"
-  direction                    = "Inbound"
-  name                         = "allow-inbound-from-airlockprocessor"
-  network_security_group_name  = azurerm_network_security_group.ws.name
-  priority                     = 140
-  protocol                     = "Tcp"
-  resource_group_name          = var.ws_resource_group_name
-  source_address_prefixes = [
-    data.azurerm_subnet.airlockprocessor.address_prefix
   ]
   source_port_range = "*"
 }
@@ -234,7 +216,69 @@ resource "azurerm_network_security_rule" "allow_inbound_from_webapp_to_services"
   source_port_range            = "*"
 }
 
+resource "azurerm_network_security_rule" "allow_inbound_from_airlockprocessor" {
+  access                       = "Allow"
+  destination_address_prefixes = azurerm_subnet.services.address_prefixes
+  destination_port_range       = "443"
+  direction                    = "Inbound"
+  name                         = "allow-inbound-from-airlockprocessor"
+  network_security_group_name  = azurerm_network_security_group.ws.name
+  priority                     = 140
+  protocol                     = "Tcp"
+  resource_group_name          = var.ws_resource_group_name
+  source_address_prefixes = [
+    data.azurerm_subnet.airlockprocessor.address_prefix
+  ]
+  source_port_range = "*"
+}
 
+resource "azurerm_network_security_rule" "allow_rdp_shortpath_server" {
+  access                     = "Allow"
+  destination_address_prefix = "*"
+  destination_port_ranges = [
+    "49152-65535"
+  ]
+  direction                   = "Outbound"
+  name                        = "outbound_to_rdp_shortpath_server"
+  network_security_group_name = azurerm_network_security_group.ws.name
+  priority                    = 150
+  protocol                    = "Udp"
+  resource_group_name         = var.ws_resource_group_name
+  source_address_prefix       = "VirtualNetwork"
+  source_port_range           = "*"
+}
+
+resource "azurerm_network_security_rule" "allow_stun_turn_udp" {
+  access = "Allow"
+  destination_port_ranges = [
+    "3478"
+  ]
+  destination_address_prefix  = "20.202.0.0/16"
+  direction                   = "Outbound"
+  name                        = "to_stun_turn_udp"
+  network_security_group_name = azurerm_network_security_group.ws.name
+  priority                    = 160
+  protocol                    = "Udp"
+  resource_group_name         = var.ws_resource_group_name
+  source_address_prefix       = "*"
+  source_port_range           = "*"
+}
+
+resource "azurerm_network_security_rule" "allow_stun_turn_tcp" {
+  access = "Allow"
+  destination_port_ranges = [
+    "443"
+  ]
+  destination_address_prefix  = "20.202.0.0/16"
+  direction                   = "Outbound"
+  name                        = "to_stun_turn_tcp"
+  network_security_group_name = azurerm_network_security_group.ws.name
+  priority                    = 170
+  protocol                    = "Tcp"
+  resource_group_name         = var.ws_resource_group_name
+  source_address_prefix       = "*"
+  source_port_range           = "*"
+}
 
 moved {
   from = azurerm_network_security_rule.deny-outbound-overrid

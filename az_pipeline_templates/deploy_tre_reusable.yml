@@ -11,6 +11,7 @@ parameters:
     values:
       - "all"
       - "core"
+      - "ui"
       - "workspace-bundles"
       - "user-resource-bundles"
       - "shared-bundles"
@@ -144,8 +145,8 @@ parameters:
     default: ""
   - name: RP_BUNDLE_VALUES
     displayName: RP bundle values
-    type: string
-    default: "{}"
+    type: object
+    default: {}
   - name: TF_LOG
     displayName: Terraform log level
     type: string
@@ -176,13 +177,6 @@ parameters:
     default: "5"
   - name: ENABLE_SWAGGER
     displayName: Enable Swagger
-    type: string
-    default: "false"
-    values:
-      - "true"
-      - "false"
-  - name: ENABLE_BASTION
-    displayName: Enable Bastion
     type: string
     default: "false"
     values:
@@ -225,10 +219,10 @@ parameters:
       - "INFO"
       - "WARN"
       - "ERROR"
-  - name: USE_EXISTING_PRIVATE_DNS_ZONE
+  - name: USE_CORE_PRIVATE_DNS_ZONES
     default: "false"
     type: string
-  - name: PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME
+  - name: PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME
     default: ""
   - name: PRIVATE_DNS_ZONE_AZURE_CREDENTIALS
     default: "secondary"
@@ -240,6 +234,10 @@ parameters:
     displayName: Deploy App Gateway
     type: string
     default: "false"
+  - name: CORE_DDOS_PLAN_ID
+    default: ""
+  - name: CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS
+    default: ""
 jobs:
   - job: validation
     displayName: Validation
@@ -392,8 +390,8 @@ jobs:
           MGMT_STORAGE_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           MGMT_ACR_PRIVATE_ENDPOINT_SUBNET_ID: $(pipeline_network_subnet_id)
           BOOTSTRAP_STORAGE_ALLOWED_SUBNET_IDS: $(pipeline_network_subnet_id)
-          USE_EXISTING_PRIVATE_DNS_ZONE: ${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }}
-          PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }}
+          USE_CORE_PRIVATE_DNS_ZONES: ${{ parameters.USE_CORE_PRIVATE_DNS_ZONES }}
+          PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME }}
           PRIVATE_DNS_ZONE_AZURE_CREDENTIALS: ${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           SECONDARY_SUBSCRIPTION_ID: ${{ parameters.SECONDARY_SUBSCRIPTION_ID }}
@@ -504,7 +502,6 @@ jobs:
           CORE_ADDRESS_SPACE: ${{ parameters.CORE_ADDRESS_SPACE }}
           TRE_ADDRESS_SPACE: ${{ parameters.TRE_ADDRESS_SPACE }}
           ENABLE_SWAGGER: "${{ parameters.ENABLE_SWAGGER }}"
-          ENABLE_BASTION: "${{ parameters.ENABLE_BASTION }}"
           SWAGGER_UI_CLIENT_ID: "${{ parameters.SWAGGER_UI_CLIENT_ID }}"
           API_CLIENT_SECRET: "${{ parameters.API_CLIENT_SECRET }}"
           APPLICATION_ADMIN_CLIENT_ID: "${{ parameters.APPLICATION_ADMIN_CLIENT_ID }}"
@@ -515,15 +512,19 @@ jobs:
             STATEFUL_RESOURCES_LOCKED: "false"
           CORE_APP_SERVICE_PLAN_SKU: ${{ parameters.CORE_APP_SERVICE_PLAN_SKU }}
           RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE: ${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}
-          RP_BUNDLE_VALUES: "${{ parameters.RP_BUNDLE_VALUES }}"
+          RP_BUNDLE_VALUES: ${{ parameters.RP_BUNDLE_VALUES }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           SECONDARY_SUBSCRIPTION_ID: ${{ parameters.SECONDARY_SUBSCRIPTION_ID }}
           CORE_STORAGE_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
           CORE_KEYVAULT_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
-          USE_EXISTING_PRIVATE_DNS_ZONE: ${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }}
-          PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }}
+          CORE_STATIC_WEB_ALLOWED_SUBNET_IDS: "'[\"$(pipeline_network_subnet_id)\"]'"
+          CORE_API_ALLOWED_DEVOPS_SUBNET_ID: $(pipeline_network_subnet_id)
+          CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS: ${{ parameters.CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS }}
+          USE_CORE_PRIVATE_DNS_ZONES: ${{ parameters.USE_CORE_PRIVATE_DNS_ZONES }}
+          PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME: ${{ parameters.PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME }}
           PRIVATE_DNS_ZONE_AZURE_CREDENTIALS: ${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }}
           DEPLOY_APP_GATEWAY: ${{ parameters.DEPLOY_APP_GATEWAY }}
+          CORE_DDOS_PLAN_ID: ${{ parameters.CORE_DDOS_PLAN_ID }}
           LOGGING_LEVEL: ${{ parameters.LOGGING_LEVEL }}
 
       - template: devcontainer_run_command.yml
@@ -777,7 +778,7 @@ jobs:
 
   - job: deploy_ui
     displayName: Deploy UI
-    condition: and(succeeded(), ${{ eq(parameters.deployStages, 'all') }})
+    condition: and(succeeded(), ${{ or(eq(parameters.deployStages, 'all'), eq(parameters.deployStages, 'ui')) }})
     dependsOn: [deploy_tre]
     pool:
       name: ${{ parameters.agentPool }}
@@ -836,6 +837,7 @@ jobs:
           IS_API_SECURED: false
           WORKSPACE_APP_SERVICE_PLAN_SKU: ${{ parameters.WORKSPACE_APP_SERVICE_PLAN_SKU }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
+          DEPLOY_APP_GATEWAY: ${{ parameters.DEPLOY_APP_GATEWAY }}
 
       - publish: "./e2e_tests/pytest_e2e_smoke.xml"
         artifact: E2E Test (Smoke) Results

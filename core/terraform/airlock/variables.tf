@@ -49,6 +49,10 @@ variable "airlock_app_service_plan_sku" {
   default = "P1v3"
 }
 
+variable "airlock_function_subnet_id" {
+  type = string
+}
+
 variable "airlock_processor_subnet_id" {
   type = string
 }
@@ -76,6 +80,10 @@ variable "arm_environment" {
 }
 
 variable "log_analytics_workspace_id" {
+  type = string
+}
+
+variable "function_app_core_dns_zone_id" {
   type = string
 }
 

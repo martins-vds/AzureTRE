@@ -45,6 +45,8 @@ resource "azurerm_linux_virtual_machine" "linuxvm" {
   encryption_at_host_enabled      = true
   admin_username                  = random_string.username.result
   admin_password                  = random_password.password.result
+  vtpm_enabled                    = true
+  secure_boot_enabled             = true
 
   custom_data = data.template_cloudinit_config.config.rendered
 
@@ -84,9 +86,12 @@ data "template_cloudinit_config" "config" {
     content      = data.template_file.get_apt_keys.rendered
   }
 
-  part {
-    content_type = "text/cloud-config"
-    content      = data.template_file.apt_sources_config.rendered
+  dynamic "part" {
+    for_each = data.template_file.apt_sources_config[*].rendered != "" ? [1] : []
+    content {
+      content_type = "text/cloud-config"
+      content      = data.template_file.apt_sources_config[0].rendered
+    }
   }
 
   part {
@@ -129,6 +134,7 @@ data "template_file" "pypi_sources_config" {
 }
 
 data "template_file" "apt_sources_config" {
+  count    = local.nexus_proxy_url != "" ? 1 : 0
   template = file("${path.module}/apt_sources_config.yml")
   vars = {
     nexus_proxy_url = local.nexus_proxy_url
@@ -155,6 +161,18 @@ resource "azurerm_virtual_machine_extension" "oms_agent" {
         "workspaceKey": "${data.azurerm_log_analytics_workspace.oms-workspace.primary_shared_key}"
     }
     PROTECTED_SETTINGS
+}
+
+resource "azurerm_virtual_machine_extension" "aad_login" {
+  name                       = "${azurerm_linux_virtual_machine.linuxvm.name}-aad-login"
+  virtual_machine_id         = azurerm_linux_virtual_machine.linuxvm.id
+  publisher                  = "Microsoft.Azure.ActiveDirectory.LinuxSSH"
+  auto_upgrade_minor_version = true
+  type                       = "AADLoginForLinux"
+  type_handler_version       = "1.0"
+  tags                       = local.tre_user_resources_tags
+
+  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_key_vault_secret" "linuxvm_password" {

@@ -46,12 +46,6 @@ parameters:
     values:
       - "true"
       - "false"
-  - name: ENABLE_BASTION
-    default: "false"
-    type: string
-    values:
-      - "true"
-      - "false"
   - name: SWAGGER_UI_CLIENT_ID
     default: ""
   - name: API_CLIENT_SECRET
@@ -98,8 +92,8 @@ parameters:
   - name: E2E_TESTS_NUMBER_PROCESSES
     default: ""
   - name: RP_BUNDLE_VALUES
-    type: string
-    default: "{}"
+    type: object
+    default: {}
   - name: SUBSCRIPTION_ID
     default: ""
   - name: SECONDARY_SUBSCRIPTION_ID
@@ -116,6 +110,14 @@ parameters:
     default: "'[]'"
   - name: CORE_KEYVAULT_ALLOWED_SUBNET_IDS
     default: "'[]'"
+  - name: CORE_STATIC_WEB_ALLOWED_SUBNET_IDS
+    default: "'[]'"
+  - name: CORE_API_ALLOWED_DEVOPS_SUBNET_ID
+    default: ""
+  - name: CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS
+    default: ""
+  - name: CORE_DDOS_PLAN_ID
+    default: ""
   - name: LOGGING_LEVEL
     default: "INFO"
     values:
@@ -123,10 +125,10 @@ parameters:
       - "INFO"
       - "WARN"
       - "ERROR"
-  - name: USE_EXISTING_PRIVATE_DNS_ZONE
+  - name: USE_CORE_PRIVATE_DNS_ZONES
     default: "false"
     type: string
-  - name: PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME
+  - name: PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME
     default: ""
   - name: PRIVATE_DNS_ZONE_AZURE_CREDENTIALS
     default: "secondary"
@@ -187,14 +189,18 @@ steps:
       targetType: 'inline'
       script: |
         if [ "${{ parameters.DEPLOY_APP_GATEWAY }}" == "false" ]; then
+          tre_ui_url="https://stweb${{ parameters.TRE_ID }}.z9.web.core.windows.net"
           tre_url="https://api-${{ parameters.TRE_ID }}.azurewebsites.net"
         else
           source devops/scripts/construct_tre_url.sh
           tre_url=$(construct_tre_url "${{ parameters.TRE_ID }}" "${{ parameters.LOCATION }}" "${{ parameters.AZURE_ENVIRONMENT }}")
+          tre_ui_url=$tre_url
         fi
 
         echo "##vso[task.setvariable variable=TRE_URL;]$tre_url"
+        echo "##vso[task.setvariable variable=TRE_UI_URL;]$tre_ui_url"
         echo "Set TRE_URL to $tre_url"
+        echo "Set TRE_UI_URL to $tre_ui_url"
 
   - task: Bash@3
     displayName: '${{ parameters.DISPLAY_NAME }} - Construct ARM_ENVIRONMENT'
@@ -224,9 +230,7 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        echo "Using $(ARM_ENVIRONMENT) arm environment"
-        echo "Using $(AZURE_ENVIRONMENT) azure environment"
-        echo "Using $(AZURE_CREDENTIALS_TENANT_ID) tenant id"
+        bundle_values=$(echo '${{ convertToJson(parameters.RP_BUNDLE_VALUES) }}' | jq)
 
         docker run --rm --mount \
           "type=bind,src=$(Build.SourcesDirectory),dst=/workspaces/tre" \
@@ -264,7 +268,6 @@ steps:
           -e TF_VAR_application_admin_client_secret="${{ parameters.APPLICATION_ADMIN_CLIENT_SECRET }}" \
           -e TF_VAR_arm_subscription_id="${{ parameters.SUBSCRIPTION_ID }}" \
           -e TF_VAR_enable_swagger="${{ parameters.ENABLE_SWAGGER }}" \
-          -e TF_VAR_enable_bastion="${{ parameters.ENABLE_BASTION }}" \
           -e SWAGGER_UI_CLIENT_ID="${{ parameters.SWAGGER_UI_CLIENT_ID }}" \
           -e TF_VAR_swagger_ui_client_id="${{ parameters.SWAGGER_UI_CLIENT_ID }}" \
           -e TF_VAR_core_address_space="${{ parameters.CORE_ADDRESS_SPACE }}" \
@@ -286,7 +289,7 @@ steps:
           -e CI_CACHE_ACR_NAME="${{ parameters.CI_CACHE_ACR_NAME }}" \
           -e TF_VAR_core_app_service_plan_sku="${{ parameters.CORE_APP_SERVICE_PLAN_SKU }}" \
           -e WORKSPACE_APP_SERVICE_PLAN_SKU="${{ parameters.WORKSPACE_APP_SERVICE_PLAN_SKU }}" \
-          -e TF_VAR_rp_bundle_values='${{ parameters.RP_BUNDLE_VALUES }}' \
+          -e TF_VAR_rp_bundle_values="$bundle_values" \
           -e TF_VAR_resource_processor_number_processes_per_instance="${{ parameters.RESOURCE_PROCESSOR_NUMBER_PROCESSES_PER_INSTANCE }}" \
           -e E2E_TESTS_NUMBER_PROCESSES="${{ parameters.E2E_TESTS_NUMBER_PROCESSES }}" \
           -e TF_VAR_logging_level="${{ parameters.LOGGING_LEVEL }}" \
@@ -294,11 +297,17 @@ steps:
           -e TF_VAR_mgmt_storage_allowed_subnet_ids=${{ parameters.MGMT_STORAGE_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_mgmt_acr_allowed_networks=${{ parameters.MGMT_ACR_ALLOWED_NETWORKS }} \
           -e TF_VAR_mgmt_acr_private_endpoint_subnet_id=${{ parameters.MGMT_ACR_PRIVATE_ENDPOINT_SUBNET_ID }} \
+          -e TF_VAR_core_ddos_plan_id="${{ parameters.CORE_DDOS_PLAN_ID }}" \
           -e TF_VAR_core_storage_allowed_subnet_ids=${{ parameters.CORE_STORAGE_ALLOWED_SUBNET_IDS }} \
           -e TF_VAR_core_keyvault_allowed_subnet_ids=${{ parameters.CORE_KEYVAULT_ALLOWED_SUBNET_IDS }} \
-          -e TF_VAR_use_existing_private_dns_zone=${{ parameters.USE_EXISTING_PRIVATE_DNS_ZONE }} \
-          -e TF_VAR_private_dns_zone_resource_group_name=${{ parameters.PRIVATE_DNS_ZONE_RESOURCE_GROUP_NAME }} \
+          -e TF_VAR_core_static_web_allowed_subnet_ids=${{ parameters.CORE_STATIC_WEB_ALLOWED_SUBNET_IDS }} \
+          -e TF_VAR_core_api_allowed_devops_subnet_id=${{ parameters.CORE_API_ALLOWED_DEVOPS_SUBNET_ID }} \
+          -e TF_VAR_core_api_additional_allowed_subnet_ids="${{ parameters.CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS }}" \
+          -e TF_VAR_use_core_private_dns_zones=${{ parameters.USE_CORE_PRIVATE_DNS_ZONES }} \
+          -e TF_VAR_private_dns_zones_resource_group_name=${{ parameters.PRIVATE_DNS_ZONES_RESOURCE_GROUP_NAME }} \
           -e TF_VAR_private_dns_zone_azure_credentials=${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }} \
           -e TF_VAR_deploy_app_gateway=${{ parameters.DEPLOY_APP_GATEWAY }} \
+          -e DEPLOY_APP_GATEWAY=${{ parameters.DEPLOY_APP_GATEWAY }} \
+          -e TRE_UI_URL="$(TRE_UI_URL)" \
           '${{ parameters.CI_CACHE_ACR_NAME }}$(ACR_DOMAIN_SUFFIX)/tredev:${{ parameters.DEVCONTAINER_TAG }}' \
         bash -c "${{ parameters.COMMAND }}"

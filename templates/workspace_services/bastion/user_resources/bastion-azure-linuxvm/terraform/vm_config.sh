@@ -74,7 +74,7 @@ if [ "${SHARED_STORAGE_ACCESS}" -eq 1 ]; then
 fi
 
 ### Anaconda Config
-if [ "${CONDA_CONFIG}" -eq 1 ]; then
+if [ "${CONDA_CONFIG}" -eq 1 ] && [ "${NEXUS_PROXY_URL}" != "" ]; then
   export PATH="/anaconda/condabin":$PATH
   export PATH="/anaconda/bin":$PATH
   export PATH="/anaconda/envs/py38_default/bin":$PATH
@@ -87,9 +87,12 @@ fi
 # Docker install and config
 sudo apt-get install -y ca-certificates curl gnupg lsb-release
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin jq
-jq -n --arg proxy "${NEXUS_PROXY_URL}:8083" '{"registry-mirrors": [$proxy]}' > /etc/docker/daemon.json
-sudo systemctl daemon-reload
-sudo systemctl restart docker
 
-# R config
-sudo echo -e "local({\n    r <- getOption(\"repos\")\n    r[\"Nexus\"] <- \"""${NEXUS_PROXY_URL}\"/repository/r-proxy/\"\n    options(repos = r)\n})" | sudo tee /etc/R/Rprofile.site
+if [ "${NEXUS_PROXY_URL}" != "" ]; then
+  jq -n --arg proxy "${NEXUS_PROXY_URL}:8083" '{"registry-mirrors": [$proxy]}' > /etc/docker/daemon.json
+  sudo systemctl daemon-reload
+  sudo systemctl restart docker
+
+  # R config
+  sudo echo -e "local({\n    r <- getOption(\"repos\")\n    r[\"Nexus\"] <- \"""${NEXUS_PROXY_URL}\"/repository/r-proxy/\"\n    options(repos = r)\n})" | sudo tee /etc/R/Rprofile.site
+fi

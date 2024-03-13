@@ -137,12 +137,6 @@
       }
     },
     {
-      "name": "enable_bastion",
-      "source":{
-        "env": "ENABLE_BASTION"
-      }
-    },
-    {
       "name": "enable_firewall",
       "source":{
         "env": "ENABLE_FIREWALL"

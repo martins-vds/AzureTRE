@@ -83,6 +83,13 @@ else
 
     TRE_URL=$(construct_tre_url "${TRE_ID}" "${LOCATION}" "${AZURE_ENVIRONMENT}")
     export TRE_URL
+
+    if [[ $DEPLOY_APP_GATEWAY == "false" ]]; then
+      TRE_UI_URL="https://stweb${TRE_ID}.z9.web.core.windows.net"
+    else
+      TRE_UI_URL=$TRE_URL
+    fi
+    export TRE_UI_URL
 fi
 
 set +o nounset

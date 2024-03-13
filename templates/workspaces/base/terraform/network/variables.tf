@@ -19,9 +19,16 @@ variable "tre_resource_id" {
 variable "arm_environment" {
   type = string
 }
-variable "enable_bastion" {
-  type = bool
-}
 variable "enable_firewall" {
   type = bool
+}
+variable "use_primary_dns_zones" {
+  type        = bool
+  default     = false
+  description = "Use existing private DNS zone for ACR"
+}
+variable "private_dns_zones_resource_group_name" {
+  type        = string
+  default     = ""
+  description = "Resource group of private DNS zone for ACR"
 }

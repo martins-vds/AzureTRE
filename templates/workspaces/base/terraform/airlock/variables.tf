@@ -25,3 +25,9 @@ variable "tre_workspace_tags" {
 variable "arm_environment" {
   type = string
 }
+variable "blobcore_zone_id" {
+  type = string
+}
+variable "resource_processor_subnet_id" {
+  type = string
+}

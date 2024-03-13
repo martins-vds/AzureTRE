@@ -1,0 +1,98 @@
+{
+  "schemaType": "ParameterSet",
+  "schemaVersion": "1.0.1",
+  "namespace": "",
+  "name": "tre-service-avd",
+  "parameters": [
+    {
+      "name": "tre_id",
+      "source": {
+        "env": "TRE_ID"
+      }
+    },
+    {
+      "name": "id",
+      "source": {
+        "env": "ID"
+      }
+    },
+    {
+      "name": "workspace_id",
+      "source": {
+        "env": "WORKSPACE_ID"
+      }
+    },
+    {
+      "name": "tfstate_container_name",
+      "source": {
+        "env": "TERRAFORM_STATE_CONTAINER_NAME"
+      }
+    },
+    {
+      "name": "tfstate_resource_group_name",
+      "source": {
+        "env": "MGMT_RESOURCE_GROUP_NAME"
+      }
+    },
+    {
+      "name": "tfstate_storage_account_name",
+      "source": {
+        "env": "MGMT_STORAGE_ACCOUNT_NAME"
+      }
+    },
+    {
+      "name": "arm_environment",
+      "source": {
+        "env": "ARM_ENVIRONMENT"
+      }
+    },
+    {
+      "name": "azure_environment",
+      "source": {
+        "env": "AZURE_ENVIRONMENT"
+      }
+    },
+    {
+      "name": "os_image",
+      "source": {
+        "env": "OS_IMAGE"
+      }
+    },
+    {
+      "name": "shared_storage_access",
+      "source": {
+        "env": "SHARED_STORAGE_ACCESS"
+      }
+    },
+    {
+      "name": "shared_storage_name",
+      "source": {
+        "env": "SHARED_STORAGE_NAME"
+      }
+    },
+    {
+      "name": "vm_size",
+      "source": {
+        "env": "VM_SIZE"
+      }
+    },
+    {
+      "name": "vm_users_object_id",
+      "source": {
+        "env": "VM_USERS_OBJECT_ID"
+      }
+    },
+    {
+      "name": "image_gallery_id",
+      "source": {
+        "env": "IMAGE_GALLERY_ID"
+      }
+    },
+    {
+      "name": "use_core_app_gateway",
+      "source": {
+        "env": "USE_CORE_APP_GATEWAY"
+      }
+    }
+  ]
+}

@@ -28,6 +28,11 @@ resource "azurerm_storage_account" "sa_airlock_processor_func_app" {
   public_network_access_enabled   = false
   tags                            = var.tre_core_tags
 
+  network_rules {
+    default_action = "Deny"
+    bypass         = ["AzureServices"]
+  }
+
   lifecycle { ignore_changes = [tags] }
 }
 
@@ -40,8 +45,9 @@ resource "azurerm_linux_function_app" "airlock_function_app" {
   service_plan_id           = azurerm_service_plan.airlock_plan.id
   storage_account_name      = azurerm_storage_account.sa_airlock_processor_func_app.name
   # consider moving to a managed identity here
-  storage_account_access_key = azurerm_storage_account.sa_airlock_processor_func_app.primary_access_key
-  tags                       = var.tre_core_tags
+  storage_account_access_key    = azurerm_storage_account.sa_airlock_processor_func_app.primary_access_key
+  tags                          = var.tre_core_tags
+  public_network_access_enabled = false
 
   identity {
     type         = "UserAssigned"
@@ -108,6 +114,28 @@ resource "azurerm_monitor_diagnostic_setting" "airlock_function_app" {
   }
 
   lifecycle { ignore_changes = [log_analytics_destination_type] }
+}
+
+resource "azurerm_private_endpoint" "function" {
+  name                = "pe-${local.airlock_function_app_name}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  subnet_id           = var.airlock_function_subnet_id
+  tags                = var.tre_core_tags
+
+  lifecycle { ignore_changes = [tags] }
+
+  private_dns_zone_group {
+    name                 = "private-dns-zone-group"
+    private_dns_zone_ids = [var.function_app_core_dns_zone_id]
+  }
+
+  private_service_connection {
+    name                           = "psc-${local.airlock_function_app_name}"
+    private_connection_resource_id = azurerm_linux_function_app.airlock_function_app.id
+    subresource_names              = ["sites"]
+    is_manual_connection           = false
+  }
 }
 
 resource "azurerm_private_endpoint" "function_storage" {
