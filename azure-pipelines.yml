@@ -6,7 +6,7 @@ parameters:
   - name: deployStages
     displayName: Deploy Components
     type: string
-    default: 'core'
+    default: 'all'
     values:
       - "all"
       - "core"
