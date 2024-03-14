@@ -167,10 +167,10 @@ jobs:
         - BUNDLE_TYPE: "workspace_service"
           BUNDLE_DIR: "./templates/workspace_services/avd"
           BUNDLE_NAME: "avd"
-        - ${{ if eq(parameters.deployBastion, 'true') }}:
-            BUNDLE_TYPE: "workspace_service"
-            BUNDLE_DIR: "./templates/workspace_services/bastion"
-            BUNDLE_NAME: "bastion"
+      ${{ if eq(parameters.deployBastion, 'true') }}:
+        - BUNDLE_TYPE: "workspace_service"
+          BUNDLE_DIR: "./templates/workspace_services/bastion"
+          BUNDLE_NAME: "bastion"
       SHARED_BUNDLES:
         - BUNDLE_TYPE: "shared_service"
           BUNDLE_DIR: "./templates/shared_services/firewall"
@@ -196,10 +196,10 @@ jobs:
         - BUNDLE_TYPE: "shared_service"
           BUNDLE_DIR: "./templates/shared_services/databricks-auth/"
           BUNDLE_NAME: "databricks_auth"
-        - ${{ if eq(parameters.deployBastion, 'true') }}:
-            BUNDLE_TYPE: "shared_service"
-            BUNDLE_DIR: "./templates/shared_services/bastion/"
-            BUNDLE_NAME: "bastion"
+      ${{ if eq(parameters.deployBastion, 'true') }}:
+        - BUNDLE_TYPE: "shared_service"
+          BUNDLE_DIR: "./templates/shared_services/bastion/"
+          BUNDLE_NAME: "bastion"
       USER_RESOURCE_BUNDLES:
         - BUNDLE_TYPE: "user_resource"
           BUNDLE_DIR: "./templates/workspace_services/guacamole/user_resources/guacamole-azure-windowsvm"
@@ -217,13 +217,13 @@ jobs:
           BUNDLE_DIR: "./templates/workspace_services/guacamole/user_resources/guacamole-azure-import-reviewvm"
           BUNDLE_NAME: "guacamole_azure_import_reviewvm"
           WORKSPACE_SERVICE_NAME: "tre-service-guacamole"
-        - ${{ if eq(parameters.deployBastion, 'true') }}:
-            BUNDLE_TYPE: "user_resource"
-            BUNDLE_DIR: "./templates/workspace_services/bastion/user_resources/bastion-azure-linuxvm"
-            BUNDLE_NAME: "bastion_azure_linuxvm"
-            WORKSPACE_SERVICE_NAME: "tre-service-bastion"
-        - ${{ if eq(parameters.deployBastion, 'true') }}:
-            BUNDLE_TYPE: "user_resource"
-            BUNDLE_DIR: "./templates/workspace_services/bastion/user_resources/bastion-azure-windowsvm"
-            BUNDLE_NAME: "bastion_azure_windowsvm"
-            WORKSPACE_SERVICE_NAME: "tre-service-bastion"
+      ${{ if eq(parameters.deployBastion, 'true') }}:
+        - BUNDLE_TYPE: "user_resource"
+          BUNDLE_DIR: "./templates/workspace_services/bastion/user_resources/bastion-azure-linuxvm"
+          BUNDLE_NAME: "bastion_azure_linuxvm"
+          WORKSPACE_SERVICE_NAME: "tre-service-bastion"
+      ${{ if eq(parameters.deployBastion, 'true') }}:
+        - BUNDLE_TYPE: "user_resource"
+          BUNDLE_DIR: "./templates/workspace_services/bastion/user_resources/bastion-azure-windowsvm"
+          BUNDLE_NAME: "bastion_azure_windowsvm"
+          WORKSPACE_SERVICE_NAME: "tre-service-bastion"
