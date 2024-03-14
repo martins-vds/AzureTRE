@@ -35,4 +35,6 @@ EOF
     schedule = "4 1 * * *"
     enabled  = true
   }
+
+  lifecycle { ignore_changes = [tags] }
 }
