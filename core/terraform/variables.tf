@@ -92,6 +92,12 @@ variable "deploy_bastion" {
   description = "Determines whether to deploy a bastion host"
 }
 
+variable "deploy_firewall" {
+  type        = bool
+  default     = false
+  description = "Determines whether to deploy a firewall"
+}
+
 variable "swagger_ui_client_id" {
   type        = string
   description = "The client id (app id) of the registration in Azure AD for the Swagger UI"

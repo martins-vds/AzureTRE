@@ -22,6 +22,7 @@ resource "azurerm_subnet" "bastion" {
 }
 
 resource "azurerm_subnet" "azure_firewall" {
+  count                = var.deploy_firewall ? 1 : 0
   name                 = "AzureFirewallSubnet"
   virtual_network_name = azurerm_virtual_network.core.name
   resource_group_name  = var.resource_group_name
@@ -164,6 +165,7 @@ resource "azurerm_subnet" "airlock_events" {
 }
 
 resource "azurerm_subnet" "firewall_management" {
+  count                = var.deploy_firewall ? 1 : 0
   name                 = "AzureFirewallManagementSubnet"
   virtual_network_name = azurerm_virtual_network.core.name
   resource_group_name  = var.resource_group_name

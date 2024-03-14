@@ -50,3 +50,9 @@ variable "deploy_bastion" {
   default     = false
   description = "Deploy a bastion host in the mgmt resource group"
 }
+
+variable "deploy_firewall" {
+  type        = bool
+  default     = false
+  description = "Deploy a firewall in the mgmt resource group"
+}

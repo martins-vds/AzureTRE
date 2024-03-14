@@ -7,7 +7,7 @@ output "bastion_subnet_id" {
 }
 
 output "azure_firewall_subnet_id" {
-  value = azurerm_subnet.azure_firewall.id
+  value = one(azurerm_subnet.azure_firewall[*].id)
 }
 
 output "app_gw_subnet_id" {
