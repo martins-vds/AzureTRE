@@ -207,6 +207,7 @@ install:
         secondary_arm_client_secret: ${ bundle.credentials.azure_client_secret }
         secondary_arm_tenant_id: ${ bundle.credentials.azure_tenant_id }
         secondary_arm_subscription_id: ${ bundle.parameters.private_dns_zones_subscription_id }
+        bastion_deployed: ${ bundle.parameters.bastion_deployed }
 
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
@@ -255,6 +256,7 @@ upgrade:
         secondary_arm_client_secret: ${ bundle.credentials.azure_client_secret }
         secondary_arm_tenant_id: ${ bundle.credentials.azure_tenant_id }
         secondary_arm_subscription_id: ${ bundle.parameters.private_dns_zones_subscription_id }
+        bastion_deployed: ${ bundle.parameters.bastion_deployed }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -325,6 +327,7 @@ uninstall:
         secondary_arm_client_secret: ${ bundle.credentials.azure_client_secret }
         secondary_arm_tenant_id: ${ bundle.credentials.azure_tenant_id }
         secondary_arm_subscription_id: ${ bundle.parameters.private_dns_zones_subscription_id }
+        bastion_deployed: ${ bundle.parameters.bastion_deployed }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }

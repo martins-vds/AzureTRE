@@ -16,6 +16,7 @@ data "azurerm_subnet" "shared" {
 }
 
 data "azurerm_subnet" "bastion" {
+  count                = var.bastion_deployed ? 1 : 0
   resource_group_name  = local.core_resource_group_name
   virtual_network_name = local.core_vnet
   name                 = "AzureBastionSubnet"
@@ -34,7 +35,7 @@ data "azurerm_subnet" "airlockprocessor" {
 }
 
 data "azurerm_route_table" "rt" {
-  count = var.enable_firewall ? 1 : 0
+  count               = var.enable_firewall ? 1 : 0
   name                = "rt-${var.tre_id}"
   resource_group_name = local.core_resource_group_name
 }

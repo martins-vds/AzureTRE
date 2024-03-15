@@ -161,6 +161,7 @@ resource "azurerm_network_security_rule" "allow_outbound_webapps_to_services" {
 }
 
 resource "azurerm_network_security_rule" "allow_inbound_from_bastion" {
+  count                        = var.bastion_deployed ? 1 : 0
   access                       = "Allow"
   destination_address_prefixes = azurerm_subnet.services.address_prefixes
   destination_port_ranges = [
