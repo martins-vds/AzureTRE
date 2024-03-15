@@ -117,6 +117,10 @@ jobs:
           use_core_app_gateway: 'true'
         ${{ else }}:
           use_core_app_gateway: 'false'
+        ${{ if eq(parameters.deployBastion, 'true') }}:
+          bastion_deployed: 'true'
+        ${{ else }}:
+          bastion_deployed: 'false'
       CORE_DDOS_PLAN_ID: $(CORE_DDOS_PLAN_ID)
       CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS: $(CORE_API_ADDITIONAL_ALLOWED_SUBNET_IDS)
       ${{ if eq(parameters.deployAppGateway, 'true') }}:
