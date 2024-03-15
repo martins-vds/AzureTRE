@@ -9,17 +9,15 @@ resource "azurerm_storage_account" "stg" {
   public_network_access_enabled   = false
   tags                            = local.tre_workspace_tags
 
+  network_rules {
+    # When deploying from a local machine we need to "allow"
+    default_action = var.enable_local_debugging ? "Allow" : "Deny"
+    bypass         = ["AzureServices"]
+
+    virtual_network_subnet_ids = [module.network.services_subnet_id, module.network.resource_processor_subnet_id]
+  }
+
   lifecycle { ignore_changes = [tags] }
-}
-
-resource "azurerm_storage_account_network_rules" "stgrules" {
-  storage_account_id = azurerm_storage_account.stg.id
-
-  # When deploying from a local machine we need to "allow"
-  default_action = var.enable_local_debugging ? "Allow" : "Deny"
-  bypass         = ["AzureServices"]
-
-  virtual_network_subnet_ids = [module.network.services_subnet_id, module.network.resource_processor_subnet_id]
 }
 
 resource "azurerm_storage_share" "shared_storage" {
@@ -29,7 +27,6 @@ resource "azurerm_storage_share" "shared_storage" {
 
   depends_on = [
     azurerm_private_endpoint.stgfilepe,
-    azurerm_storage_account_network_rules.stgrules
   ]
 }
 
@@ -40,7 +37,6 @@ resource "azurerm_storage_container" "stgcontainer" {
 
   depends_on = [
     azurerm_private_endpoint.stgblobpe,
-    azurerm_storage_account_network_rules.stgrules
   ]
 }
 

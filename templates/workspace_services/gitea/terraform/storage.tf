@@ -6,14 +6,12 @@ resource "azurerm_storage_account" "gitea" {
   account_replication_type = "GRS"
   tags                     = local.workspace_service_tags
 
+  network_rules {
+    default_action = "Deny"
+    bypass         = ["AzureServices"]
+  }
+
   lifecycle { ignore_changes = [tags] }
-}
-
-resource "azurerm_storage_account_network_rules" "stgrules" {
-  storage_account_id = azurerm_storage_account.gitea.id
-
-  default_action = "Deny"
-  bypass         = ["AzureServices"]
 }
 
 resource "azurerm_private_endpoint" "stgfilepe" {
