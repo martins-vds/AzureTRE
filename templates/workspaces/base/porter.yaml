@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-workspace-base
-version: 1.6.21
+version: 1.6.23
 description: "A base Azure TRE workspace"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -131,6 +131,9 @@ parameters:
   - name: use_existing_private_dns_zones
     type: boolean
     default: false
+  - name: bastion_deployed
+    type: boolean
+    default: false
 outputs:
   - name: app_role_id_workspace_owner
     type: string
@@ -204,6 +207,7 @@ install:
         secondary_arm_client_secret: ${ bundle.credentials.azure_client_secret }
         secondary_arm_tenant_id: ${ bundle.credentials.azure_tenant_id }
         secondary_arm_subscription_id: ${ bundle.parameters.private_dns_zones_subscription_id }
+        bastion_deployed: ${ bundle.parameters.bastion_deployed }
 
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
@@ -252,6 +256,7 @@ upgrade:
         secondary_arm_client_secret: ${ bundle.credentials.azure_client_secret }
         secondary_arm_tenant_id: ${ bundle.credentials.azure_tenant_id }
         secondary_arm_subscription_id: ${ bundle.parameters.private_dns_zones_subscription_id }
+        bastion_deployed: ${ bundle.parameters.bastion_deployed }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -322,6 +327,7 @@ uninstall:
         secondary_arm_client_secret: ${ bundle.credentials.azure_client_secret }
         secondary_arm_tenant_id: ${ bundle.credentials.azure_tenant_id }
         secondary_arm_subscription_id: ${ bundle.parameters.private_dns_zones_subscription_id }
+        bastion_deployed: ${ bundle.parameters.bastion_deployed }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }

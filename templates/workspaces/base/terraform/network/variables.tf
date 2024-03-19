@@ -32,3 +32,8 @@ variable "private_dns_zones_resource_group_name" {
   default     = ""
   description = "Resource group of private DNS zone for ACR"
 }
+variable "bastion_deployed" {
+  type        = bool
+  default     = false
+  description = "Bastion deployed"
+}

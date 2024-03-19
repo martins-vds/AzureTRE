@@ -28,7 +28,8 @@ module "network" {
   enable_firewall                       = var.enable_firewall
   use_primary_dns_zones                 = var.use_core_private_dns_zones
   private_dns_zones_resource_group_name = var.private_dns_zones_resource_group_name
-
+  bastion_deployed                      = var.bastion_deployed
+  
   providers = {
     azurerm.primary   = azurerm
     azurerm.secondary = azurerm.secondary

@@ -165,3 +165,9 @@ variable "secondary_arm_client_secret" {
   description = "Secondary ARM client secret"
   sensitive = true
 }
+
+variable "bastion_deployed" {
+  type        = bool
+  default     = false
+  description = "Bastion deployed"
+}

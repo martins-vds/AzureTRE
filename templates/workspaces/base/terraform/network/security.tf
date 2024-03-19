@@ -161,6 +161,7 @@ resource "azurerm_network_security_rule" "allow_outbound_webapps_to_services" {
 }
 
 resource "azurerm_network_security_rule" "allow_inbound_from_bastion" {
+  count                        = var.bastion_deployed ? 1 : 0
   access                       = "Allow"
   destination_address_prefixes = azurerm_subnet.services.address_prefixes
   destination_port_ranges = [
@@ -174,7 +175,7 @@ resource "azurerm_network_security_rule" "allow_inbound_from_bastion" {
   protocol                    = "Tcp"
   resource_group_name         = var.ws_resource_group_name
   source_address_prefixes = [
-    data.azurerm_subnet.bastion.address_prefix
+    one(data.azurerm_subnet.bastion[*].address_prefix)
   ]
   source_port_range = "*"
 }
