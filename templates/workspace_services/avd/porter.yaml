@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.0.16
+version: 0.0.17
 description: "Azure Virtual Desktop"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -155,7 +155,7 @@ install:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
-        key: tre-service-avd-${ bundle.parameters.tre_id }
+        key: tre-service-avd-${ bundle.parameters.tre_id }-${ bundle.parameters.id }
       outputs:
         - name: connection_uri
 
@@ -180,7 +180,7 @@ upgrade:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
-        key: tre-service-avd-${ bundle.parameters.tre_id }
+        key: tre-service-avd-${ bundle.parameters.tre_id }-${ bundle.parameters.id }
       outputs:
         - name: connection_uri
 
@@ -205,4 +205,4 @@ uninstall:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
-        key: tre-service-avd-${ bundle.parameters.tre_id }
+        key: tre-service-avd-${ bundle.parameters.tre_id }-${ bundle.parameters.id }
