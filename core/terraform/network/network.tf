@@ -19,8 +19,6 @@ resource "azurerm_subnet" "bastion" {
   virtual_network_name = azurerm_virtual_network.core.name
   resource_group_name  = var.resource_group_name
   address_prefixes     = [local.bastion_subnet_address_prefix]
-
-  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_subnet" "azure_firewall" {
@@ -31,7 +29,6 @@ resource "azurerm_subnet" "azure_firewall" {
   address_prefixes     = [local.firewall_subnet_address_space]
   depends_on           = [azurerm_subnet.bastion]
 
-  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_subnet" "app_gw" {
@@ -43,7 +40,6 @@ resource "azurerm_subnet" "app_gw" {
   private_link_service_network_policies_enabled = true
   depends_on                                    = [azurerm_subnet.azure_firewall]
 
-  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_subnet" "web_app" {
@@ -64,7 +60,6 @@ resource "azurerm_subnet" "web_app" {
     }
   }
 
-  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_subnet" "shared" {
@@ -76,7 +71,6 @@ resource "azurerm_subnet" "shared" {
   private_endpoint_network_policies_enabled = false
   depends_on                                = [azurerm_subnet.web_app]
 
-  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_subnet" "resource_processor" {
@@ -94,7 +88,7 @@ resource "azurerm_subnet" "resource_processor" {
 
   depends_on = [azurerm_subnet.shared]
 
-  lifecycle { ignore_changes = [tags] }
+
 }
 
 resource "terraform_data" "resource_processor_network_rule" {
@@ -131,7 +125,6 @@ resource "azurerm_subnet" "airlock_processor" {
   # https://github.com/microsoft/AzureTRE/issues/2098
   service_endpoints = ["Microsoft.Storage"]
 
-  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_subnet" "airlock_notification" {
@@ -152,7 +145,6 @@ resource "azurerm_subnet" "airlock_notification" {
     }
   }
 
-  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_subnet" "airlock_storage" {
@@ -164,7 +156,6 @@ resource "azurerm_subnet" "airlock_storage" {
   private_endpoint_network_policies_enabled = false
   depends_on                                = [azurerm_subnet.airlock_notification]
 
-  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_subnet" "airlock_events" {
@@ -181,7 +172,6 @@ resource "azurerm_subnet" "airlock_events" {
   # https://docs.microsoft.com/en-us/azure/event-grid/consume-private-endpoints
   service_endpoints = ["Microsoft.ServiceBus"]
 
-  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_subnet" "firewall_management" {
@@ -192,7 +182,6 @@ resource "azurerm_subnet" "firewall_management" {
   address_prefixes     = [local.firewall_management_subnet_address_prefix]
   depends_on           = [azurerm_subnet.airlock_events]
 
-  lifecycle { ignore_changes = [tags] }
 }
 
 resource "azurerm_ip_group" "resource_processor" {
