@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://github.com/microsoft/AzureTRE/templates/workspace_services/static-html-server/template_schema.json",
+  "type": "object",
+  "title": "Static Html Server",
+  "description": "",
+  "required": [
+  ],
+  "properties": {
+    "display_name": {
+      "type": "string",
+      "title": "Name for the workspace service",
+      "description": "The name of the workspace service to be displayed to users",
+      "default": "R Shiny Report Server",
+      "updateable": true
+    },
+    "description": {
+      "type": "string",
+      "title": "Description of the workspace service",
+      "description": "Description of the workspace service",
+      "default": "Service to host R Shiny Reports",
+      "updateable": true
+    },
+    "overview": {
+      "type": "string",
+      "title": "Workspace Service Overview",
+      "description": "Long form description of the workspace service, in markdown syntax",
+      "default": "This service hosts R Shiny Reports",
+      "updateable": true
+    }
+  },
+  "uiSchema": {
+    "is_exposed_externally": {
+      "classNames": "tre-hidden"
+    }
+  },
+  "pipeline": {
+    "install": [
+      {
+        "stepId": "main"
+      },
+      {
+        "stepId": "12ba0dad-ea6c-4d0d-9255-d316212f5ffa",
+        "stepTitle": "Add R Shiny App URI as AAD redirect URI",
+        "resourceType": "workspace",
+        "resourceAction": "upgrade",
+        "properties": [
+          {
+            "name": "aad_redirect_uris",
+            "type": "array",
+            "arraySubstitutionAction": "replace",
+            "arrayMatchField": "name",
+            "value": {
+              "name": "{{ resource.id }}",
+              "value": "{{ resource.properties.authentication_callback_uri }}"
+            }
+          }
+        ]
+      }
+    ],
+    "upgrade": [
+      {
+        "stepId": "main"
+      },
+      {
+        "stepId": "741c7ff2-eff5-47b2-bf62-2b410d65c96b",
+        "stepTitle": "Add R Shiny App URI as AAD redirect URI",
+        "resourceType": "workspace",
+        "resourceAction": "upgrade",
+        "properties": [
+          {
+            "name": "aad_redirect_uris",
+            "type": "array",
+            "arraySubstitutionAction": "replace",
+            "arrayMatchField": "name",
+            "value": {
+              "name": "{{ resource.id }}",
+              "value": "{{ resource.properties.authentication_callback_uri }}"
+            }
+          }
+        ]
+      }
+    ],
+    "uninstall": [
+      {
+        "stepId": "9a1d6b95-26c8-4165-8890-573dd4e2b45c",
+        "stepTitle": "Update R Shiny App URI to AAD redirect URI",
+        "resourceType": "workspace",
+        "resourceAction": "upgrade",
+        "properties": [
+          {
+            "name": "aad_redirect_uris",
+            "type": "array",
+            "arraySubstitutionAction": "remove",
+            "arrayMatchField": "name",
+            "value": {
+              "name": "{{ resource.id }}"
+            }
+          }
+        ]
+      },
+      {
+        "stepId": "main"
+      }
+    ]
+  }
+}
