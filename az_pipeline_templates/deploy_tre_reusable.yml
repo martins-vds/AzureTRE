@@ -399,7 +399,6 @@ jobs:
           PRIVATE_DNS_ZONE_AZURE_CREDENTIALS: ${{ parameters.PRIVATE_DNS_ZONE_AZURE_CREDENTIALS }}
           SUBSCRIPTION_ID: ${{ parameters.SUBSCRIPTION_ID }}
           SECONDARY_SUBSCRIPTION_ID: ${{ parameters.SECONDARY_SUBSCRIPTION_ID }}
-          DEPLOY_BASTION: ${{ parameters.DEPLOY_BASTION }}
 
       - task: AzureCLI@2
         displayName: ACR Login
@@ -531,6 +530,7 @@ jobs:
           DEPLOY_APP_GATEWAY: ${{ parameters.DEPLOY_APP_GATEWAY }}
           CORE_DDOS_PLAN_ID: ${{ parameters.CORE_DDOS_PLAN_ID }}
           LOGGING_LEVEL: ${{ parameters.LOGGING_LEVEL }}
+          DEPLOY_BASTION: ${{ parameters.DEPLOY_BASTION }}
           ? ${{ if eq(parameters.DEPLOY_FIREWALL, 'true') }}
           : DEPLOY_FIREWALL: "true"
           ${{ else }}:
