@@ -1,6 +1,6 @@
 schemaVersion: 1.0.0
 name: tre-workspace-service-rshiny-external
-version: 0.0.10
+version: 0.0.11
 description: "A RShiny workspace service"
 dockerfile: Dockerfile.tmpl
 registry: azuretre

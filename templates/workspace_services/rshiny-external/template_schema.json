@@ -42,7 +42,7 @@
       "default": "microsoft/azuretre/rshiny-workspace-service-external",
       "updateable": true
     },
-    "image_version": {
+    "image_tag": {
       "type": "string",
       "title": "Image Version",
       "description": "The version of the image to use for the workspace service",
