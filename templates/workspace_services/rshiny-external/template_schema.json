@@ -39,13 +39,13 @@
       "type": "string",
       "title": "Image Name",
       "description": "The name of the image to use for the workspace service",
-      "default": "microsoft/azuretre/rshiny-workspace-service-external",
+      "default": "microsoft/azuretre/rshiny-workspace-service",
       "updateable": true
     },
     "image_tag": {
       "type": "string",
-      "title": "Image Version",
-      "description": "The version of the image to use for the workspace service",
+      "title": "Image Tag",
+      "description": "The tag of the image to use for the workspace service",
       "default": "latest",
       "updateable": true
     }
