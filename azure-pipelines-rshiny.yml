@@ -31,6 +31,8 @@ jobs:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
+        set -e
+        
         version_file='$(VERSION_FILE)'
         acr_name='$(ACR_NAME)'
         image_name_prefix="microsoft/azuretre"
