@@ -20,7 +20,7 @@ variables:
       value: 'templates/workspace_services/rshiny/version.txt'
 
 jobs:
-- job: 
+- job:
   displayName: 'Build RShiny App'
   steps:
   - task: AzureCLI@2
@@ -43,7 +43,7 @@ jobs:
 
         acr_domain_suffix=`az cloud show --query suffixes.acrLoginServerEndpoint --output tsv`
         acr_fqdn="${acr_name}${acr_domain_suffix}"
-        full_image_name_prefix:=${acr_fqdn}/${image_name_prefix}
+        full_image_name_prefix=${acr_fqdn}/${image_name_prefix}
 
         docker build -t "${full_image_name_prefix}/${image_name}:${version}" -f "$(DOCKER_FILE)" "$(DOCKER_DIRECTORY)"
         docker push "${full_image_name_prefix}/${image_name}:${version}"
