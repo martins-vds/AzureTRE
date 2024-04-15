@@ -13,11 +13,11 @@ parameters:
 variables:
     - group: '${{ parameters.environment }}'
     - name: DOCKER_DIRECTORY
-      value: '.'
+      value: 'templates/workspace_services/rshiny/rshiny-app'
     - name: DOCKER_FILE
-      value: 'Dockerfile'
+      value: 'templates/workspace_services/rshiny/rshiny-app/Dockerfile'
     - name: VERSION_FILE
-      value: 'version_rshiny.txt'
+      value: 'templates/workspace_services/rshiny/version.txt'
 
 jobs:
 - job: 
