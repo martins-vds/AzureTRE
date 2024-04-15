@@ -12,14 +12,39 @@ parameters:
 
 variables:
     - group: '${{ parameters.environment }}'
+    - name: DOCKER_DIRECTORY
+      value: '.'
+    - name: DOCKER_FILE
+      value: 'Dockerfile'
+    - name: VERSION_FILE
+      value: 'version_rshiny.txt'
 
 jobs:
 - job: 
   displayName: 'Build RShiny App'
   steps:
-  - task: Docker@2
+  - task: AzureCLI@2
+    displayName: 'Build and Push'
     inputs:
-      containerRegistry: 'My ACR'
-      repository: 'fsdf'
-      command: 'buildAndPush'
-      Dockerfile: '**/Dockerfile'
+      azureSubscription: $(AZURE_CREDENTIALS)
+      addSpnToEnvironment: true
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        version_file='$(VERSION_FILE)'
+        acr_name='$(ACR_NAME)'
+        image_name_prefix="microsoft/azuretre"
+
+        version_line=$(cat "${version_file}")
+        version_array=( ${version_line//=/ } )
+        version="${version_array[1]//\"}"
+
+        ./devops/scripts/login_acr.sh $acr_name
+
+        acr_domain_suffix=`az cloud show --query suffixes.acrLoginServerEndpoint --output tsv`
+        acr_fqdn="${acr_name}${acr_domain_suffix}"
+        full_image_name_prefix:=${acr_fqdn}/${image_name_prefix}
+
+        docker build -t "${full_image_name_prefix}/${image_name}:${version}" -f "$(DOCKER_FILE)" "$(DOCKER_DIRECTORY)"
+        docker push "${full_image_name_prefix}/${image_name}:${version}"
+
