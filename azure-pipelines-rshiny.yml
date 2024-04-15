@@ -14,4 +14,7 @@ variables:
     - group: '${{ parameters.environment }}'
 
 jobs:
-
+- job: 
+  displayName: 'Build RShiny App'
+  steps:
+    - 
