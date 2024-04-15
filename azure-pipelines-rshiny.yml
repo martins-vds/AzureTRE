@@ -34,6 +34,7 @@ jobs:
         version_file='$(VERSION_FILE)'
         acr_name='$(ACR_NAME)'
         image_name_prefix="microsoft/azuretre"
+        image_name="rshiny-workspace-service"
 
         version_line=$(cat "${version_file}")
         version_array=( ${version_line//=/ } )
