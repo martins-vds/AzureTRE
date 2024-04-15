@@ -1,0 +1,17 @@
+name: $(Date:yyyyMMdd).$(Rev:r)
+
+trigger: none
+
+parameters:
+  - name: environment
+    displayName: Environment
+    type: string
+    default: azuretre-dev
+    values:
+      - "azuretre-dev"
+
+variables:
+    - group: '${{ parameters.environment }}'
+
+jobs:
+
