@@ -17,4 +17,9 @@ jobs:
 - job: 
   displayName: 'Build RShiny App'
   steps:
-    - 
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'My ACR'
+      repository: 'fsdf'
+      command: 'buildAndPush'
+      Dockerfile: '**/Dockerfile'
